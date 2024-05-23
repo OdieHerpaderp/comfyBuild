@@ -1,0 +1,94 @@
+Resource Nodes:
+    Replace bullet system with resource nodes
+    resource nodes have percentage for production penalty based on excessive use
+    production will stop when production percentage is below 25%
+
+Production Timer:
+    Do not produce every tick to spread load
+    Reduce production bonus per level, instead increase speed    
+
+Prehistoric Era:
+    Pit houses/dugouts (dwellings that consumed wood, hides, stone for construction) Consumed resources like wood for framing, earth for insulation, animal hides/plants for roofing
+    Wattle and daub huts Consumed wood for the wattle (woven lattice), clay/mud for daub (coating), plants/reeds for thatched roofing
+    Rock shelters/caves (consumed animal hides, wood for reinforcement)
+    Primitive quarries/mines (produced stone, flint, obsidian for tools)
+    Earthen Mounds/Tumuli - Burial and ceremonial mounds made of piled earth and stone, like Silbury Hill and Newgrange.
+    Megaliths - Massive stone constructions like standing stones, dolmens, and passage tombs built using crude stone-moving techniques.
+    Crannogs - Fortified artificial islands in lakes/marshes, built with timber piles and connected by a causeway.
+    Brochs - Drystone hollow-walled structures found in Scotland, possibly defensive towers or homes for extended families.
+    Longhouses (large wooden houses for multiple families)
+
+Ancient Civilizations:
+    Mud brick houses (consumed mud/clay, straw, wood)
+    Stone quarries (produced building stone)
+    Pottery kilns (consumed wood/fuel to produce ceramics)
+    Granaries (stored/consumed agricultural produce)
+    Primitive smelters (consumed ores, charcoal to produce metals)
+    Ziggurats - Massive stepped pyramids made of mud-brick, built by Mesopotamians like the Sumerians.
+    Aqueducts - Stone masonry channels and bridges to transport water, perfected by the ancient Romans.
+    Amphitheaters - Large oval or circular open-air venues for events, with sloping stone seating around a central area.
+    Insulae - Ancient Roman apartment buildings, some rising up to 7-8 stories using timber framing and brick/concrete.
+
+Paleolithic Age
+    Lower Paleolithic (oldest stone tool cultures like Oldowan and Acheulean)
+    Buildings: Caves, rock shelters, basic huts
+    Resources: Stone tools, fire, hunted animals, gathered plants
+
+Middle Paleolithic (more advanced stone tool cultures like Mousterian)
+    Buildings: Pit houses, animal hide tents/shelters
+    Resources: Specialized stone tools, fire, hunted herd animals
+
+Upper Paleolithic (modern human behaviors emerge)
+    Buildings: Longhouses, rock/mud dwellings
+    Resources: Complex stone/bone tools, art/decoration, tailored clothing
+
+Mesolithic Age
+    Transitional period between Paleolithic and Neolithic
+    Buildings: Semi-permanent wood/reed huts, seasonal camps
+    Resources: Microliths (small stone tools), bows/arrows, domesticated dog, specialized hunting/fishing
+
+Neolithic Age
+    Neolithic Revolution (origins of agriculture, pottery, permanent settlements)
+    Buildings: Mud-brick houses, granaries, early temples
+    Resources: Domesticated plants/animals, pottery, polished stone tools, weaving
+
+Early Medieval:
+    Motte and Bailey Castles - Early medieval fortifications with a wooden tower on a mound (motte) and an enclosed courtyard (bailey).
+    Stave Churches - Wooden post churches built by the Vikings in Scandinavia using intricate corner joints.
+    Monasteries - Religious complexes with churches, dormitories, cloisters, built with stone masonry.
+    Wattle and Daub Houses - Thatched roof houses with walls made of woven wooden lattice covered in daub (mud/clay).
+
+Middle Ages:
+    Timber framed houses (consumed wood, wattle and daub)
+    Water mills (produced flour from grains, consumed water power)
+    Forges/smithies (consumed charcoal, metals to produce tools/weapons)
+    Tanneries (consumed animal hides to produce leather)
+    Mines (produced coal, ores, minerals)
+
+High Medieval:
+    Romanesque Churches - Massive stone churches and cathedrals with thick walls, round arches, vaulted ceilings.
+    Stone Keeps - Rectangular towers at the center of castles, providing fortified residence for lords.
+    Walled Cities - Urban centers ringed by thick defensive stone walls and gates, like Constantinople.
+    Gothic Cathedrals - Ornate stone cathedrals with ribbed vaults, flying buttresses, stained glass windows.
+
+Renaissance/Early Industrial:
+    Glassworks (consumed wood/coal to produce glass products)
+    Brickworks/kilns (produced fired bricks, consumed wood/coal)
+    Foundries (consumed ores, coal to produce cast iron/metals)
+    Sawmills (produced cut lumber, consumed water/steam power)
+    Factories (consumed raw materials to mass produce goods)
+    Stone and brick manor houses
+    Timber-framed houses
+    Early skyscrapers (5-6 stories) in cities
+
+Early Modern Age:
+    Baroque and Rococo palaces and mansions
+    Row houses in cities
+    Early factories and mills (water and steam powered)
+
+Industrial Revolution:
+    Bessemer steel plants (consumed coal, iron ore to mass produce steel)
+    Textile mills (consumed cotton, wool to produce textiles)
+    Railroads and bridges (consumed steel for construction)
+    Coal mines (produced coal for powering factories/transportation)
+    Skyscrapers (consumed steel girders to build taller structures)

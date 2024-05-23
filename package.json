@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@geckos.io/server": "^1.7.1",
+    "express": "^4.19.2",
+    "mongojs": "^3.1.0",
+    "node": "^14.21.3",
+    "node-pre-gyp": "^0.17.0",
+    "pathfinding": "^0.4.18",
+    "require_optional": "^1.0.1",
+    "socket.io": "^2.0.0",
+    "socket.io-client": "^2.0.0",
+    "three": "^0.130.1"
+  }
+}

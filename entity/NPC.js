@@ -170,7 +170,7 @@ NPC = function(param){
 			vit:self.VIT / 2,
 			dex:self.DEX,
 			armor:Math.round((Base.wave + self.armor) / 2),
-			armorType:Base.armorType,
+			armorType:"",
 			agi:self.AGI / 2,
 			ntl:self.NTL,
 			cnc:self.CNC,

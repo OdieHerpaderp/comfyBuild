@@ -22,8 +22,6 @@ Base.Health = 150;
 Base.Tech = 0;
 Base.wave = 0;
 Base.phase = 0; //0 = build phase, 1 = creep phase
-Base.creepType = "unknown";
-Base.armorType = "unknown";
 Base.mobsLeft = 8;
 Base.bonusGold = 100;
 Base.spawnSpeed = 50;
@@ -213,7 +211,6 @@ Base.startWave = function(){
 				}
 				console.log(totalGold);
 				Base.wave = 1 + Math.floor(Math.pow(totalGold / 350, 0.75));
-				Base.creepType = "rat";
 				Base.announce("Skipped to wave " + Base.wave);
 				Base.wave -= 1;
 		}

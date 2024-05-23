@@ -56,12 +56,6 @@ Base.sendGameState = function(num){
 function towerMaxHealth() { 
 	return Math.round(30 * Math.pow((Base.Tech - 750) / 225 + Base.wave / 5, 1.2))
 }
-function regenTower() { 
-	Base.Health += (600 + Base.Tech) / (1400 + Base.Health * 16);
-	if (Base.Health > towerMaxHealth()){
-		Base.Health = towerMaxHealth();
-	}
-}
 
 //Pathfinding Stuff
 PFGrid = {};

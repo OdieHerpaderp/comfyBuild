@@ -1,4 +1,4 @@
-var USE_DB = true;
+var USE_DB = false;
 var mongojs = USE_DB ? require("mongojs") : null;
 var db = USE_DB ? mongojs('localhost:27017/odieTD', ['account','progress']) : null;
 
@@ -50,6 +50,7 @@ Database.getPlayerProgress = function(username,cb){
 	});
 }
 Database.savePlayerProgress = function(data,cb){
+	if(USE_DB == false) return;
 	console.log("WE GON SAVE");
 	console.log(data);
 	db.account.findAndModify({

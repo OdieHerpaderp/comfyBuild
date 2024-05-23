@@ -353,7 +353,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 	  });
   
 	  if (hasAllResources) {
-		console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
+		//console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
   
 		for (const resource of resources) {
 		  if (resource === 'population') {
@@ -364,11 +364,11 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 		}
 		return true;
 	  } else {
-		console.log(`The ${buildingName} building does not have enough resources to build ${resources.join(', ')}.`);
+		//console.log(`The ${buildingName} building does not have enough resources to build ${resources.join(', ')}.`);
 		return false;
 	  }
 	} else {
-	  console.log(`The ${buildingName} building does not exist or does not have 'build' and 'produce' properties.`);
+	  //console.log(`The ${buildingName} building does not exist or does not have 'build' and 'produce' properties.`);
 	  return false;
 	}
   }

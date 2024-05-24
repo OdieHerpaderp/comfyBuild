@@ -106,7 +106,7 @@ const frameLogin = jsFrame.create({
 const frameStockpile = jsFrame.create({
     name: `frameStockpile`,
     title: `Stockpile`,
-    right: 380, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110,
+    left: 80, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110,
     appearanceName: 'material',
     appearanceParam: {
         border: {
@@ -141,7 +141,7 @@ const frameStockpile = jsFrame.create({
 const frameBuildings = jsFrame.create({
     name: `frameBuildings`,
     title: `Buildings`,
-    right: 380, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110,
+    left: 380, top: 360, width: 620, height: 420, minWidth: 200, minHeight: 110,
     appearanceName: 'material',
     appearanceParam: {
         border: {

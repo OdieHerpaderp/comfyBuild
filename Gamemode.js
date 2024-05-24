@@ -18,6 +18,7 @@ Gamemode.prepare = function(){
 		y:8 * 48,
 		map:"field",
 	});
+	return;
 	Tower({
 		towerType:"waterSource",
 		parent:0,

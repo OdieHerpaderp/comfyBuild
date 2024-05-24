@@ -59,7 +59,7 @@ NPC = function(param){
 		}
 	}
 
-	self.regenerate = function()
+	self.comfyTick = function()
 	{
 		self.mana += 1;
 

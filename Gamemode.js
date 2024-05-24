@@ -12,6 +12,12 @@ Gamemode.endBX = 0;
 Gamemode.endBY = 0;
 
 Gamemode.prepare = function(){
+	Bullet({
+		type:"soil",
+		x:8 * 48,
+		y:8 * 48,
+		map:"field",
+	});
 	Tower({
 		towerType:"waterSource",
 		parent:0,

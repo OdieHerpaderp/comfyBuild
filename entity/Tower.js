@@ -18,7 +18,7 @@ Tower = function(param){
 	self.attackTimer = 0;
 	self.upgradeLevel = 0;
 	self.targetLevel = 1;
-	self.buildTimer = 65;
+	self.buildTimer = 45;
 	self.transforms = 0;
 	self.value = param.value;
 	self.team = self.whatTeam; // none, west, east
@@ -36,7 +36,7 @@ Tower = function(param){
 		else return Player.list[self.parent].team;
 	}
 
-	self.regenerate = function()
+	self.comfyTick = function()
 	{
 		if(self.targetLevel > self.upgradeLevel){
 			if(self.buildTimer > 0) {
@@ -50,7 +50,7 @@ Tower = function(param){
 			}
 			else { 
 				self.upgradeLevel++;
-				self.buildTimer = Math.round(65 + self.upgradeLevel * 0.5);
+				self.buildTimer = Math.round(45 + self.upgradeLevel * 1.25);
 			}
 			return;
 		}
@@ -64,125 +64,9 @@ Tower = function(param){
 	};
 
 	self.update = function(){
-
-		if(self.heroic == true){
-			if(Base.phase == 1) self.heroicEXP += Base.wave / 75;
-			self.AGI = Math.floor(30 + Math.pow(self.heroicWEP + self.heroicAGI * 2, 0.95));
-			self.range = Math.floor(120 + Math.pow(self.heroicNTL / 2, 0.85));
-			if (self.towerType == "heroicBarbarian") {
-				self.damage = Math.floor(350 + Math.pow(self.heroicWEP * 4 + self.heroicSTR * 9, 0.95) + Math.pow(self.heroicJWL * 4 + self.heroicAGI * 3, 0.95));
-			}
-			else if (self.towerType == "heroicArcher") {
-				self.damage = Math.floor(350 + Math.pow(self.heroicWEP * 4 + self.heroicSTR * 6, 0.95) + Math.pow(self.heroicJWL * 4 + self.heroicAGI * 6, 0.95));
-			}
-			else if (self.towerType == "heroicWizard") {
-				self.damage = Math.floor(350 + Math.pow(self.heroicWEP * 4 + self.heroicSTR * 3, 0.95) + Math.pow(self.heroicJWL * 4 + self.heroicNTL * 9, 0.95));
-			}
-			self.heroicLVL = Math.floor(Math.pow(self.heroicEXP / 300 , 0.55));
-			self.heroicPTS = 9 + self.heroicLVL - self.heroicSTR - self.heroicAGI - self.heroicNTL;
-			//console.log("ARCHER - LVL: " + self.heroicLVL + " PTS: " + self.heroicPTS)
-		}
-
 		super_update();
-
-		self.attackTimer += 1 + self.AGI;
-		
-		if (self.attackTimer > 1200){
-			//console.log("Tower look for baddie");
-			if(self.towerType == "rocket"){
-				for(var ni in NPC.list){
-					var np = NPC.list[ni];
-					if(self.getDistance(np) < self.range && Math.round(Math.random() * 5) == 3 ){
-						var dy = np.y - self.y;
-						var dx = np.x - self.x;
-  						var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  						theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-						if (theta < 0) theta = 360 + theta; // range [0, 360)
-					}
-				}
-				if (theta == undefined){
-					return;
-				}
-				self.shootBullet(ni,theta,"rocket",self.id); self.attackTimer = 0; return;
-			}
-			else if(self.mana > 89 && self.towerType == "grave"){
-				var target = self.getArmor(self.range);
-				if (target[1] !== 420) {self.shootBullet(target[0],target[1],"spellGrave",self.id); self.mana -= 89; self.attackTimer = 0; return;}
-			}
-			else if(self.mana > 69 && self.towerType == "darkness"){
-				var target = self.getArmor(self.range);
-				if (target[1] !== 420) {self.shootBullet(target[0],target[1],"spellDarkness",self.id); self.mana -= 69; self.attackTimer = 0; return;}
-			}
-			else if(self.mana > 39 && self.towerType == "snowman"){
-				for(var ni in NPC.list){
-					var np = NPC.list[ni];
-					if(self.attackTimer < 300) return;
-					if(self.getDistance(np) < self.range){
-						var dy = np.y - self.y;
-						var dx = np.x - self.x;
-  						var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  						theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-						if (theta < 0) theta = 360 + theta; // range [0, 360)
-						self.shootBullet(ni,theta,"spellSnowman",self.id); self.mana -= 39; self.attackTimer -= 399;
-					}
-				}
-			}
-			else if(self.mana > 109 && self.towerType == "spark"){
-				for(var ni in NPC.list){
-					var np = NPC.list[ni];
-					if(self.getDistance(np) < self.range && np.stun < 1024){
-						var dy = np.y - self.y;
-						var dx = np.x - self.x;
-  						var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  						theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-						if (theta < 0) theta = 360 + theta; // range [0, 360)
-						self.shootBullet(ni,theta,"spellSpark",self.id); self.mana -= 109; self.attackTimer = 0; return;
-					}
-				}
-			}
-			else if(self.mana > 99 && self.towerType == "lightning"){
-				for(var ni in NPC.list){
-					var np = NPC.list[ni];
-					if(self.getDistance(np) < self.range && np.stun < 1024){
-						var dy = np.y - self.y;
-						var dx = np.x - self.x;
-  						var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  						theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-						if (theta < 0) theta = 360 + theta; // range [0, 360)
-						self.shootBullet(ni,theta,"spellLightning",self.id); self.mana -= 99; self.attackTimer = 0; return;
-					}
-				}
-			}
-
-			for(var ni in NPC.list){
-				var np = NPC.list[ni];
-				if(self.getDistance(np) < self.range){
-					//console.log("I found a baddie");
-					var dy = np.y - self.y;
-					var dx = np.x - self.x;
-  					var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  					theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-					if (theta < 0) theta = 360 + theta; // range [0, 360)
-
-					if (self.mana > 49 && self.towerType == "corrosion") {self.shootBullet(ni,theta,"spellCorrosion",self.id); self.mana -= 49;}
-					else if (self.mana > 39 && self.towerType == "toxic") {self.shootBullet(ni,theta,"spellCorrosion",self.id); self.mana -= 39;}
-					else if (self.mana > 39 && self.towerType == "frost") {self.shootBullet(ni,theta,"spellFrost",self.id); self.mana -= 39;}
-					else if (self.mana > 59 && self.towerType == "bbq") {self.shootBullet(ni,theta,"spellBBQ",self.id); self.mana -= 59;}
-					else if (self.mana > 209 && self.towerType == "ganja") {self.shootBullet(ni,theta,"spellGanja",self.id); self.mana -= 209;}
-					else if (self.mana >= 11 && self.towerType == "gun") {if(self.loaded == 1){self.shootBullet(ni,theta,self.towerType,self.id); self.mana -= 11;}}
-					else if (self.mana < 11 && self.towerType == "gun") {if(self.loaded == 1){self.loaded = 0;}self.attackTimer = 0; return;}
-					else if (self.mana >= 39 && self.towerType == "laser") {self.shootBullet(ni,theta,self.towerType,self.id); self.mana -= 39; self.attackTimer = 0; return;}
-					else if (self.mana < 39 && self.towerType == "laser") {return;}
-					else if (self.mana >= 11 && self.towerType == "oilDrum") {self.shootBullet(ni,theta,self.towerType,self.id); self.shootBullet(ni,theta - 16,self.towerType,self.id); self.shootBullet(ni,theta + 16,self.towerType,self.id); self.mana -= 11;}
-					else if (self.mana < 11 && self.towerType == "oilDrum") {self.attackTimer = 0; return;}
-					else {self.shootBullet(ni,theta,self.towerType,self.id)}
-					self.attackTimer = 0;
-					//if(self.towerType == "heroicArcher") self.heroicEXP += Base.wave * 2;
-					return;
-				}
-			}
-		}
 	}
+
 	self.shootBullet = function(target,angle,towerType,towerParent){
 		self.calcDamage = self.damage;
 		Bullet({

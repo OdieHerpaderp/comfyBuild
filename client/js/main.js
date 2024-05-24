@@ -1,4 +1,3 @@
-
 //ThreeJS
 
 var scene = new THREE.Scene();
@@ -158,14 +157,6 @@ var animate = function () {
 
 animate();
 
-//movable chat
-window.onload = addListeners();
-
-function addListeners(){
-    //document.getElementById('belowGame').addEventListener('mousedown', mouseDown, false);
-    //window.addEventListener('mouseup', mouseUp, false);
-}
-
 function mouseUp()
 {
     window.removeEventListener('mousemove', divMove, true);
@@ -243,9 +234,10 @@ signDivSignUp.onclick = function(){
 }
 socket.on('signInResponse',function(data){
     if(data.success){
-        signDiv.style.display = 'none';
-        settingsDiv.style.display = 'none';
-        gameDiv.style.display = 'inline-block';
+        frameLogin.closeFrame();
+        frameStockpile.show();
+        frameBuildings.show();
+        document.getElementById('buildingsDiv').innerHTML = interface.generateBuildingsHTML();
     } else
         alert("Sign in unsuccessul.");
 });
@@ -829,7 +821,7 @@ socket.on('init',function(data){
             var myessprite = new THREE.TextSprite({
                 align: 'center',
                 fillStyle: '#ffffff',
-                fontFamily: 'pelagiadregular',
+                fontFamily: 'Roboto Slab',
                 fontSize: 0.80,
                 lineGap: 0.05,
                 strokeStyle: '#000',
@@ -1252,28 +1244,11 @@ document.oncontextmenu = function(event){
     event.preventDefault();
 }
 
-//TODO: Fix Tooltips
-//document.getElementById('buttonPawn').onmouseover = function() { info("pawn") }
-//document.getElementById('buttonArrow').onmouseover = function() { info("arrow") } 
-//document.getElementById('buttonCannon').onmouseover = function() { info("cannon") } 
-//document.getElementById('buttonGrave').onmouseover = function() { info("grave") } 
-//document.getElementById('buttonCorrosion').onmouseover = function() { info("corrosion") } 
-//document.getElementById('buttonFrost').onmouseover = function() { info("frost") } 
-//document.getElementById('buttonSapling').onmouseover = function() { info("sapling") } 
-//document.getElementById('buttonBBQ').onmouseover = function() { info("bbq") } 
-//document.getElementById('buttonSpark').onmouseover = function() { info("spark") } 
-//document.getElementById('buttonRocket').onmouseover = function() { info("rocket") } 
-//document.getElementById('buttonBouncing').onmouseover = function() { info("bouncing") } 
-//document.getElementById('buttonLaser').onmouseover = function() { info("laser") } 
-//document.getElementById('buttonHeroic').onmouseover = function() { info("heroic") } 
-
-var info = function(type){
-    return;
-    document.getElementById('info-text').innerHTML = "Damage: " + towerData[type].damage + " AGI: " + towerData[type].AGI + 
-    "<br>Range: " + towerData[type].range + " Bullet Type: " + towerData[type].bulletType + 
-    "<br>Role:" + towerData[type].role;
-}
-
 console.log("*Main Loaded");
+frameLogin.show();
+frameLogin.setPosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
 loadDiv.style.display = 'none';
-signDiv.style.display = 'inline-block';
+signDiv.style.display = 'none';
+settingsDiv.style.display = 'none';
+gameDiv.style.display = 'inline-block';
+

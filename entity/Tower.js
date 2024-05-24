@@ -41,7 +41,7 @@ Tower = function(param){
 		if(self.targetLevel > self.upgradeLevel){
 			if(self.buildTimer > 0) {
 				for (let i = 0; i < self.upgradeLevel + 1; i++) { 
-					if(checkBuildingConsumptionAndProduce(self.towerType)){
+					if(checkBuildingConsumptionAndBuild(self.towerType)){
 						self.buildTimer -= 2 * Base.constructionMultiplier;
 						Base.Tech += self.upgradeLevel;
 					}
@@ -55,7 +55,7 @@ Tower = function(param){
 			return;
 		}
 		else{
-			for (let i = 0; i < self.upgradeLevel; i++) { 
+			for (let i = 0; i < self.upgradeLevel + 1; i++) { 
 				if(checkBuildingConsumptionAndProduce(self.towerType)) {Base.Tech += 1; Base.morale -= Math.ceil(10 - self.upgradeLevel / 100);}
 			}
 		}
@@ -308,7 +308,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 	  });
   
 	  if (hasAllResources) {
-		console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
+		//console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
   
 		for (const resource of resources) {
 		  if (resource === 'population') {
@@ -322,19 +322,19 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 		for (const [item, quantity] of producedItems) {
 		  if (item === 'population') {
 			Base.population += quantity;
-			console.log(`The ${buildingName} building produced ${quantity} population.`);
+			//console.log(`The ${buildingName} building produced ${quantity} population.`);
 		  } else {
 			Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity;
-			console.log(`The ${buildingName} building produced ${quantity} ${item}(s).`);
+			//console.log(`The ${buildingName} building produced ${quantity} ${item}(s).`);
 		  }
 		}
 		return true;
 	  } else {
-		console.log(`The ${buildingName} building does not have enough resources to consume ${resources.join(', ')}.`);
+			//console.log(`The ${buildingName} building does not have enough resources to produce: ${resources.join(', ')}.`);
 		return false;
 	  }
 	} else {
-	  console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
+	  	console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
 	  return false;
 	}
   }
@@ -343,10 +343,10 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 	const building = buildings[buildingName];
   
 	if (building && building.build) {
-	  const resources = Object.keys(building.consume);
+	  const resources = Object.keys(building.build);
 	  const hasAllResources = resources.every(resource => {
 		if (resource === 'population') {
-		  return building.build[resource] <= population;
+		  return building.build[resource] <= Base.population;
 		} else {
 		  return building.build[resource] && Base.stockpile[resource] >= building.build[resource];
 		}
@@ -364,11 +364,11 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 		}
 		return true;
 	  } else {
-		//console.log(`The ${buildingName} building does not have enough resources to build ${resources.join(', ')}.`);
+		//console.log(`The ${buildingName} building does not have enough resources to build: ${resources.join(', ')}.`);
 		return false;
 	  }
 	} else {
-	  //console.log(`The ${buildingName} building does not exist or does not have 'build' and 'produce' properties.`);
+		console.log(`The ${buildingName} building does not exist or does not have 'build' and 'produce' properties.`);
 	  return false;
 	}
   }

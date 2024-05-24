@@ -13,7 +13,7 @@ Gamemode.endBY = 0;
 
 Gamemode.prepare = function(){
 	Tower({
-		towerType:"well",
+		towerType:"waterSource",
 		parent:0,
 		x:8 * 48,
 		y:8 * 48,

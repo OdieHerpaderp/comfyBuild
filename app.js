@@ -82,6 +82,7 @@ app.get('/',function(req, res) {
 	res.sendFile(__dirname + '/client/indexthreejs.html');
 });
 app.use('/client',express.static(__dirname + '/client'));
+app.use('/lib',express.static(__dirname + '/lib'));
 app.use('/node_modules',express.static(__dirname + '/node_modules'));
 
 serv.listen(process.env.PORT || 2000);
@@ -171,31 +172,6 @@ setInterval(function(){
 	if(tick % 128 === 0){
 		console.log("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
 		Base.skippedTicks = 0;
-
-		if(Base.population < 3) {
-			// Test if grid is valid
-			randomGridX = Math.round(16 + Math.random() * 96);
-			randomGridY = Math.round(16 + Math.random() * 96);
-			if(PFGrid.grid.isWalkableAt(randomGridX,randomGridY)){
-				PFGrid.grid.setWalkableAt(randomGridX, randomGridY, false);
-				var towerType = "slums";
-				var randomtow = Math.round(Math.random() * 3);
-				Tower({
-					towerType:towerType,
-					parent:player.id,
-					x:randomGridX * 48,
-					y:randomGridY * 48,
-					map:player.map,
-					damage:1,
-					range:1,
-					mana:0,
-					bulletType:"undefined",
-					agi:1,
-					value:0,
-				});
-				socket.emit('addToChat','Homeless people have built a slums on their own volition!');
-			}
-		}
 	}
 	tick++;
 },1);

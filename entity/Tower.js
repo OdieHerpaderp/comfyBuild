@@ -42,10 +42,10 @@ Tower = function(param){
 			if(self.buildTimer > 0) {
 				for (let i = 0; i < self.upgradeLevel + 1; i++) { 
 					if(checkBuildingConsumptionAndBuild(self.towerType)){
-						self.buildTimer -= 2 * Base.constructionMultiplier;
+						self.buildTimer -= 2 / ((self.upgradeLevel+1) * 1.35) * Base.constructionMultiplier;
 						Base.Tech += self.upgradeLevel;
 					}
-					//else console.log("Could not build!");
+					//else console.log("Could not build!");Base.constructionMultiplier
 				}
 			}
 			else { 
@@ -55,9 +55,11 @@ Tower = function(param){
 			return;
 		}
 		else{
-			for (let i = 0; i < self.upgradeLevel + 1; i++) { 
-				if(checkBuildingConsumptionAndProduce(self.towerType)) {Base.Tech += 1; Base.morale -= Math.ceil(10 - self.upgradeLevel / 100);}
+			var active = false;
+			for (let i = 0; i < self.upgradeLevel; i++) { 
+				if(checkBuildingConsumptionAndProduce(self.towerType)) {Base.Tech += 1; active=true;}
 			}
+			if(active) Base.morale -= Math.ceil(10 - self.upgradeLevel / 100);
 		}
 	};
 
@@ -301,7 +303,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 	  const resources = Object.keys(building.consume);
 	  const hasAllResources = resources.every(resource => {
 		if (resource === 'population') {
-		  return building.consume[resource] <= Base.population;
+		  return building.consume[resource] <= Base.populationCurrent;
 		} else {
 		  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource];
 		}
@@ -312,7 +314,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
   
 		for (const resource of resources) {
 		  if (resource === 'population') {
-			Base.population -= building.consume[resource];
+			Base.populationCurrent -= building.consume[resource];
 		  } else {
 			Base.stockpile[resource] -= building.consume[resource];
 		  }
@@ -346,7 +348,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 	  const resources = Object.keys(building.build);
 	  const hasAllResources = resources.every(resource => {
 		if (resource === 'population') {
-		  return building.build[resource] <= Base.population;
+		  return building.build[resource] <= Base.populationCurrent;
 		} else {
 		  return building.build[resource] && Base.stockpile[resource] >= building.build[resource];
 		}
@@ -357,7 +359,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
   
 		for (const resource of resources) {
 		  if (resource === 'population') {
-			Base.population -= building.build[resource];
+			Base.populationCurrent -= building.build[resource];
 		  } else {
 			Base.stockpile[resource] -= building.build[resource];
 		  }

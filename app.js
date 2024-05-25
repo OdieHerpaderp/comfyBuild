@@ -163,39 +163,20 @@ function gameTick() {
 
 // New implementation that doesn't rely on raf
 const targetFrameRate = 30;
-const targetFrameTime = 1000 / targetFrameRate;
+const targetFrameTime = 1000 / targetFrameRate; // Target frame time in milliseconds
 
-let lastFrameTime = process.hrtime();
-let nextFrameTime = 0;
-let frameId = null;
+let lastFrameTime = Date.now();
 
-function gameLoop(currentTime = process.hrtime()) {
-  const elapsedTime = calculateElapsedTime(lastFrameTime, currentTime);
+function gameLoop() {
+  const currentTime = Date.now();
+  const elapsedTime = currentTime - lastFrameTime;
 
   if (elapsedTime >= targetFrameTime) {
     gameTick(elapsedTime);
     lastFrameTime = currentTime;
-    nextFrameTime = currentTime[0] * 1000 + currentTime[1] / 1000000 + targetFrameTime;
   }
 
-  const delay = Math.max(nextFrameTime - (currentTime[0] * 1000 + currentTime[1] / 1000000), 0);
-
-  if (frameId !== null) {
-    clearTimeout(frameId);
-  }
-
-  frameId = setTimeout(gameLoop, delay);
-}
-
-function calculateElapsedTime(start, end) {
-  const [startSec, startNano] = start;
-  const [endSec, endNano] = end;
-
-  const elapsedNano = endNano - startNano;
-  const elapsedSec = endSec - startSec;
-
-  const elapsedMilliseconds = (elapsedSec * 1000) + (elapsedNano / 1000000);
-  return elapsedMilliseconds;
+  setTimeout(gameLoop, targetFrameTime);
 }
 
 gameLoop();

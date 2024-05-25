@@ -150,11 +150,6 @@ function gameTick() {
 	{
 		comfyBuild.tick();
 	}
-	if(tick % 512 === 0) Base.announce("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
-	if(tick % 128 === 0){
-		console.log("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
-		Base.skippedTicks = 0;
-	}
 	var packs = Entity.getFrameUpdateData();
 	//TODO: updatePacks on the client assume that the updatePack contains every entity.
 	for(var i in SOCKET_LIST){
@@ -172,6 +167,7 @@ const targetFrameTime = 1000 / targetFrameRate;
 
 let lastFrameTime = process.hrtime();
 let nextFrameTime = 0;
+let frameId = null;
 
 function gameLoop(currentTime = process.hrtime()) {
   const elapsedTime = calculateElapsedTime(lastFrameTime, currentTime);
@@ -183,13 +179,12 @@ function gameLoop(currentTime = process.hrtime()) {
   }
 
   const delay = Math.max(nextFrameTime - (currentTime[0] * 1000 + currentTime[1] / 1000000), 0);
-  const nextLoop = () => gameLoop(process.hrtime());
 
-  if (delay > 0) {
-    setTimeout(nextLoop, delay);
-  } else {
-    nextLoop();
+  if (frameId !== null) {
+    clearTimeout(frameId);
   }
+
+  frameId = setTimeout(gameLoop, delay);
 }
 
 function calculateElapsedTime(start, end) {

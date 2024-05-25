@@ -275,22 +275,11 @@ socket.on('towerTooltip',function(data){
 });
 
 // Stockpile
-var stockpileDiv = document.getElementById('stockpileDiv');
-var stockpileItems = {};
+var stockpile = new ItemList();
+document.getElementById('stockpileDiv').appendChild(stockpile.HTML);
 
 socket.on('stockpile',function(data){
-    for (const prop in data) {
-        if(data[prop] <= 0) { continue; }
-        //stockpileDiv.innerHTML += `<div id='parent'><div id='wide'>${prop}:</div><div id='narrow'>${data[prop].toLocaleString()}</div></div>`;
-
-        if (stockpileItems[prop] === undefined) {
-            stockpileItems[prop] = new Item(prop, data[prop].toLocaleString());
-            stockpileDiv.appendChild(stockpileItems[prop].HTML);
-        }
-        else {
-            stockpileItems[prop].setAmount(data[prop].toLocaleString());
-        }
-    }
+    stockpile.updateItems(data);
 });
 
 socket.on('gameState',function(data){

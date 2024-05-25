@@ -11,13 +11,31 @@ Gamemode.endAY = 0;
 Gamemode.endBX = 0;
 Gamemode.endBY = 0;
 
+Gamemode.spawnBullet = function(type){
+	// Test if grid is valid
+	var randomGridX = Math.round(4 + Math.random() * 120);
+	var randomGridY = Math.round(4 + Math.random() * 120);
+	while(!PFGrid.grid.isWalkableAt(randomGridX,randomGridY)){
+		randomGridX = Math.round(4 + Math.random() * 120);
+		randomGridY = Math.round(4 + Math.random() * 120);
+	}
+	if(PFGrid.grid.isWalkableAt(randomGridX,randomGridY)){
+		PFGrid.grid.setWalkableAt(randomGridX, randomGridY, false);
+		Bullet({
+			type:type,
+			x:randomGridX * 48,
+			y:randomGridY * 48,
+			map:"field",
+		});
+	}
+};
+
 Gamemode.prepare = function(){
-	Bullet({
-		type:"soil",
-		x:8 * 48,
-		y:8 * 48,
-		map:"field",
-	});
+	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("soil"); }
+	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("freshWater"); }
+	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("wildGame"); }
+	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("forest"); }
+	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("rockDeposit"); }
 	return;
 	Tower({
 		towerType:"waterSource",

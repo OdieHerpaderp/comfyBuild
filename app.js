@@ -8,7 +8,6 @@ require('./Entity');
 require('./Gamemode');
 //require('./geckosio');
 require('./client/Inventory');
-const raf = require('raf');
 
 var express = require('express');
 var app = express();
@@ -151,12 +150,8 @@ function gameTick() {
 	{
 		comfyBuild.tick();
 	}
-	if(tick % 512 === 0) Base.announce("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
-	if(tick % 128 === 0){
-		console.log("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
-		Base.skippedTicks = 0;
-	}
 	var packs = Entity.getFrameUpdateData();
+	//TODO: updatePacks on the client assume that the updatePack contains every entity.
 	for(var i in SOCKET_LIST){
 		var socket = SOCKET_LIST[i];
 		socket.emit('init',packs.initPack);
@@ -166,94 +161,25 @@ function gameTick() {
 	tick++;
 };
 
-// New implementation that doesn't "skip" frames
-const targetFrameRate = 30; // Target frame rate in Hz
+// New implementation that doesn't rely on raf
+const targetFrameRate = 30;
 const targetFrameTime = 1000 / targetFrameRate; // Target frame time in milliseconds
 
-let lastFrameTime = process.hrtime();
+let lastFrameTime = Date.now();
 
 function gameLoop() {
-  const currentTime = process.hrtime();
-  const elapsedTime = calculateElapsedTime(lastFrameTime, currentTime);
+  const currentTime = Date.now();
+  const elapsedTime = currentTime - lastFrameTime;
 
   if (elapsedTime >= targetFrameTime) {
-    gameTick(elapsedTime); // Pass the elapsed time to the game tick function
+    gameTick(elapsedTime);
     lastFrameTime = currentTime;
   }
 
-  raf(gameLoop);
+  setTimeout(gameLoop, targetFrameTime);
 }
 
-function calculateElapsedTime(start, end) {
-  const [startSec, startNano] = start;
-  const [endSec, endNano] = end;
-
-  const elapsedNano = endNano - startNano;
-  const elapsedSec = endSec - startSec;
-
-  const elapsedMilliseconds = (elapsedSec * 1000) + (elapsedNano / 1000000);
-  return elapsedMilliseconds;
-}
-
-raf(gameLoop);
-
-Base.startWave = function(){
-	console.log("startWave initialized.");
-	if(Base.phase == 0){
-		if(Base.wave == 0){
-			var totalGold = 0;
-			for(var i in Player.list){
-					var player = Player.list[i];
-					totalGold += player.gold + player.score * 6;
-				}
-				console.log(totalGold);
-				Base.wave = 1 + Math.floor(Math.pow(totalGold / 350, 0.75));
-				Base.announce("Skipped to wave " + Base.wave);
-				Base.wave -= 1;
-		}
-		PFGrid.gridBackup = PFGrid.grid.clone(); //create clone of grid, as pathfinding messes up the grid.
-		PFGrid.pathA = PFGrid.finder.findPath(Gamemode.startAX, Gamemode.startAY, Gamemode.endAX, Gamemode.endAY, PFGrid.gridBackup);
-
-		console.log(PFGrid.pathA);
-
-		PFGrid.gridBackup = PFGrid.grid.clone(); //create clone of grid, as pathfinding messes up the grid.
-		PFGrid.pathB = PFGrid.finder.findPath(Gamemode.startBX, Gamemode.startBY, Gamemode.endBX, Gamemode.endBY, PFGrid.gridBackup);
-
-		console.log(PFGrid.pathB);
-
-		for(var i in Tower.list){
-			var t = Tower.list[i];
-			t.mana = t.manaMax;
-			playa = Player.list[t.parent];
-			if (playa){
-				if (t.towerType == "gun") Math.round(playa.scoreBoard[0] += t.damage * t.AGI / 70);
-				else if (t.towerType == "gustav") Math.round(playa.scoreBoard[1] += t.damage * t.AGI / 30);
-				else if (t.bulletType == "physical") Math.round(playa.scoreBoard[0] += t.damage * t.AGI / 50);
-				else if (t.bulletType == "siege") Math.round(playa.scoreBoard[1] += t.damage * t.AGI / 50);
-				else if (t.bulletType == "arcane") Math.round(playa.scoreBoard[2] += t.damage * t.AGI / 50);
-				else if (t.bulletType == "heroic") Math.round(playa.scoreBoard[3] += t.damage * t.AGI / 50);
-				else if (t.bulletType == "elemental") Math.round(playa.scoreBoard[4] += t.damage * t.AGI / 50);
-				console.log(playa.username + ": " + playa.scoreBoard);
-			}
-		}
-		Base.wave += 1;
-		Base.phase = 1;
-		Base.bonusGold = Math.floor(Base.Tech / 1500 + 182 + Math.pow(Base.wave * 12, 1.10));
-		Base.sendGameState(1);
-		Base.Health *= 1.1;
-	}
-};
-
-Base.readyCheck = function(){
-	var online = 0;
-	for(var i in Player.list){
-		var p = Player.list[i];
-		if (p.ready == false) return false;
-		online ++;
-	}
-	if(online == 0) return false;
-	return true;
-}
+gameLoop();
 
 Base.nextColor = function(){
 	var online = 0;

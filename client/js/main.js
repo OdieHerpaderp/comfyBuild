@@ -285,7 +285,7 @@ socket.on('stockpile',function(data){
 
         if (stockpileItems[prop] === undefined) {
             stockpileItems[prop] = new Item(prop, data[prop].toLocaleString());
-            stockpileDiv2.appendChild(stockpileItems[prop].HTML);
+            stockpileDiv.appendChild(stockpileItems[prop].HTML);
         }
         else {
             stockpileItems[prop].setAmount(data[prop].toLocaleString());

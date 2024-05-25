@@ -2,20 +2,22 @@ Bullet = function(param){
 	var self = Entity(param);
 	self.id = Math.random();
 	self.angle = param.angle;
-	self.type = param.towerType;
+	self.type = param.type;
 	if(param.towerType == "oilDrum") self.speed = 5;
 	else self.speed = Math.pow(4 + param.speed / 7, 0.7);
 	self.spdX = Math.cos(param.angle/180*Math.PI) * self.speed;
 	self.spdY = Math.sin(param.angle/180*Math.PI) * self.speed;
 	self.parentType = param.parenttype;
 	self.bulletType = param.bulletType;
-	//console.log("My bullet type is " + self.bulletType);
+	console.log("My bullet type is " + self.type + " and i spawned at x" + Math.round(self.x / 48) +" y"+ Math.round(self.x / 48));
 	self.upgradeLevel = param.upgradeLevel;
 	self.parent = param.parent;
 	self.towerParent = param.towerParent;
 	self.damage = param.damage;
 	self.target = param.target;
 	self.lastTarget = "";
+	self.spdX = 0;
+	self.spdY = 0;
 
 	self.timer = 0;
 	self.bounces = 0;
@@ -92,11 +94,17 @@ Bullet = function(param){
 	}
 
 	self.update = function(){
-		if(self.timer++ > 24)
-			self.toRemove = true;
+		self.updateSpd();
+		//self.toRemove = true;
+		console.log(self)
 		super_update();
 	}
-	
+
+	self.updateSpd = function(){
+		self.spdX = 0;
+		self.spdY = 0;
+	}
+
 	self.getInitPack = function(){
 		return {
 			id:self.id,

@@ -143,17 +143,23 @@ Player = function(param){
 			map:self.map,
 		}
 	}
-	self.grantEXP = function(expGain){
-		//console.log("Granting " + self.id + " EXP: " + expGain);
-		self.exp += expGain;
-		self.tonxt = Math.round( 2500 + Math.pow(self.score * 750 , 1.1));
-		if(self.exp > self.tonxt){
-			console.log("DING " + self.id);
-			self.exp -= self.tonxt;
-			self.score++;
-			Base.announce(self.username + " leveled up to " + self.score + "!");
+
+	self.checkNodeOnCurrentPos = function(type){
+		if(type == undefined) return true;
+		self.gridX = Math.round(self.x / 48);
+		self.gridY = Math.round(self.y / 48);
+		self.x = self.gridX * 48;
+		self.y = self.gridY * 48;
+		for(var bi in Bullet.list){
+			var bp = Bullet.list[bi];
+			console.log("found " + bp.type + " comparing to" + type);
+			console.log(bp);
+			if(bp.type == type) console.log("we gotta match: " + Math.round(self.x / 48) + " " + Math.round(bp.x / 48));
+			if(bp.type == type && Math.round(self.x / 48) == Math.round(bp.x / 48) && Math.round(self.y / 48) == Math.round(bp.y / 48)) return true;
 		}
+		return false
 	}
+
 	Player.list[self.id] = self;
 
 	initPack.player.push(self.getInitPack());
@@ -340,14 +346,11 @@ Player.onConnect = function(socket,username,progress){
 		// Test if grid is valid
 		player.gridX = Math.round(player.x / 48);
 		player.gridY = Math.round(player.y / 48);
-		if(PFGrid.grid.isWalkableAt(player.gridX,player.gridY)){
-			PFGrid.grid.setWalkableAt(player.gridX, player.gridY, false);
-			createTower(player, tower);
-			//player.gold -= towerData[tower].value;
-		}
-		else{
-			socket.emit('addToChat','There is already a tower or obstacle here.');
-		}
+		console.log("Checking for "+ tower +"'s node: " + buildings[tower].node);
+		if(!player.checkNodeOnCurrentPos(buildings[tower].node)){ socket.emit('addToChat','This building needs to be placed on a ' + buildings[tower].node + 'node.'); return;}
+		if(!PFGrid.grid.isWalkableAt(player.gridX,player.gridY)){ socket.emit('addToChat','There is already a tower or obstacle here.'); return;}
+		PFGrid.grid.setWalkableAt(player.gridX, player.gridY, false);
+		createTower(player, tower);
 	});
 
 	socket.on('sendMsgToServer',function(data){

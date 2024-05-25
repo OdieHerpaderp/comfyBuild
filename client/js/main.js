@@ -275,11 +275,11 @@ socket.on('towerTooltip',function(data){
 });
 
 // Stockpile
-var stockpile = new ItemList();
+var stockpile = new ResourceList();
 document.getElementById('stockpileDiv').appendChild(stockpile.HTML);
 
 socket.on('stockpile',function(data){
-    stockpile.updateItems(data);
+    stockpile.updateResources(data);
 });
 
 socket.on('gameState',function(data){

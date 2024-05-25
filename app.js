@@ -166,15 +166,35 @@ function gameTick() {
 	tick++;
 };
 
-// Now uses a requestAnimationFrame, which should be less jank than before.
-// Skips every other "frame" to target a 30hz tick rate.
-var doTick = true;
+// New implementation that doesn't "skip" frames
+const targetFrameRate = 30; // Target frame rate in Hz
+const targetFrameTime = 1000 / targetFrameRate; // Target frame time in milliseconds
+
+let lastFrameTime = process.hrtime();
+
 function gameLoop() {
-	if(doTick){ gameTick(); doTick = false; }
-	else doTick = true;
-	raf(gameLoop);
-};
-// Start the gameLoop, this will recursively run the function using a requestAnimationFrame shim
+  const currentTime = process.hrtime();
+  const elapsedTime = calculateElapsedTime(lastFrameTime, currentTime);
+
+  if (elapsedTime >= targetFrameTime) {
+    gameTick(elapsedTime); // Pass the elapsed time to the game tick function
+    lastFrameTime = currentTime;
+  }
+
+  raf(gameLoop);
+}
+
+function calculateElapsedTime(start, end) {
+  const [startSec, startNano] = start;
+  const [endSec, endNano] = end;
+
+  const elapsedNano = endNano - startNano;
+  const elapsedSec = endSec - startSec;
+
+  const elapsedMilliseconds = (elapsedSec * 1000) + (elapsedNano / 1000000);
+  return elapsedMilliseconds;
+}
+
 raf(gameLoop);
 
 Base.startWave = function(){

@@ -123,23 +123,21 @@ var damageDisplay = function() {
 };
 
 var animate = function () {
-    setTimeout( function() { 
-        requestAnimationFrame( animate ); 
-        var currentTime = new Date().getTime();
-        var delta = currentTime - previousTime - 6;
-        avgDelta = Math.min((avgDelta * 2 + delta + targetFrameTime * 2) / 5 , 250);
-        previousTime = currentTime;
+    requestAnimationFrame( animate ); 
+    var currentTime = new Date().getTime();
+    var delta = currentTime - previousTime - 6;
+    avgDelta = Math.min((avgDelta * 2 + delta + targetFrameTime * 2) / 5 , 250);
+    previousTime = currentTime;
 
-        if (avgDelta > frameTime + 4 && frameTime < 200) frameTime = Math.ceil((frameTime + avgDelta * 2) / 3);
-        else if (avgDelta < frameTime + 1 && frameTime > targetFrameTime) frameTime = Math.floor((frameTime + avgDelta) / 2);
+    if (avgDelta > frameTime + 4 && frameTime < 200) frameTime = Math.ceil((frameTime + avgDelta * 2) / 3);
+    else if (avgDelta < frameTime + 1 && frameTime > targetFrameTime) frameTime = Math.floor((frameTime + avgDelta) / 2);
 
-        if (frameTime > 80 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
-        if (frameTime > 60 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";
-        else if (frameTime > 40 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
-        else document.getElementById('fpsCounter').style.color = "white";
+    if (frameTime > 80 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
+    if (frameTime > 60 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";
+    else if (frameTime > 40 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
+    else document.getElementById('fpsCounter').style.color = "white";
 
-        document.getElementById('fpsCounter').innerHTML = "FT: " + Math.round(avgDelta) + " (" + frameTime + ")";
-    }, frameTime);
+    document.getElementById('fpsCounter').innerHTML = "FT: " + Math.round(avgDelta) + " (" + frameTime + ")";
 
     //cube.rotation.x += 0.01;
     if(oldWidth != window.innerWidth || oldHeight != window.innerHeight){

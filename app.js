@@ -143,19 +143,22 @@ io.sockets.on('connection', function(socket){
 
 // Now uses a requestAnimationFrame, which should be less jank than before.
 function gameLoop() {
-	var packs = Entity.getFrameUpdateData();
-	for(var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
-		socket.emit('init',packs.initPack);
-		socket.emit('update',packs.updatePack);
-		socket.emit('remove',packs.removePack);
+	// .getFrameUpdateData() is where game ticks are processed.
+	if(tick % 2 === 0){
+		var packs = Entity.getFrameUpdateData();
+		for(var i in SOCKET_LIST){
+			var socket = SOCKET_LIST[i];
+			socket.emit('init',packs.initPack);
+			socket.emit('update',packs.updatePack);
+			socket.emit('remove',packs.removePack);
+		}
 	}
-	if(tick === 5)
-	{
+	if(tick === 5){
 		Gamemode.prepare();
 	}
-	if(tick % 3 === 0)
-	{
+	// These are actual ticks for comfyBuild logic. 
+	// TODO: This should be merged into .getFrameUpdateData()
+	if(tick % 4 === 0){
 		comfyBuild.tick();
 	}
 	if(tick % 512 === 0) Base.announce("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);

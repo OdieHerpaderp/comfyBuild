@@ -1034,11 +1034,9 @@ socket.on('update',function(data){
                 }
                 b.towerType = pack.towerType;
             }
-            if(pack.buildTimer !== undefined)
-                p.buildTimer = pack.buildTimer;
             if(pack.targetLevel !== undefined)
                 p.targetLevel = pack.targetLevel;
-            if(pack.upgradeLevel !== undefined){
+            if((pack.upgradeLevel !== undefined && pack.upgradeLevel !== b.upgradeLevel) || (pack.buildTimer !== undefined && pack.buildTimer !== b.buildTimer)){
                     var spriteT = scene.getObjectByName("TL" + pack.id);
                     var status = "";
                     var levelText = Math.round(pack.upgradeLevel);
@@ -1053,6 +1051,7 @@ socket.on('update',function(data){
                             ].join('\n');
                     }
                 b.upgradeLevel = pack.upgradeLevel;
+                b.buildTimer = pack.buildTimer;
             }
             if(pack.x !== undefined && pack.y !== undefined){
                 var cubetower = scene.getObjectByName("To" + pack.id);

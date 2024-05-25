@@ -5,9 +5,7 @@ interface.generateBuildingsHTML = function() {
         <thead>
           <tr>
             <th>Building</th>
-            <th>Build Reqs</th>
-            <th>Consume</th>
-            <th>Produce</th>
+            <th>Material Info</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -19,28 +17,22 @@ interface.generateBuildingsHTML = function() {
   
       html += `
         <tr>
-          <td>${buildingName} <font style="font-size:11px">Tier:${building.tier}<br>
-          <font style="font-size:10px">${building.info}</font></td>
-          <td style="font-size:10px">
+          <td>${buildingName} <font style="font-size:15px">Tier:${building.tier}<br>
+          <font style="font-size:14px">${building.info}</font></td>
+          <td style="font-size:15px;line-height: 0.9;"><b>Build:</b>
       `;
   
       for (const resource in building.build) {
-        html += `${resource}: ${building.build[resource]}. `;
+        html += ` ${resource}: ${building.build[resource]}. `;
       }
   
-      html += `
-          </td>
-          <td style="font-size:10px">
-      `;
+      html += `<br /><b>Consume:</b> `;
   
       for (const resource in building.consume) {
         html += `${resource}: ${building.consume[resource]}. `;
       }
   
-      html += `
-          </td>
-          <td style="font-size:10px">
-      `;
+      html += `<br /><b>Produce:</b> `;
   
       for (const resource in building.produce) {
         html += `${resource}: ${building.produce[resource]}. `;
@@ -94,7 +86,7 @@ const frameLogin = jsFrame.create({
         backgroundColor: '#22222255',
         overflow: 'hidden',
         width: '100%',
-        fontSize: 14
+        fontSize: 18
     },
     
     html: `<div style="padding:4px;font-family: 'Roboto Slab'">Username: <input id="signDiv-username" type="text"></input><br>
@@ -132,7 +124,7 @@ const frameStockpile = jsFrame.create({
         backgroundColor: '#22222255',
         overflow: 'auto',
         width: '100%',
-        fontSize: 14
+        fontSize: 18
     },
     
     html: `<div id="stockpileDiv" style="padding:4px;">stockpile text goes here</div>`
@@ -141,7 +133,7 @@ const frameStockpile = jsFrame.create({
 const frameBuildings = jsFrame.create({
     name: `frameBuildings`,
     title: `Buildings`,
-    left: 380, top: 360, width: 620, height: 420, minWidth: 200, minHeight: 110,
+    left: 380, top: 360, width: 820, height: 420, minWidth: 200, minHeight: 110,
     appearanceName: 'material',
     appearanceParam: {
         border: {
@@ -167,7 +159,7 @@ const frameBuildings = jsFrame.create({
         backgroundColor: '#22222255',
         overflow: 'auto',
         width: '100%',
-        fontSize: 14
+        fontSize: 18
     },
     
     html: `<div id="buildingsDiv" style="padding:4px;font-family: 'Roboto Slab'">mooi text goes here</div>`

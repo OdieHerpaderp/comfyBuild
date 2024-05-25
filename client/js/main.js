@@ -1041,7 +1041,7 @@ socket.on('update',function(data){
                     var status = "";
                     var levelText = Math.round(pack.upgradeLevel);
                     if (pack.targetLevel > pack.upgradeLevel) levelText = Math.round(pack.upgradeLevel) + " > " + Math.round(pack.targetLevel);
-                    if(pack.targetLevel > pack.upgradeLevel) status = "Build: " + Math.round(Math.max(p.buildTimer * 0.65,0)) / 10;
+                    if(pack.targetLevel > pack.upgradeLevel) status = "Build: " + Math.round(Math.max(b.buildTimer * 0.65,0)) / 10;
                     if(spriteT){
                         spriteT.text = [
                             '       ',

@@ -141,24 +141,20 @@ io.sockets.on('connection', function(socket){
 
 });
 
-// Now uses a requestAnimationFrame, which should be less jank than before.
-function gameLoop() {
-	// .getFrameUpdateData() is where game ticks are processed.
-	if(tick % 2 === 0){
-		var packs = Entity.getFrameUpdateData();
-		for(var i in SOCKET_LIST){
-			var socket = SOCKET_LIST[i];
-			socket.emit('init',packs.initPack);
-			socket.emit('update',packs.updatePack);
-			socket.emit('remove',packs.removePack);
-		}
+function gameTick() {
+	var packs = Entity.getFrameUpdateData();
+	for(var i in SOCKET_LIST){
+		var socket = SOCKET_LIST[i];
+		socket.emit('init',packs.initPack);
+		socket.emit('update',packs.updatePack);
+		socket.emit('remove',packs.removePack);
 	}
-	if(tick === 5){
+	if(tick === 5)
+	{
 		Gamemode.prepare();
 	}
-	// These are actual ticks for comfyBuild logic. 
-	// TODO: This should be merged into .getFrameUpdateData()
-	if(tick % 4 === 0){
+	if(tick % 2 === 0)
+	{
 		comfyBuild.tick();
 	}
 	if(tick % 512 === 0) Base.announce("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
@@ -167,6 +163,14 @@ function gameLoop() {
 		Base.skippedTicks = 0;
 	}
 	tick++;
+};
+
+// Now uses a requestAnimationFrame, which should be less jank than before.
+// Skips every other "frame" to target a 30hz tick rate.
+var doTick = true;
+function gameLoop() {
+	if(doTick){ gameTick(); doTick = false; }
+	else doTick = true;
 	raf(gameLoop);
 };
 // Start the gameLoop, this will recursively run the function using a requestAnimationFrame shim

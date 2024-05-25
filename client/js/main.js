@@ -125,7 +125,7 @@ var damageDisplay = function() {
 var animate = function () {
     requestAnimationFrame( animate ); 
     var currentTime = new Date().getTime();
-    var delta = currentTime - previousTime - 6;
+    var delta = currentTime - previousTime;
     avgDelta = Math.min((avgDelta * 2 + delta + targetFrameTime * 2) / 5 , 250);
     previousTime = currentTime;
 
@@ -137,7 +137,7 @@ var animate = function () {
     else if (frameTime > 40 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
     else document.getElementById('fpsCounter').style.color = "white";
 
-    document.getElementById('fpsCounter').innerHTML = "FT: " + Math.round(avgDelta) + " (" + frameTime + ")";
+    document.getElementById('fpsCounter').innerHTML = "FrameTime: " + delta +" ms";
 
     //cube.rotation.x += 0.01;
     if(oldWidth != window.innerWidth || oldHeight != window.innerHeight){

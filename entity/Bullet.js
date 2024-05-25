@@ -9,7 +9,7 @@ Bullet = function(param){
 	self.spdY = Math.sin(param.angle/180*Math.PI) * self.speed;
 	self.parentType = param.parenttype;
 	self.bulletType = param.bulletType;
-	console.log("My bullet type is " + self.type + " and i spawned at x" + Math.round(self.x / 48) +" y"+ Math.round(self.x / 48));
+	//console.log("My bullet type is " + self.type + " and i spawned at x" + Math.round(self.x / 48) +" y"+ Math.round(self.x / 48));
 	self.upgradeLevel = param.upgradeLevel;
 	self.parent = param.parent;
 	self.towerParent = param.towerParent;
@@ -96,7 +96,7 @@ Bullet = function(param){
 	self.update = function(){
 		self.updateSpd();
 		//self.toRemove = true;
-		console.log(self)
+		//console.log(self)
 		super_update();
 	}
 

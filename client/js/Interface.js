@@ -17,7 +17,7 @@ interface.generateBuildingsHTML = function() {
   
       html += `
         <tr>
-          <td>${buildingName} <font style="font-size:15px">Tier:${building.tier}<br>
+          <td>${buildingName} <font style="font-size:15px">Age:${building.age}<br>
           <font style="font-size:14px">${building.info}</font></td>
           <td style="font-size:15px;line-height: 0.9;"><b>Build:</b>
       `;

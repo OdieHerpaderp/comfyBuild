@@ -96,38 +96,38 @@ const frameLogin = jsFrame.create({
 });
 
 const frameStockpile = jsFrame.create({
-    name: `frameStockpile`,
-    title: `Stockpile`,
-    left: 80, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110,
-    appearanceName: 'material',
-    appearanceParam: {
-        border: {
-            width: 0,
-            radius: 2,
-        },
-        titleBar: {
-            color: 'white',
-            background: '#33333399',
-            leftMargin: 8,
-            height: 16,
-            fontSize: 14,
-            buttonWidth: 36,
-            buttonHeight: 16,
-            buttonColor: 'white',
-            buttons: [ // buttons on the right
-            ],
-            buttonsOnLeft: [ //buttons on the left
-            ],
-        },
-    },
-    style: {
-        backgroundColor: '#22222255',
-        overflow: 'auto',
-        width: '100%',
-        fontSize: 18
-    },
-    
-    html: `<div id="stockpileDiv" style="padding:4px;">stockpile text goes here</div>`
+  name: `frameStockpile`,
+  title: `Stockpile`,
+  left: 30, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110,
+  appearanceName: 'material',
+  appearanceParam: {
+      border: {
+          width: 0,
+          radius: 2,
+      },
+      titleBar: {
+          color: 'white',
+          background: '#33333399',
+          leftMargin: 8,
+          height: 16,
+          fontSize: 14,
+          buttonWidth: 36,
+          buttonHeight: 16,
+          buttonColor: 'white',
+          buttons: [ // buttons on the right
+          ],
+          buttonsOnLeft: [ //buttons on the left
+          ],
+      },
+  },
+  style: {
+      backgroundColor: '#22222255',
+      overflow: 'auto',
+      width: '100%',
+      fontSize: 18
+  },
+  
+  html: `<div id="stockpileDiv" style="padding:4px;"></div>`
 });
 
 const frameBuildings = jsFrame.create({

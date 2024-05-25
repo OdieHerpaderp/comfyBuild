@@ -250,7 +250,7 @@ socket.on('signUpResponse',function(data){
 var chatText = document.getElementById('chat-text');
 var chatInput = document.getElementById('chat-input');
 var chatForm = document.getElementById('chat-form');
-var stockpileDiv = document.getElementById('stockpileDiv');
+
 
 socket.on('addToChat',function(data){
     chatText.innerHTML = '<div>' + data + '</div>' + chatText.innerHTML;
@@ -274,12 +274,23 @@ socket.on('towerTooltip',function(data){
     //buttonSell.innerHTML = "Sell (+" + data.value + ")";
 });
 
+// Stockpile
+var stockpileDiv = document.getElementById('stockpileDiv');
+var stockpileItems = {};
+
 socket.on('stockpile',function(data){
-    //TODO improve if/when needed?
-    stockpileDiv.innerHTML = "";
     for (const prop in data) {
-        if(data[prop] > 0) stockpileDiv.innerHTML += `<div id='parent'><div id='wide'>${prop}:</div><div id='narrow'>${data[prop].toLocaleString()}</div></div>`;
-      }
+        if(data[prop] <= 0) { continue; }
+        //stockpileDiv.innerHTML += `<div id='parent'><div id='wide'>${prop}:</div><div id='narrow'>${data[prop].toLocaleString()}</div></div>`;
+
+        if (stockpileItems[prop] === undefined) {
+            stockpileItems[prop] = new Item(prop, data[prop].toLocaleString());
+            stockpileDiv2.appendChild(stockpileItems[prop].HTML);
+        }
+        else {
+            stockpileItems[prop].setAmount(data[prop].toLocaleString());
+        }
+    }
 });
 
 socket.on('gameState',function(data){

@@ -8,6 +8,7 @@ require('./Entity');
 require('./Gamemode');
 //require('./geckosio');
 require('./client/Inventory');
+const raf = require('raf');
 
 var express = require('express');
 var app = express();
@@ -140,41 +141,47 @@ io.sockets.on('connection', function(socket){
 
 });
 
-setInterval(function(){
+// Now uses a requestAnimationFrame, which should be less jank than before.
+function gameLoop() {
 	var currentTime = new Date().getTime();
     var delta = currentTime - previousTime;
-	if (delta > 10) console.log("Subtick has exceeded 10! (" + delta + ")");
+	//console.log("Subtick time: (" + delta + ")");
 	previousTime = currentTime;
 	var deltaTick = currentTime - Base.lastTick;
 	if (deltaTick < 30) {
-		Base.skippedTicks++; return;
+		//console.log("not time yet");
+		Base.skippedTicks++;
 	}
+	else{
+		Base.lastTick = currentTime;
 
-	Base.lastTick = currentTime;
+		var packs = Entity.getFrameUpdateData();
 
-	var packs = Entity.getFrameUpdateData();
-
-	for(var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
-		socket.emit('init',packs.initPack);
-		socket.emit('update',packs.updatePack);
-		socket.emit('remove',packs.removePack);
+		for(var i in SOCKET_LIST){
+			var socket = SOCKET_LIST[i];
+			socket.emit('init',packs.initPack);
+			socket.emit('update',packs.updatePack);
+			socket.emit('remove',packs.removePack);
+		}
+		if(tick === 5)
+		{
+			Gamemode.prepare();
+		}
+		if(tick % 3 === 0)
+		{
+			comfyBuild.tick();
+		}
+		if(tick % 512 === 0) Base.announce("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
+		if(tick % 128 === 0){
+			console.log("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
+			Base.skippedTicks = 0;
+		}
+		tick++;
 	}
-	if(tick === 5)
-	{
-		Gamemode.prepare();
-	}
-	if(tick % 3 === 0)
-	{
-		comfyBuild.tick();
-	}
-	if(tick % 512 === 0) Base.announce("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
-	if(tick % 128 === 0){
-		console.log("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
-		Base.skippedTicks = 0;
-	}
-	tick++;
-},1);
+	raf(gameLoop);
+};
+// Start the gameLoop, this will recursively run the function using a requestAnimationFrame shim
+raf(gameLoop);
 
 Base.startWave = function(){
 	console.log("startWave initialized.");

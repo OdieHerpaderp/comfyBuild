@@ -141,14 +141,8 @@ io.sockets.on('connection', function(socket){
 
 });
 
+//TODO: Merge comfyBuild tick into main tick once movement is clientside
 function gameTick() {
-	var packs = Entity.getFrameUpdateData();
-	for(var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
-		socket.emit('init',packs.initPack);
-		socket.emit('update',packs.updatePack);
-		socket.emit('remove',packs.removePack);
-	}
 	if(tick === 5)
 	{
 		Gamemode.prepare();
@@ -161,6 +155,13 @@ function gameTick() {
 	if(tick % 128 === 0){
 		console.log("T:" + tick + "  Skipped Ticks: " + Base.skippedTicks);
 		Base.skippedTicks = 0;
+	}
+	var packs = Entity.getFrameUpdateData();
+	for(var i in SOCKET_LIST){
+		var socket = SOCKET_LIST[i];
+		socket.emit('init',packs.initPack);
+		socket.emit('update',packs.updatePack);
+		socket.emit('remove',packs.removePack);
 	}
 	tick++;
 };

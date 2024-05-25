@@ -137,7 +137,7 @@ var animate = function () {
     else if (frameTime > 40 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
     else document.getElementById('fpsCounter').style.color = "white";
 
-    document.getElementById('fpsCounter').innerHTML = "FrameTime: " + delta +" ms";
+    document.getElementById('fpsCounter').innerHTML = "FT: " + delta +" ms";
 
     //cube.rotation.x += 0.01;
     if(oldWidth != window.innerWidth || oldHeight != window.innerHeight){

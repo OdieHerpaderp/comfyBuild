@@ -7,7 +7,6 @@ class ResourceList {
 
     updateResources(resources) {
         for (const name in resources) {
-            if(resources[name] <= 0) { continue; }
             this.updateResource(name, resources[name].toLocaleString());
         }
     }

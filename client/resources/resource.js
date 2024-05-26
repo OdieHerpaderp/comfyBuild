@@ -6,11 +6,19 @@ class Resource {
         this.HTML = document.createElement("comfybuild-resource");
         this.HTML.setAttribute("comfybuild-resourcename", this.name);
         this.HTML.setAttribute("comfybuild-resourceamount", this.amount);
+
+        if (amount <= 0) {
+            this.HTML.style.display = "none";
+        }
     }
 
     setAmount(amount) {
         this.amount = amount;
         this.HTML.setAttribute("comfybuild-resourceamount", this.amount);
+
+        if (amount > 0) {
+            this.HTML.style.display = "block";
+        }
     }
 }
 

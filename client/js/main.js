@@ -621,11 +621,11 @@ socket.on('init',function(data){
 
         var geometry = new THREE.PlaneGeometry( 5, 5, 1, 1 );
         var PTex = new THREE.TextureLoader().load( '/client/img/player.png' );
-        var materialplayer = new THREE.MeshLambertMaterial( { map: PTex, side: THREE.BackSide, transparent: true, depthWrite: false, depthTest: false, color: data.player[i].color, } );
+        var materialplayer = new THREE.MeshLambertMaterial( { map: PTex, transparent: true, depthWrite: false, depthTest: false, color: data.player[i].color, } );
         var cubeplayer = new THREE.Mesh( geometry, materialplayer );
 
         cubeplayer.position.set(-400,-40,-400);
-        cubeplayer.rotation.x = Math.PI / 2;
+        cubeplayer.rotation.x = Math.PI * 1.5;
         cubeplayer.name = "Pl" + data.player[i].id;
 
         scene.add(cubeplayer);
@@ -640,21 +640,11 @@ socket.on('init',function(data){
         var materialbullet = new THREE.MeshLambertMaterial( { map: Texture, transparent: true } );
         var cubebullet = new THREE.Mesh( bulletGeometry, materialbullet );
         
-        cubebullet.position.set(data.bullet[i].x / 10, 2, data.bullet[i].y / 10);
+        cubebullet.position.set(data.bullet[i].x / 10, 0.1, 0.1 + data.bullet[i].y / 10);
+        cubebullet.rotation.x = Math.PI * 1.5;
         cubebullet.name = "Bu" + data.bullet[i].id;
 
         scene.add(cubebullet);
-
-        if (data.bullet[i].towerType == "laser"){
-            var laserMaterial = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-            var points = [];
-            points.push( new THREE.Vector3( Tower.list[data.bullet[i].towerParent].x / 10, 2, Tower.list[data.bullet[i].towerParent].y / 10 ));
-            points.push( new THREE.Vector3( data.bullet[i].x / 10, 2, data.bullet[i].y / 10 ) );
-
-            var geometry = new THREE.BufferGeometry().setFromPoints( points );
-            var line = new THREE.Line( geometry, laserMaterial );
-            cubebullet.add( line );
-        }
     }
     for(var i = 0 ; i < data.npc.length; i++){
         new NPC(data.npc[i]);
@@ -816,7 +806,7 @@ socket.on('init',function(data){
             //var Lgeometry = new THREE.PlaneGeometry( 3.5, 0.9, 1, 1 );
             //var LTex = new THREE.TextureLoader().load( '/client/img/upgrade1.png' );
             //var Lmaterialtower = new THREE.MeshLambertMaterial( { map: LTex, side: THREE.DoubleSide,transparent: true, depthWrite: false, depthTest: false,} );
-            var myessprite = new THREE.TextSprite({
+            var textSprite = new THREE.TextSprite({
                 align: 'center',
                 fillStyle: '#ffffff',
                 fontFamily: 'Roboto Slab',
@@ -830,9 +820,9 @@ socket.on('init',function(data){
                 ].join('\n'),
             });
 
-            myessprite.position.set(0,0.2,1.6);
-            myessprite.name = "TL" + data.tower[i].id;
-            cubetower.add(myessprite);
+            textSprite.position.set(0,0.2,1.6);
+            textSprite.name = "TL" + data.tower[i].id;
+            cubetower.add(textSprite);
         }
     }
 });
@@ -971,6 +961,8 @@ socket.on('update',function(data){
                 p.stoned = pack.stoned;
         }
     }
+    // Temporarily stop processing bullets, as they don't need updates
+    /*
     for(var i = 0 ; i < data.bullet.length; i++){
         var pack = data.bullet[i];
         var b = Bullet.list[data.bullet[i].id];
@@ -988,10 +980,11 @@ socket.on('update',function(data){
                 
             var cubebullet = scene.getObjectByName("Bu" + pack.id);
             if(cubebullet){
-                cubebullet.position.set(pack.x / 10, 2, pack.y / 10);
+                cubebullet.position.set(pack.x / 10, 1, pack.y / 10);
             }
         }
     }
+    */
     var needsTooltip = false;
     var needsHeroicTooltip = false;
 

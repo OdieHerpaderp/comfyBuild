@@ -327,7 +327,8 @@ NPC.update = function(){
 		if(npc.toRemove){
 			delete NPC.list[i];
 			removePack.npc.push(npc.id);
-		} else
+		} else if (false)
+			// Skip sending bullet updates.
 			pack.push(npc.getUpdatePack());
 	}
 	return pack;

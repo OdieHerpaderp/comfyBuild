@@ -152,8 +152,8 @@ Player = function(param){
 		self.y = self.gridY * 48;
 		for(var bi in Bullet.list){
 			var bp = Bullet.list[bi];
-			console.log("found " + bp.type + " comparing to" + type);
-			console.log(bp);
+			//console.log("found " + bp.type + " comparing to" + type);
+			//console.log(bp);
 			if(bp.type == type) console.log("we gotta match: " + Math.round(self.x / 48) + " " + Math.round(bp.x / 48));
 			if(bp.type == type && Math.round(self.x / 48) == Math.round(bp.x / 48) && Math.round(self.y / 48) == Math.round(bp.y / 48)) return true;
 		}

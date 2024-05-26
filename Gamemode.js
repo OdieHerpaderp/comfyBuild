@@ -11,16 +11,16 @@ Gamemode.endAY = 0;
 Gamemode.endBX = 0;
 Gamemode.endBY = 0;
 
-Gamemode.spawnBullet = function(type){
-	// Test if grid is valid
-	var randomGridX = Math.round(4 + Math.random() * 120);
-	var randomGridY = Math.round(4 + Math.random() * 120);
-	while(!PFGrid.grid.isWalkableAt(randomGridX,randomGridY)){
-		randomGridX = Math.round(4 + Math.random() * 120);
-		randomGridY = Math.round(4 + Math.random() * 120);
+Gamemode.spawnBullet = function(type,xMin,xMax,yMin,yMax){
+	// Test if grid is valid, but use a backup to discard changes
+	var randomGridX = Math.round(xMin + Math.random() * (xMax-xMin));
+	var randomGridY = Math.round(yMin + Math.random() * (yMax-yMin));
+	while(!PFGrid.gridBackup.isWalkableAt(randomGridX,randomGridY)){
+		randomGridX = Math.round(xMin + Math.random() * (xMax-xMin));
+		randomGridY = Math.round(yMin + Math.random() * (yMax-yMin));
 	}
-	if(PFGrid.grid.isWalkableAt(randomGridX,randomGridY)){
-		PFGrid.grid.setWalkableAt(randomGridX, randomGridY, false);
+	if(PFGrid.gridBackup.isWalkableAt(randomGridX,randomGridY)){
+		PFGrid.gridBackup.setWalkableAt(randomGridX, randomGridY, false);
 		Bullet({
 			type:type,
 			x:randomGridX * 48,
@@ -31,11 +31,11 @@ Gamemode.spawnBullet = function(type){
 };
 
 Gamemode.prepare = function(){
-	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("soil"); }
-	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("freshWater"); }
-	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("wildGame"); }
-	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("forest"); }
-	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("rockDeposit"); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("freshWater",60,68,0,127); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("soil",4,120,4,120); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("wildGame",4,120,4,120); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("forest",4,120,4,120); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("rockDeposit",4,50,4,120); }
 	return;
 	Tower({
 		towerType:"waterSource",

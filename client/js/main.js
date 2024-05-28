@@ -235,7 +235,9 @@ socket.on('signInResponse',function(data){
         frameLogin.closeFrame();
         frameStockpile.show();
         frameBuildings.show();
-        document.getElementById('buildingsDiv').innerHTML = interface.generateBuildingsHTML();
+        let buildingList = new BuildingDataList(buildings);
+        document.getElementById('buildingsDiv').appendChild(buildingList.HTML);
+        //document.getElementById('building-list').appendChild(buildingList.HTML);
     } else
         alert("Sign in unsuccessul.");
 });
@@ -253,7 +255,10 @@ var chatForm = document.getElementById('chat-form');
 
 
 socket.on('addToChat',function(data){
-    chatText.innerHTML = '<div>' + data + '</div>' + chatText.innerHTML;
+    var span = document.createElement("span");
+    span.innerHTML = data;
+    chatText.insertBefore(span, chatText.firstChild);
+    //chatText.innerHTML = '<span>' + data + '</span>' + chatText.innerHTML;
     //chatText.scrollTop = chatText.scrollHeight - chatText.clientHeight
 });
 socket.on('evalAnswer',function(data){
@@ -321,20 +326,20 @@ socket.on('gameState',function(data){
     }
 });
 
-chatForm.onsubmit = function(e){
-    e.preventDefault();
-    if(chatInput.value[0] === '/')
-        socket.emit('evalServer',chatInput.value.slice(1));
-    else if(chatInput.value[0] === '@'){
-        //@username,message
-        socket.emit('sendPmToServer',{
-            username:chatInput.value.slice(1,chatInput.value.indexOf(',')),
-            message:chatInput.value.slice(chatInput.value.indexOf(',') + 1)
-        });
-    } else
-        socket.emit('sendMsgToServer',chatInput.value);
-    chatInput.value = '';
-}
+//chatForm.onsubmit = function(e){
+//    e.preventDefault();
+//    if(chatInput.value[0] === '/')
+//        socket.emit('evalServer',chatInput.value.slice(1));
+//    else if(chatInput.value[0] === '@'){
+//        //@username,message
+//        socket.emit('sendPmToServer',{
+//            username:chatInput.value.slice(1,chatInput.value.indexOf(',')),
+//            message:chatInput.value.slice(chatInput.value.indexOf(',') + 1)
+//        });
+//    } else
+//        socket.emit('sendMsgToServer',chatInput.value);
+//    chatInput.value = '';
+//}
 
 //UI
 var changeMap = function(){

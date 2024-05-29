@@ -2,6 +2,10 @@ import { BuildingDataList } from "buildingDataList";
 import { ResourceList } from "resourceList";
 import { buildings } from "buildings";
 import { io } from "socket.io-client";
+import * as THREE from 'three';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import TextSprite from '@seregpie/three.text-sprite';
 
 var socket = io();
 
@@ -69,7 +73,7 @@ camera.position.z = 5;
 //scene.add(light);
 
 //cubemap HDR
-new THREE.RGBELoader()
+new RGBELoader()
     .setPath('/client/img/')
     .load('skybox.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -91,7 +95,7 @@ var displayDamage = 2;
 window.upgradeAmount = 1;
 var pop = 100;
 
-const loader = new THREE.GLTFLoader();
+const loader = new GLTFLoader();
 
 var modelData = [];
 
@@ -616,7 +620,7 @@ socket.on('damage', function (data) {
     else if (data.type == "crit") textColor = '#ff2222';
     else if (data.type == "corrosion") textColor = '#33ff66';
 
-    let sprite = new THREE.TextSprite({
+    let sprite = new TextSprite({
         align: 'center',
         fillStyle: textColor,
         fontFamily: 'Nanum Gothic Coding',
@@ -699,7 +703,7 @@ socket.on('init', function (data) {
         cubenpcB.name = "NB" + data.npc[i].id;
         scene.add(cubenpcB);
 
-        let sprite = new THREE.TextSprite({
+        let sprite = new TextSprite({
             align: 'right',
             fillStyle: '#ffffff',
             fontFamily: 'Nanum Gothic Coding',
@@ -727,7 +731,7 @@ socket.on('init', function (data) {
         cubenpcArm.name = "NA" + data.npc[i].id;
         cubenpc.add(cubenpcArm);
 
-        let asprite = new THREE.TextSprite({
+        let asprite = new TextSprite({
             align: 'center',
             fillStyle: '#ffffff',
             fontFamily: 'Nanum Gothic Coding',
@@ -752,7 +756,7 @@ socket.on('init', function (data) {
             cubenpcBS.name = "NS" + data.npc[i].id;
             scene.add(cubenpcBS);
 
-            let spriteS = new THREE.TextSprite({
+            let spriteS = new TextSprite({
                 align: 'right',
                 fillStyle: '#ffffff',
                 fontFamily: 'Nanum Gothic Coding',
@@ -827,13 +831,13 @@ socket.on('init', function (data) {
             //var Lgeometry = new THREE.PlaneGeometry( 3.5, 0.9, 1, 1 );
             //var LTex = new THREE.TextureLoader().load( '/client/img/upgrade1.png' );
             //var Lmaterialtower = new THREE.MeshLambertMaterial( { map: LTex, side: THREE.DoubleSide,transparent: true, depthWrite: false, depthTest: false,} );
-            var textSprite = new THREE.TextSprite({
-                align: 'center',
-                fillStyle: '#ffffff',
+            var textSprite = new TextSprite({
+                alignment: 'center',
+                color: '#fff',
                 fontFamily: 'Roboto Slab',
                 fontSize: 0.80,
                 lineGap: 0.05,
-                strokeStyle: '#000',
+                strokeColor: '#000',
                 strokeWidth: 0.15,
                 text: [
                     '     ',

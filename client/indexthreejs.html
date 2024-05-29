@@ -302,11 +302,6 @@
 	<!--<script src="/client/socket.js"></script>-->
 	<script src="/client/Inventory.js"></script>
 	<script src="/client/blowfish.js"></script>
-	<script src="/node_modules/three/build/three.js"></script>
-	<script src="/client/js/three-text-texture.js"></script>
-	<script src="/client/js/three-text-sprite.js"></script>
-	<script src="/node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
-	<script src="/node_modules/three/examples/js/loaders/RGBELoader.js"></script>
 	<script src="/client/js/Interface.js"></script>
 	<!--<script src="/client/js/main.js"></script>-->
 
@@ -320,7 +315,10 @@
 				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
 				"templateHelpers": "./client/modules/templateHelpers.mjs",
 				"socket.io-client": "./node_modules/socket.io-client/dist/socket.io.esm.min.js",
-				"three": "./node_modules/three/build/three.module.js"
+				"three": "./node_modules/three/build/three.module.js",
+				"three/addons/": "./node_modules/three/examples/jsm/",
+				"@seregpie/three.text-sprite":  "./client/modules/three.text-sprite/index.js",
+				"@seregpie/three.text-texture": "./client/modules/three.text-texture/index.js"
 			}
 		}
 	</script>

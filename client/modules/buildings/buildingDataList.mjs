@@ -1,4 +1,4 @@
-import BuildingData from "./buildingData.js";
+import BuildingData from "./buildingData.mjs";
 
 class BuildingDataList {
     static template;

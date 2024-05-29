@@ -1,7 +1,10 @@
 Base = {};
 require('./Database');
 require('./lib/lib');
-require('./lib/buildings');
+buildings = {};
+(async () => {
+	buildings = (await import("./lib/buildings.mjs")).buildings;
+})();
 require('./lib/comfyBuild');
 require('./lib/stockpile');
 require('./Entity');

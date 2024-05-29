@@ -73,7 +73,7 @@ var pop = 100;
 
 const loader = new THREE.GLTFLoader();
 
-modelData = [];
+var modelData = [];
 
 loader.load( 'client/models/tower/pawn.glb', function ( gltf ) {
     const root = gltf.scene;
@@ -248,9 +248,6 @@ socket.on('signInResponse',function(data){
         frameLogin.closeFrame();
         frameStockpile.show();
         frameBuildings.show();
-        let buildingList = new BuildingDataList(buildings);
-        document.getElementById('buildingsDiv').appendChild(buildingList.HTML);
-        //document.getElementById('building-list').appendChild(buildingList.HTML);
     } else
         alert("Sign in unsuccessul.");
 });
@@ -290,14 +287,6 @@ socket.on('towerTooltip',function(data){
     towerTooltipText.innerHTML = "LVL: " + data.LVL +  " DMG: " + data.damage + " AGI: " + data.AGI + " RNG: " + data.range;
     buttonUpgrade.innerHTML = "Upgrade (" + upgradeAmount + ")";
     //buttonSell.innerHTML = "Sell (+" + data.value + ")";
-});
-
-// Stockpile
-var stockpile = new ResourceList();
-document.getElementById('stockpileDiv').appendChild(stockpile.HTML);
-
-socket.on('stockpile',function(data){
-    stockpile.updateResources(data);
 });
 
 socket.on('gameState',function(data){

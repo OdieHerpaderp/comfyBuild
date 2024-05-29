@@ -127,6 +127,7 @@ a:active {
 }
 
 table {
+    font-family: 'Roboto Slab';
     border-collapse: collapse;
     width: 100%;
 }
@@ -356,4 +357,37 @@ td {
     background-color: rgba(0,0,0,0.5);
     padding: 3px;
     text-align: center;
+}
+
+.resourceList {
+    padding: 4px;
+}
+
+.resource {
+    display: flex;
+}
+
+.resource div {
+    line-height: 16px;
+    height: 20px;
+    font-variant-numeric: tabular-nums lining-nums;
+}
+
+.resource > .resourceName {
+    flex-grow: 1;
+    font-family: 'Roboto Slab';
+    font-size: 16px;
+}
+
+.resource > .resourceName:after {
+    content: ':';
+}
+
+.resource > .resourceAmount {
+    font-size: 18px;
+    text-align: right;
+}
+
+.hidden {
+    display: none;
 }

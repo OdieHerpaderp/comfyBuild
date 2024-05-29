@@ -1,9 +1,11 @@
+import BuildingData from "./buildingData.js";
+
 class BuildingDataList {
+    static template;
     buildingDatas = [];
 
     constructor(buildings) {
-        this.HTML = document.querySelector("template#building-data-list-template")
-            .content.cloneNode(true).firstElementChild;
+        this.HTML = BuildingDataList.template.content.cloneNode(true);
 
         let infoField = this.HTML.querySelector("#infoField");
 
@@ -29,3 +31,9 @@ class BuildingDataList {
     }
 }
 
+var templateHTML = await ( await fetch("client/modules/buildings/buildingDataList.html") ).text();
+var parser = new DOMParser();
+BuildingDataList.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+
+export { BuildingDataList };
+export default BuildingDataList;

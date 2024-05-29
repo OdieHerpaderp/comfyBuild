@@ -1,4 +1,6 @@
 class BuildingData {
+    static template;
+
     constructor(name, data, infoField) {
         this.name = name;
         this.age = this.default(data.age, -1);
@@ -8,8 +10,7 @@ class BuildingData {
         this.consume = this.default(data.consume, {});
         this.produce = this.default(data.produce, {});
 
-        this.HTML = document.querySelector("template#building-data-template")
-            .content.cloneNode(true).firstElementChild;
+        this.HTML = BuildingData.template.content.cloneNode(true).firstElementChild;
 
         this.fillProperty("name", this.name);
         this.fillProperty("age", this.age);
@@ -22,7 +23,6 @@ class BuildingData {
         this.fillProperty("produce", this.getResourceInfo(this.produce));
 
         var buildButton = this.HTML.querySelector("[data-action=build]");
-        console.log(buildButton);
         buildButton.onclick = () => { buildTower(this.name); };
 
         if (infoField) {
@@ -52,3 +52,10 @@ class BuildingData {
         }
     }
 }
+
+var templateHTML = await ( await fetch("client/modules/buildings/buildingData.html") ).text();
+var parser = new DOMParser();
+BuildingData.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+
+export { BuildingData };
+export default BuildingData;

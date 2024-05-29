@@ -296,51 +296,6 @@
 	-->
 	</div>
 
-
-	<template id="building-data-list-template">
-		<div class="text-normal">
-			<div id="infoField">Test</div>
-			<table>
-				<thead>
-					<tr>
-						<th>Age</th>
-						<th>Building</th>
-						<th style="text-align:right;">Consume</th>
-						<th>></th>
-						<th style="text-align:left;">Produce</th>
-						<th>Build</th>
-					</tr>
-				</thead>
-				<tbody data-property="buildingData"></tbody>
-			</table>
-		</div>
-	</template>
-
-	<template id="building-data-template">
-		<tr>
-			<td data-property="age"></td>
-			<td>
-				<span data-property="name"></span><br />
-				<span data-property="node" class="text-small flex-center"></span>
-			</td>
-			<td style="text-align:right;">
-				<span data-property="consume" class="text-small flex-right"></span>
-			</td>
-			<td style="font-size:35px; line-height: 35px; color:lightgray;">></td>
-			<td style="text-align:left;">
-				<span data-property="produce" class="text-small flex"></span>
-			</td>
-			<td>
-				<div class="flex-center">
-					<button class="comfyButton" data-action="build">Build</button>
-					<span data-property="build" class="text-small"></span>
-				</div>
-			</td>
-		</tr>
-	</template>
-
-
-
 	<script src="https://cdn.jsdelivr.net/npm/jsframe.js/lib/jsframe.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/split.js@1.6.0/dist/split.min.js"></script>
 
@@ -354,12 +309,10 @@
 	<script src="/node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
 	<script src="/node_modules/three/examples/js/loaders/RGBELoader.js"></script>
 	<script src="/client/js/Interface.js"></script>
-	<script src="/client/buildings/buildingData.js"></script>
-	<script src="/client/buildings/buildingDataList.js"></script>
-	<script src="/client/resources/resource.js"></script>
-	<script src="/client/resources/resourceList.js"></script>
-
 	<script src="/client/js/main.js"></script>
+
+
+	<script type="module" src="/client/game.js" defer></script>
 
 </body>
 

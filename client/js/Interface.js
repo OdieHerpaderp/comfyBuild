@@ -1,58 +1,3 @@
-interface={};
-interface.generateBuildingsHTML = function() {
-    let html = `
-      <table>
-        <thead>
-          <tr>
-            <th>Building</th>
-            <th>Material Info</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-  
-    for (const buildingName in buildings) {
-      const building = buildings[buildingName];
-  
-      html += `
-        <tr>
-          <td>${buildingName} <font style="font-size:15px">Age:${building.age}<br>
-          <font style="font-size:14px">${building.info}</font></td>
-          <td style="font-size:15px;line-height: 0.9;"><b>Build:</b>
-      `;
-  
-      for (const resource in building.build) {
-        html += ` ${resource}: ${building.build[resource]}. `;
-      }
-  
-      html += `<br /><b>Consume:</b> `;
-  
-      for (const resource in building.consume) {
-        html += `${resource}: ${building.consume[resource]}. `;
-      }
-  
-      html += `<br /><b>Produce:</b> `;
-  
-      for (const resource in building.produce) {
-        html += `${resource}: ${building.produce[resource]}. `;
-      }
-  
-      html += `
-          </td>
-          <td><a href="javascript:buildTower('${buildingName}');">Build</a></td>
-        </tr>
-      `;
-    }
-  
-    html += `
-        </tbody>
-      </table>
-    `;
-  
-    return html;
-  }
-
 //jsFrame
 const jsFrame = new JSFrame();
 
@@ -89,7 +34,7 @@ const frameLogin = jsFrame.create({
         fontSize: 18
     },
     
-    html: `<div style="padding:4px;font-family: 'Roboto Slab'">Username: <input id="signDiv-username" type="text"></input><br>
+    html: `<div style="padding:4px;font-family:'Roboto Slab';font-size:18px;">Username: <input id="signDiv-username" type="text"></input><br>
 	Password: <input id="signDiv-password" type="password"></input>
 	<button id="signDiv-signIn">Sign In</button>
 	<button id="signDiv-signUp">Sign Up</button></div>`
@@ -133,7 +78,7 @@ const frameStockpile = jsFrame.create({
 const frameBuildings = jsFrame.create({
     name: `frameBuildings`,
     title: `Buildings`,
-    left: 380, top: 360, width: 820, height: 420, minWidth: 200, minHeight: 110,
+    left: 380, top: 360, width: 550, height: 420, minWidth: 535, minHeight: 110,
     appearanceName: 'material',
     appearanceParam: {
         border: {
@@ -162,7 +107,13 @@ const frameBuildings = jsFrame.create({
         fontSize: 18
     },
     
-    html: `<div id="buildingsDiv" style="padding:4px;font-family: 'Roboto Slab'">mooi text goes here</div>`
+    html: `<div id="buildingsDiv" style="padding:4px;font-family: 'Roboto Slab'"></div>`
+});
+
+document.addEventListener("DOMContentLoaded", (event) => {
+    Split(["#chat", "#building-info", "#building-list"],{
+        minSize: 250,
+    });
 });
 
 console.log("*frameJs loaded.");

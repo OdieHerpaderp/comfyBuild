@@ -1,264 +1,301 @@
-<style>
-	@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
-	@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100..900&display=swap');
-	@font-face {
-		font-family: 'Pelagiad';
-		src: url('/client/font/pelagiad-webfont.woff2') format('woff2'),
-			url('/client/font/pelagiad-webfont.woff') format('woff');
-		font-weight: normal;
-		font-style: normal;
+<!DOCTYPE html>
+<html>
 
-	}
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./client/style.css">
 
-	body   				{overflow: hidden; background-color: #224400;color: #FAFAFA; font-family: 'Roboto Mono', monospace;font-variant-numeric: tabular-nums lining-nums;font-size: 18px;}
-	h1     				{color: blue;}
-	p      				{color: white;}
-	.logo  				{background-image: url("/client/img/logo.png"); float:left; width:154px; height:38px; position:relative; top:3px; margin-left:6px; margin-right:8px; text-align: center;}
-	.pane  				{background-image: url("/client/img/pane.png"); float:left; width:256px; height:38px; position:relative; top:3px; margin-left:6px; margin-right:8px; text-align: center; line-height: 40px;}
-	a			{margin-right:-2px;margin-bottom:-1px;box-shadow:0 2px #222222, inset 0 2px #666666;text-shadow: 0.5px 0.5px 1px #000000; color:#DDDDDD; text-decoration: none; background-color:#444444;display:block;border-style: solid; border-color:#222222; border-width: 1.5px; border-radius: 3px; text-align: center; font-family: 'Roboto Slab'; font-size:26px; line-height: 27px;}
-	a:hover		{box-shadow:0 2px #222222, inset 0 2px #888888; color:#FFFFFF; text-decoration: none; background-color:#666666;display:block}
-	a:active		{margin-top:2px;margin-bottom:-3px;box-shadow:inset 0 -2px #333333;text-shadow: 0.5px 0.5px 1px #000000; color:#FFFFFF; text-decoration: none; background-color:#222222;display:block}
-	.buttonReady		{box-shadow:0 2px #222222, inset 0 2px #666666;text-shadow: 1.5px 1.5px 1.5px #000000,0px -0.5px 0px #666666; color:#DDDDDD; text-decoration: none; background-color:#444444;display:block;border-style: solid; border-color:#222222; border-width: 1.5px; border-radius: 3px; text-align: center; font-family: 'Roboto Slab'; font-size:36px; line-height: 74px;}
-	.buttonReady:hover	{box-shadow:0 2px #222222, inset 0 2px #888888; color:#FFFFFF; text-decoration: none; background-color:#666666;display:block}
-	.buttonReady:active	{margin-top:2px;margin-bottom:-2px;box-shadow:inset 0 -2px #333333;text-shadow: 0.5px 0.5px 1px #000000; color:#FFFFFF; text-decoration: none; background-color:#222222;display:block}
-	td					{font-size:16px;}
-	td					{border-bottom: 1px solid white;padding-right:0px;margin-right:0px;font-size:15px;}
-	#scoreBoardtd		{text-align:right; margin-left:2px; padding:2px;text-shadow: 0.5px 0.5px 1.5px #000000;width:13%}
-	#chat-text			{text-shadow: 0.5px 0.5px 1.5px #332200;}
-	#info-text			{text-shadow: 0.5px 0.5px 1.5px #332200;}
-	.slidecontainer 	{width: 99%;}
-	.slider 			{-webkit-appearance: none; width: 100%; height: 25px; background: #d3d3d3; outline: none; opacity: 0.7; -webkit-transition: .2s; transition: opacity .2s;}
-	.slider:hover 		{opacity: 1;}
-	.slider::-webkit-slider-thumb	{-webkit-appearance: none; appearance: none; width: 25px;	height: 25px; background: #4CAF50; cursor: pointer;}
-	.slider::-moz-range-thumb 		{width: 25px; height: 25px; background: #4CAF50; cursor: pointer;}
-	#narrow {
-		font-size:18px;
-		line-height:16px;
-		float: right;
-		height:20px;
-		width: 140px;
-		text-align: right;
-		font-variant-numeric: tabular-nums lining-nums;
-	}
-	#wide {
-		font-family: 'Roboto Slab';
-		font-size:16px;
-		line-height:16px;
-		float: left;
-		height:20px;
-		width: calc(100% - 148px);
-		font-variant-numeric: tabular-nums lining-nums;
-	}
-</style>
-<div id="loadDiv" style="width:100%; height:100%;"><div style="position:relative;top: 40%;width:300px;height:100px; margin: auto auto;"><center><img src="/client/img/loading.png"><br>Loading - Please wait...</center></div></div>
-<div id="signDiv" style="display:none;">
-	<div>
-		<h3>Options</h3>
-		<a class="button" href="javascript:openSettings()" style="position:relative;height:24px;top:0px;left:105px;width:31px">
-			Open Settings
-		</a>
-	</div>
+	<style>
 
-	<div>
-		<h3>Words of wisdom</h3>
-		<p>* Accounts now work. Please register an account to play.</p>
-		<p>* You can scroll down the list of towers. </p>
-		<p>* One kaasbroodje in the hand is better than ten in the sand! </p>
-	</div>
-</div>
+	</style>
+</head>
 
-<div id="gameDiv" style="display:none;">
-	<div id="game" onwheel="scrollWheel(event)" style="overflow:hidden; position:absolute;width:100%;height:100%;top:44px; left:2px;">
-        <canvas id="ctx" width="3744" height="1920" style="transition: transform .2s;"></canvas>
-        <canvas id="threejs" style="z-index: -1; position: absolute; left:0px; top:0px;"></canvas>
-		<canvas id="ctx-ui" width="1872" height="960" style="position:absolute;"></canvas>
-
-		<div id="scoreBoard" style="position:absolute;top:0px; right:0px;width:700px;height:100px;overflow-y:scroll">
-			<div>Wajo</div>
+<body>
+	<div id="loadDiv" style="width:100%; height:100%;">
+		<div style="position:relative;top: 40%;width:300px;height:100px; margin: auto auto;">
+			<center><img src="/client/img/loading.png"><br>Loading - Please wait...</center>
 		</div>
-		
-		<a class="button" href="javascript:zoomOut()" style="position:absolute;height:24px;top:0px;left:0px;width:31px">
-			-
-		</a>
-		<a class="button" href="javascript:zoomDefault()" style="position:absolute;height:24px;top:0px;left:35px;width:31px">
-			R
-		</a>
-		<a class="button" href="javascript:zoomIn()" style="position:absolute;height:24px;top:0px;left:70px;width:31px">
-			+
-		</a>
-		<a class="button" href="javascript:openSettings()" style="position:absolute;height:24px;top:0px;left:105px;width:31px">
-			S
-		</a>
-		<a id="fpsCounter" style="position:absolute;height:22px;top:32px;left:0px;width:93px;font-size:14px;">
-			Perf: ?
-		</a>
 	</div>
-
-    <div class="uiButtons" id="ui" style="background-image: url('/client/img/bottombar.png'); background-size:cover; background-repeat:no-repeat;position:absolute;width:100%;height:132px;line-height:44px;bottom:0px;left:0px;">
-        <div id="buttenz">
-		<a class="buttonReady" id="buttonReady" href="javascript:startWave()" style="position:absolute;height:76px;top:20px;left:0px;width:148px">
-			Ready!
-		</a>
-		<div style="position:absolute;width:768px;height:132px;right:0px;top:0px;overflow-y:scroll;overflow-x:hidden">
-		<table>
-			<tr>
-				<td><a class="button" id="buttonDolmen" href="javascript:buildTower('dolmen');" style="height:24px;width:180px;">
-					Dolmen
-				</a></td>
-				<td><a class="button" id="buttonQuarry" href="javascript:buildTower('brickWorks');" style="height:24px;width:180px;">
-					Brickworks
-				</a></td>
-				<td><a class="button" id="buttonPawn" href="javascript:buildTower('lumberMill');" style="height:24px;width:180px;">
-					Lumber Mill
-				</a></td>
-			</tr>
-			<tr>
-				<td><a class="button" id="buttonHut" href="javascript:buildTower('hut');" style="height:24px;width:180px;">
-					Hut
-				</a></td>
-				<td><a class="button" id="buttonSandPit" href="javascript:buildTower('glassSmelter');" style="height:24px;width:180px;">
-					Glass Smelter
-				</a></td>
-				<td><a class="button" id="buttonWheatField" href="javascript:buildTower('wheatField');" style="height:24px;width:180px;">
-					Wheat Field
-				</a></td>
-			</tr>
-			<tr>
-				<td><a class="button" id="buttonHut" href="javascript:buildTower('burdei');" style="height:24px;width:180px;">
-					Burdei
-				</a></td>
-				<td><a class="button" id="buttonSandPit" href="javascript:buildTower('smithy')" style="height:24px;width:180px;">
-					Smithy
-				</a></td>
-				<td><a class="button" id="buttonWheatField" href="javascript:buildTower('kiln')" style="height:24px;width:180px;">
-					Kiln
-				</a></td>
-			</tr>
-			<tr>
-				<td><a class="button" id="buttonHut" href="javascript:spawnResource(1);" style="height:26px;width:180px;">
-					T1 Res. (10k TP)
-				</a></td>
-				<td><a class="button" id="buttonSandPit" href="javascript:spawnResource(2);" style="height:26px;width:180px;">
-					T2 Res. (250k TP)
-				</a></td>
-			</tr>
-		</table>
-        </div>
+	<div id="signDiv" style="display:none;">
+		<div>
+			<h3>Options</h3>
+			<a class="button" href="javascript:openSettings()"
+				style="position:relative;height:24px;top:0px;left:105px;width:31px">
+				Open Settings
+			</a>
 		</div>
 
-	</div>
-
-	<div class="uiButtonsVersus" id="uiVersus" style="display: none; background-image: url('/client/img/bottombar.png'); background-size:cover; background-repeat:no-repeat;position:absolute;width:100%;height:132px;line-height:44px;bottom:134px;left:0px;">
-        <div id="buttenz">
-		<a class="button" id="buttonWest" href="javascript:joinWest()" style="position:absolute;height:76px;top:20px;left:0px;width:148px">
-			Join West
-		</a>
-		<a class="button" id="buttonEast" href="javascript:joinEast()" style="position:absolute;height:76px;top:20px;left:152px;width:148px">
-			Join East
-		</a>
-		<div style="position:absolute;width:568px;height:132px;right:0px;top:0px;overflow-y:scroll;overflow-x:hidden">
-		<table><tr>
-		<td><p>Health: Lv 1</p><a class="button" id="buttonPawn" href="javascript:towerPawn()" style="height:26px;width:180px;">
-			Upgrade (100G)
-		</a></td>
-		<td><p>Armor: Lv 1</p><a class="button" id="buttonArrow" href="javascript:towerArrow()" style="height:26px;width:180px;">
-			Upgrade (100G)
-		</a></td>
-		<td><p>Speed: Lv 1</p><a class="button" id="buttonCannon" href="javascript:towerCannon()" style="height:26px;width:180px;">
-			Upgrade (100G)
-		</a></td></tr>
-        </tr></table>
-        </div>
+		<div>
+			<h3>Words of wisdom</h3>
+			<p>* Accounts now work. Please register an account to play.</p>
+			<p>* You can scroll down the list of towers. </p>
+			<p>* One kaasbroodje in the hand is better than ten in the sand! </p>
 		</div>
-
 	</div>
 
-	<div id="hud" style="position:absolute;top:0px; left:0px;width:100%;height:44px; background-image: url('/client/img/topbar.png')">
-		<span id="statuspane">
-          <div class='logo'></div>
-          <div id="panePos" class='pane'>X:</div>
-          <div id="paneGold" class='pane'>Gold:</div>
-          <div id="paneLevel" class='pane'>Level:</div>
-          <div id="paneTech" class='pane'>Tech:</div>
-		  <div id="paneHealth" class='pane'>Health:</div>
-		  <div id="paneWave" class='pane'>Wave:</div>
-        </span>
-	</div>
+	<div id="gameDiv" style="display:none;">
+		<div id="game" onwheel="scrollWheel(event)"
+			style="overflow:hidden; position:absolute;width:100%;height:100%;top:44px; left:2px;">
+			<canvas id="ctx" width="3744" height="1920" style="transition: transform .2s;"></canvas>
+			<canvas id="threejs" style="z-index: -1; position: absolute; left:0px; top:0px;"></canvas>
+			<canvas id="ctx-ui" width="1872" height="960" style="position:absolute;"></canvas>
 
-	<div id="settingsDiv" style="position:absolute; width:100%; height:100%;">
-		<div style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:40px; margin: auto auto;text-align: center; border-style: solid; line-height: 40px;">
-			Settings <a class="button" href="javascript:closeSettings()" style="position:absolute;height:24px;top:4px;right:4px;width:31px">X</a>
-		</div>
-		<div style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:300px; margin: auto auto; border-style: solid;">
-			<a class="button" id="buttonDisplayHP" href="javascript:hpDisplay()" style="position:absolute;height:24px;top:4px;right:20px;width:260px">HP Display ON</a>
-			<a class="button" id="buttonDisplayDAM" href="javascript:damageDisplay()" style="position:absolute;height:24px;top:36px;right:20px;width:260px">Damage Display ALL</a>
-			<br><br><br><br>
-			<div class="slidecontainer">
-				<p>Target FrameTime: <span id="targetFrameTime">20</span></p>
-				<input type="range" min="10" max="50" value="20" class="slider" id="frameTimeSlider">
+			<div id="scoreBoard"
+				style="position:absolute;top:0px; right:0px;width:700px;height:100px;overflow-y:scroll">
+				<div>Wajo</div>
 			</div>
-			<div class="slidecontainer">
-				<p>Render Scale %: <span id="renderScale">100</span></p>
-				<input type="range" min="50" max="200" value="100" class="slider" id="renderScaleSlider">
+
+			<a class="button" href="javascript:zoomOut()"
+				style="position:absolute;height:24px;top:0px;left:0px;width:31px">
+				-
+			</a>
+			<a class="button" href="javascript:zoomDefault()"
+				style="position:absolute;height:24px;top:0px;left:35px;width:31px">
+				R
+			</a>
+			<a class="button" href="javascript:zoomIn()"
+				style="position:absolute;height:24px;top:0px;left:70px;width:31px">
+				+
+			</a>
+			<a class="button" href="javascript:openSettings()"
+				style="position:absolute;height:24px;top:0px;left:105px;width:31px">
+				S
+			</a>
+			<a id="fpsCounter" style="position:absolute;height:22px;top:32px;left:0px;width:93px;font-size:14px;">
+				Perf: ?
+			</a>
+		</div>
+
+		<div id="bottom-bar">
+			<div id="chat">
+				<div id="chat-text" class="stretch">
+					<span>Hello!</span>
+				</div>
+				<div id="chat-input-bar">
+					<input id="chat-input" type="text" disabled></input>
+					<button disabled>Send</button>
+				</div>
+			</div>
+			<div id="building-info"></div>
+			<div id="building-list"></div>
+		</div>
+		<!--
+		<div class="uiButtons" id="ui"
+			style="background-image: url('/client/img/bottombar.png'); background-size:cover; background-repeat:no-repeat;position:absolute;width:100%;height:132px;line-height:44px;bottom:0px;left:0px;">
+			<div id="buttenz">
+				<a class="buttonReady" id="buttonReady" href="javascript:startWave()"
+					style="position:absolute;height:76px;top:20px;left:0px;width:148px">
+					Ready!
+				</a>
+				<div
+					style="position:absolute;width:768px;height:132px;right:0px;top:0px;overflow-y:scroll;overflow-x:hidden">
+					<table>
+						<tr>
+							<td><a class="button" id="buttonDolmen" href="javascript:buildTower('dolmen');"
+									style="height:24px;width:180px;">
+									Dolmen
+								</a></td>
+							<td><a class="button" id="buttonQuarry" href="javascript:buildTower('brickWorks');"
+									style="height:24px;width:180px;">
+									Brickworks
+								</a></td>
+							<td><a class="button" id="buttonPawn" href="javascript:buildTower('lumberMill');"
+									style="height:24px;width:180px;">
+									Lumber Mill
+								</a></td>
+						</tr>
+						<tr>
+							<td><a class="button" id="buttonHut" href="javascript:buildTower('hut');"
+									style="height:24px;width:180px;">
+									Hut
+								</a></td>
+							<td><a class="button" id="buttonSandPit" href="javascript:buildTower('glassSmelter');"
+									style="height:24px;width:180px;">
+									Glass Smelter
+								</a></td>
+							<td><a class="button" id="buttonWheatField" href="javascript:buildTower('wheatField');"
+									style="height:24px;width:180px;">
+									Wheat Field
+								</a></td>
+						</tr>
+						<tr>
+							<td><a class="button" id="buttonHut" href="javascript:buildTower('burdei');"
+									style="height:24px;width:180px;">
+									Burdei
+								</a></td>
+							<td><a class="button" id="buttonSandPit" href="javascript:buildTower('smithy')"
+									style="height:24px;width:180px;">
+									Smithy
+								</a></td>
+							<td><a class="button" id="buttonWheatField" href="javascript:buildTower('kiln')"
+									style="height:24px;width:180px;">
+									Kiln
+								</a></td>
+						</tr>
+						<tr>
+							<td><a class="button" id="buttonHut" href="javascript:spawnResource(1);"
+									style="height:26px;width:180px;">
+									T1 Res. (10k TP)
+								</a></td>
+							<td><a class="button" id="buttonSandPit" href="javascript:spawnResource(2);"
+									style="height:26px;width:180px;">
+									T2 Res. (250k TP)
+								</a></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+		</div>
+		-->
+
+		<div class="uiButtonsVersus" id="uiVersus"
+			style="display: none; background-image: url('/client/img/bottombar.png'); background-size:cover; background-repeat:no-repeat;position:absolute;width:100%;height:132px;line-height:44px;bottom:134px;left:0px;">
+			<div id="buttenz">
+				<a class="button" id="buttonWest" href="javascript:joinWest()"
+					style="position:absolute;height:76px;top:20px;left:0px;width:148px">
+					Join West
+				</a>
+				<a class="button" id="buttonEast" href="javascript:joinEast()"
+					style="position:absolute;height:76px;top:20px;left:152px;width:148px">
+					Join East
+				</a>
+				<div
+					style="position:absolute;width:568px;height:132px;right:0px;top:0px;overflow-y:scroll;overflow-x:hidden">
+					<table>
+						<tr>
+							<td>
+								<p>Health: Lv 1</p><a class="button" id="buttonPawn" href="javascript:towerPawn()"
+									style="height:26px;width:180px;">
+									Upgrade (100G)
+								</a>
+							</td>
+							<td>
+								<p>Armor: Lv 1</p><a class="button" id="buttonArrow" href="javascript:towerArrow()"
+									style="height:26px;width:180px;">
+									Upgrade (100G)
+								</a>
+							</td>
+							<td>
+								<p>Speed: Lv 1</p><a class="button" id="buttonCannon" href="javascript:towerCannon()"
+									style="height:26px;width:180px;">
+									Upgrade (100G)
+								</a>
+							</td>
+						</tr>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="hud"
+			style="position:absolute;top:0px; left:0px;width:100%;height:44px; background-image: url('/client/img/topbar.png')">
+			<span id="statuspane">
+				<div class='logo'></div>
+				<div id="panePos" class='pane'>X:</div>
+				<div id="paneGold" class='pane'>Gold:</div>
+				<div id="paneLevel" class='pane'>Level:</div>
+				<div id="paneTech" class='pane'>Tech:</div>
+				<div id="paneHealth" class='pane'>Health:</div>
+				<div id="paneWave" class='pane'>Wave:</div>
+			</span>
+		</div>
+
+		<div id="settingsDiv" style="position:absolute; width:100%; height:100%;">
+			<div
+				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:40px; margin: auto auto;text-align: center; border-style: solid; line-height: 40px;">
+				Settings <a class="button" href="javascript:closeSettings()"
+					style="position:absolute;height:24px;top:4px;right:4px;width:31px">X</a>
+			</div>
+			<div
+				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:300px; margin: auto auto; border-style: solid;">
+				<a class="button" id="buttonDisplayHP" href="javascript:hpDisplay()"
+					style="position:absolute;height:24px;top:4px;right:20px;width:260px">HP Display ON</a>
+				<a class="button" id="buttonDisplayDAM" href="javascript:damageDisplay()"
+					style="position:absolute;height:24px;top:36px;right:20px;width:260px">Damage Display ALL</a>
+				<br><br><br><br>
+				<div class="slidecontainer">
+					<p>Target FrameTime: <span id="targetFrameTime">20</span></p>
+					<input type="range" min="10" max="50" value="20" class="slider" id="frameTimeSlider">
+				</div>
+				<div class="slidecontainer">
+					<p>Render Scale %: <span id="renderScale">100</span></p>
+					<input type="range" min="50" max="200" value="100" class="slider" id="renderScaleSlider">
+				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div id="towerTooltip" style="position:absolute; left:62%; top:42%; height:80px; background-image: url('/client/img/bottombar.png'); padding:6px;font-size:14px">
-		<div id="transformDiv">
-			<span id="towerTooltipText" style="margin-bottom:8px;">LVL: 9 DMG: 99 AGI: 99 RNG: 99</span><br />
+
+		<div id="towerTooltip"
+			style="position:absolute; left:62%; top:42%; height:80px; background-image: url('/client/img/bottombar.png'); padding:6px;font-size:14px">
+			<div id="transformDiv">
+				<span id="towerTooltipText" style="margin-bottom:8px;">LVL: 9 DMG: 99 AGI: 99 RNG: 99</span><br />
+			</div>
+			<a class="button" id="buttonAdd" href="javascript:upgradeAmount++"
+				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
+				+
+			</a>
+			<a class="button" id="button" href="javascript:upgradeAll()"
+				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
+				Upgrade All
+			</a>
+			<br>
+			<a class="button" id="buttonUpgrade" href="javascript:upgradeTower()"
+				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
+				Upgrade x1
+			</a>
+			<a class="button" id="buttonSell" href="javascript:sellTower()"
+				style="float:right; height:22px;width:172px; margin-right:0px;margin-top:4px;font-size:24px;line-height:22px;">
+				Sell
+			</a>
+			<br>
+			<a class="button" id="buttonAdd" href="javascript:upgradeAmount--"
+				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
+				-
+			</a>
+			<a class="button" id="button" href="javascript:upgradeSameType()"
+				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
+				Upg. Same Type
+			</a>
 		</div>
-		<a class="button" id="buttonAdd" href="javascript:upgradeAmount++" style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-			+
-		</a>
-		<a class="button" id="button" href="javascript:upgradeAll()" style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-			Upgrade All
-		</a>
-		<br>
-		<a class="button" id="buttonUpgrade" href="javascript:upgradeTower()" style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-			Upgrade x1
-		</a>
-		<a class="button" id="buttonSell" href="javascript:sellTower()" style="float:right; height:22px;width:172px; margin-right:0px;margin-top:4px;font-size:24px;line-height:22px;">
-			Sell
-		</a>
-		<br>
-		<a class="button" id="buttonAdd" href="javascript:upgradeAmount--" style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-			-
-		</a>
-		<a class="button" id="button" href="javascript:upgradeSameType()" style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-			Upg. Same Type
-		</a>
+
+		<div id="heroicTooltip"
+			style="position:absolute; left:56%; top:42%; height:65px; background-image: url('/client/img/bottombar.png'); padding:6px;font-size:14px">
+			<span id="heroicTooltipText" style="margin-bottom:8px;">Level: 99 Stat Points: 99<br />
+				STR: 99 AGI: 99 NTL: 99</span><br />
+			<a class="button" id="buttonHSTR" href="javascript:heroicSTR()"
+				style="float:left; height:24px;width:114px; margin-right:4px;margin-top:4px;font-size:20px;line-height:22px;">
+				STR Stat
+			</a>
+			<a class="button" id="buttonHAGI" href="javascript:heroicAGI()"
+				style="float:left; height:24px;width:114px; margin-right:4px;margin-top:4px;font-size:20px;line-height:22px;">
+				AGI Stat
+			</a>
+			<a class="button" id="buttonHNTL" href="javascript:heroicNTL()"
+				style="float:left; height:24px;width:114px; margin-right:0px;margin-top:4px;font-size:20px;line-height:22px;">
+				NTL Stat
+			</a>
+		</div>
+		<!--
+		<div id="belowGame" style="position:absolute; left:164px; bottom: 8px; width: 60%;">
+			<div id="chat-text"
+				style="position:relative;left:0px;width:60%;height:100px;overflow-y:hidden;margin-bottom:-100px;">
+				<div>Hello!</div>
+			</div>
+			<div id="info-text"
+				style="position:relative;right:0px;width:40%;height:100px;overflow-y:hidden;margin-left:60%;">
+				<div>Test</div>
+			</div>
+			<!--<div id="inventory"></div>--><!--
+			<form id="chat-form">
+				<!-- <input  id="chat-input" type="text" style="width:480px"></input> --><!--
+			</form>
+		</div>
+	-->
 	</div>
 
-	<div id="heroicTooltip" style="position:absolute; left:56%; top:42%; height:65px; background-image: url('/client/img/bottombar.png'); padding:6px;font-size:14px">
-		<span id="heroicTooltipText" style="margin-bottom:8px;">Level: 99 Stat Points: 99<br />
-		STR: 99 AGI: 99 NTL: 99</span><br />
-		<a class="button" id="buttonHSTR" href="javascript:heroicSTR()" style="float:left; height:24px;width:114px; margin-right:4px;margin-top:4px;font-size:20px;line-height:22px;">
-			STR Stat
-		</a>
-		<a class="button" id="buttonHAGI" href="javascript:heroicAGI()" style="float:left; height:24px;width:114px; margin-right:4px;margin-top:4px;font-size:20px;line-height:22px;">
-			AGI Stat
-		</a>
-		<a class="button" id="buttonHNTL" href="javascript:heroicNTL()" style="float:left; height:24px;width:114px; margin-right:0px;margin-top:4px;font-size:20px;line-height:22px;">
-			NTL Stat
-		</a>
-	</div>
-
-	<div id="belowGame" style="position:absolute; left:164px; bottom: 8px; width: 60%;">
-		<div id="chat-text" style="position:relative;left:0px;width:60%;height:100px;overflow-y:hidden;margin-bottom:-100px;">
-			<div>Hello!</div>
-		</div>
-		<div id="info-text" style="position:relative;right:0px;width:40%;height:100px;overflow-y:hidden;margin-left:60%;">
-			<div>Test</div>
-		</div>
-		<!--<div id="inventory"></div>-->
-		<form id="chat-form">
-			<!-- <input  id="chat-input" type="text" style="width:480px"></input> -->
-		</form>
-	</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/jsframe.js/lib/jsframe.min.js"></script>
 
 <script src="/client/socket.js"></script>
 <script src="/client/Inventory.js"></script>
@@ -272,5 +309,69 @@
 <script src="/client/js/Interface.js"></script>
 <script src="/client/resources/resource.js"></script>
 <script src="/client/resources/resourceList.js"></script>
+	<template id="building-data-list-template">
+		<div class="text-normal">
+			<div id="infoField">Test</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Age</th>
+						<th>Building</th>
+						<th style="text-align:right;">Consume</th>
+						<th>></th>
+						<th style="text-align:left;">Produce</th>
+						<th>Build</th>
+					</tr>
+				</thead>
+				<tbody data-property="buildingData"></tbody>
+			</table>
+		</div>
+	</template>
 
-<script src="/client/js/main.js"></script>
+	<template id="building-data-template">
+		<tr>
+			<td data-property="age"></td>
+			<td>
+				<span data-property="name"></span><br />
+				<span data-property="node" class="text-small flex-center"></span>
+			</td>
+			<td style="text-align:right;">
+				<span data-property="consume" class="text-small flex-right"></span>
+			</td>
+			<td style="font-size:35px; line-height: 35px; color:lightgray;">></td>
+			<td style="text-align:left;">
+				<span data-property="produce" class="text-small flex"></span>
+			</td>
+			<td>
+				<div class="flex-center">
+					<button class="comfyButton" data-action="build">Build</button>
+					<span data-property="build" class="text-small"></span>
+				</div>
+			</td>
+		</tr>
+	</template>
+
+
+
+	<script src="https://cdn.jsdelivr.net/npm/jsframe.js/lib/jsframe.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/split.js@1.6.0/dist/split.min.js"></script>
+
+	<script src="/client/socket.js"></script>
+	<script src="/client/Inventory.js"></script>
+	<script src="/client/blowfish.js"></script>
+	<script src="/lib/buildings.js"></script>
+	<script src="/node_modules/three/build/three.js"></script>
+	<script src="/client/js/three-text-texture.js"></script>
+	<script src="/client/js/three-text-sprite.js"></script>
+	<script src="/node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="/client/js/Interface.js"></script>
+	<script src="/client/buildings/buildingData.js"></script>
+	<script src="/client/buildings/buildingDataList.js"></script>
+	<script src="/client/resources/resource.js"></script>
+	<script src="/client/resources/resourceList.js"></script>
+
+	<script src="/client/js/main.js"></script>
+
+</body>
+
+</html>

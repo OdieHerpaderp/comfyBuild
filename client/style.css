@@ -17,6 +17,7 @@ body {
     font-family: 'Roboto Mono', monospace;
     font-variant-numeric: tabular-nums lining-nums;
     font-size: 18px;
+    text-shadow: 0.5px 0.5px 1px #000000;
 }
 
 h1 {
@@ -387,6 +388,12 @@ td {
 }
 
 .resource > .resourceAmount {
+    text-align: right;
+}
+
+.resource > .resourceChange {
+    font-size: 14px;
+    min-width: 38px;
     text-align: right;
 }
 

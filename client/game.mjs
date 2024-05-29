@@ -359,86 +359,6 @@ socket.on('gameState', function (data) {
 //}
 
 //UI
-var changeMap = function () {
-    socket.emit('changeMap');
-}
-
-var buildTower = function (tower) {
-    socket.emit('buildTower', tower);
-}
-
-var spawnResource = function (tier) {
-    socket.emit('spawnResource', tier);
-}
-
-var towerDolmen = function () {
-    socket.emit('towerDolmen');
-}
-
-var towerQuarry = function () {
-    socket.emit('towerQuarry');
-}
-
-var towerForestry = function () {
-    socket.emit('towerForestry');
-}
-
-var towerPawn = function () {
-    socket.emit('towerPawn');
-}
-
-var towerPawn = function () {
-    socket.emit('towerPawn');
-}
-
-var towerArrow = function () {
-    socket.emit('towerArrow');
-}
-
-var towerCannon = function () {
-    socket.emit('towerCannon');
-}
-
-var towerDarkness = function () {
-    socket.emit('towerDarkness');
-}
-
-var towerCorrosion = function () {
-    socket.emit('towerCorrosion');
-}
-
-var towerFrost = function () {
-    socket.emit('towerFrost');
-}
-
-var towerGanja = function () {
-    socket.emit('towerGanja');
-}
-
-var towerBBQ = function () {
-    socket.emit('towerBBQ');
-}
-
-var towerSpark = function () {
-    socket.emit('towerSpark');
-}
-
-var towerRocket = function () {
-    socket.emit('towerRocket');
-}
-
-var towerBouncing = function () {
-    socket.emit('towerBouncing');
-}
-
-var towerLaser = function () {
-    socket.emit('towerLaser');
-}
-
-var towerHeroic = function () {
-    socket.emit('towerHeroic');
-}
-
 window.sellTower = function () {
     socket.emit('sellTower');
 }
@@ -453,33 +373,6 @@ window.upgradeAll = function () {
 window.upgradeSameType = function () {
     socket.emit('upgradeSameType', window.upgradeAmount);
 }
-
-var startWave = function () {
-    socket.emit('ready');
-}
-
-var heroicSTR = function () {
-    socket.emit('heroicSTR');
-}
-var heroicAGI = function () {
-    socket.emit('heroicAGI');
-}
-var heroicNTL = function () {
-    socket.emit('heroicNTL');
-}
-
-var transformA = function () {
-    socket.emit('transformA');
-}
-var transformB = function () {
-    socket.emit('transformB');
-}
-var transformC = function () {
-    socket.emit('transformC');
-}
-
-var ctxUi = document.getElementById("ctx-ui").getContext("2d");
-ctxUi.font = '30px Nanum Gothic Coding';
 
 var Damage = function (initPack) {
     var self = {};
@@ -1182,16 +1075,6 @@ var drawMap = function () {
     ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) - 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 0 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2);
     ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) - 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 3 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 0 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 3 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 3 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2);
 }
-
-var drawScore = function () {
-    if (lastScore === Player.list[selfId].score)
-        return;
-    lastScore = Player.list[selfId].score;
-    ctxUi.clearRect(0, 0, 500, 500);
-    ctxUi.fillStyle = 'white';
-    ctxUi.fillText(Player.list[selfId].score, 0, 30);
-}
-var lastScore = null;
 
 var drawStats = function () {
     if (!selfId)

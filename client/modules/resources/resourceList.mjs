@@ -1,5 +1,5 @@
-import { getHtmlTemplate } from "../templateHelpers.mjs";
-import { Resource } from "./resource.mjs";
+import { getHtmlTemplate } from "templateHelpers";
+import { Resource } from "resource";
 
 class ResourceList {
     static template;

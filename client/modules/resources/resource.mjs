@@ -1,4 +1,4 @@
-import { getHtmlTemplate } from "../templateHelpers.mjs";
+import { getHtmlTemplate } from "templateHelpers";
 
 class Resource {
     static template;

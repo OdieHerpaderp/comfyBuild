@@ -1,5 +1,5 @@
-import { getHtmlTemplate } from "../templateHelpers.mjs";
-import { BuildingData } from "./buildingData.mjs";
+import { getHtmlTemplate } from "templateHelpers";
+import { BuildingData } from "buildingData";
 
 class BuildingDataList {
     static template;

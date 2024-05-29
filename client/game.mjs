@@ -1,7 +1,7 @@
-import { BuildingDataList } from "./modules/buildings/buildingDataList.mjs";
-import { ResourceList } from "./modules/resources/resourceList.mjs";
-import { buildings } from "../lib/buildings.mjs";
-import { io } from "../node_modules/socket.io-client/dist/socket.io.esm.min.js";
+import { BuildingDataList } from "buildingDataList";
+import { ResourceList } from "resourceList";
+import { buildings } from "buildings";
+import { io } from "socket.io-client";
 
 var socket = io();
 

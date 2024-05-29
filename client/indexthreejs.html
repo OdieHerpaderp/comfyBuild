@@ -310,7 +310,20 @@
 	<script src="/client/js/Interface.js"></script>
 	<!--<script src="/client/js/main.js"></script>-->
 
-
+	<script type="importmap">
+		{
+			"imports": {
+				"resource": "./client/modules/resources/resource.mjs",
+				"resourceList": "./client/modules/resources/resourceList.mjs",
+				"buildings": "./lib/buildings.mjs",
+				"buildingData": "./client/modules/buildings/buildingData.mjs",
+				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
+				"templateHelpers": "./client/modules/templateHelpers.mjs",
+				"socket.io-client": "./node_modules/socket.io-client/dist/socket.io.esm.min.js",
+				"three": "./node_modules/three/build/three.module.js"
+			}
+		}
+	</script>
 	<script type="module" src="/client/game.mjs" defer></script>
 
 </body>

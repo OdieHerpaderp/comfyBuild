@@ -11,7 +11,7 @@ Gamemode.endAY = 0;
 Gamemode.endBX = 0;
 Gamemode.endBY = 0;
 
-Gamemode.spawnBullet = function(type,xMin,xMax,yMin,yMax){
+Gamemode.spawnBullet = function(type,xMin,yMin,xMax,yMax){
 	// Test if grid is valid, but use a backup to discard changes
 	var randomGridX = Math.round(xMin + Math.random() * (xMax-xMin));
 	var randomGridY = Math.round(yMin + Math.random() * (yMax-yMin));
@@ -31,11 +31,65 @@ Gamemode.spawnBullet = function(type,xMin,xMax,yMin,yMax){
 };
 
 Gamemode.prepare = function(){
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("freshWater",60,68,0,127); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("soil",4,120,4,120); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("wildGame",4,120,4,120); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("forest",4,120,4,120); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("rockDeposit",4,50,4,120); }
+	Tower({
+		towerType:"headquarters",
+		parent:0,
+		x:54 * 48,
+		y:54 * 48,
+		map:"field",
+		damage:1,
+		range:1,
+		bulletType:"undefined",
+		agi:1,
+		value:0,
+	});
+	PFGrid.grid.setWalkableAt(54, 54, false);
+	PFGrid.gridBackup.setWalkableAt(54, 54, false);
+	Tower({
+		towerType:"quarry",
+		parent:0,
+		x:50 * 48,
+		y:50 * 48,
+		map:"field",
+		damage:1,
+		range:1,
+		bulletType:"undefined",
+		agi:1,
+		value:0,
+	});
+	PFGrid.grid.setWalkableAt(50, 50, false);
+	PFGrid.gridBackup.setWalkableAt(50, 50, false);
+	Bullet({
+		type:"rockDeposit",
+		x:50 * 48,
+		y:50 * 48,
+		map:"field",
+	});
+	Tower({
+		towerType:"forestry",
+		parent:0,
+		x:58 * 48,
+		y:58 * 48,
+		map:"field",
+		damage:1,
+		range:1,
+		bulletType:"undefined",
+		agi:1,
+		value:0,
+	});
+	Bullet({
+		type:"forestry",
+		x:50 * 48,
+		y:50 * 48,
+		map:"field",
+	});
+	PFGrid.grid.setWalkableAt(68, 68, false);
+	PFGrid.gridBackup.setWalkableAt(68, 68, false);
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("freshWater",60,0,74,127); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("soil",70,4,124,124); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("wildGame",4,4,124,124); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("forest",4,4,90,120); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("rockDeposit",4,4,120,40); }
 	return;
 	Tower({
 		towerType:"waterSource",

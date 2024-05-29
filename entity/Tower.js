@@ -40,7 +40,7 @@ Tower = function(param){
 	{
 		if(self.targetLevel > self.upgradeLevel){
 			if(self.buildTimer > 0) {
-				for (let i = 0; i < self.upgradeLevel + 1; i++) { 
+				for (let i = 0; i < self.upgradeLevel + 2; i++) { 
 					if(checkBuildingConsumptionAndBuild(self.towerType)){
 						self.buildTimer -= 2 / ((self.upgradeLevel+1) * 1.35) * Base.constructionMultiplier;
 						Base.Tech += self.upgradeLevel;

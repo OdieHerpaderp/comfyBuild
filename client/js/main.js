@@ -48,6 +48,19 @@ camera.position.z = 5;
 //light.name = "Hemi";
 //scene.add(light);
 
+//cubemap HDR
+new THREE.RGBELoader()
+	.setPath( '/client/img/' )
+	.load( 'skybox.hdr', function ( texture ) {
+		texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearFilter;
+        //texture.generateMipmaps = true;
+		scene.background = texture;
+        scene.backgroundBlurriness = 1;
+		scene.environment = texture;
+} );
+
 var frameTime = 10;
 var targetFrameTime = 20;
 var renderScale = 100;

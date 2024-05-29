@@ -1,16 +1,16 @@
-import BuildingData from "./buildingData.mjs";
+import { BuildingData } from "./buildingData.mjs";
 
 class BuildingDataList {
     static template;
     buildingDatas = [];
 
-    constructor(buildings) {
+    constructor(buildings, buildFunction) {
         this.HTML = BuildingDataList.template.content.cloneNode(true);
 
         let infoField = this.HTML.querySelector("#infoField");
 
         for (const buildingName in buildings) {
-            this.buildingDatas.push(new BuildingData(buildingName, buildings[buildingName], infoField));
+            this.buildingDatas.push(new BuildingData(buildingName, buildings[buildingName], infoField, buildFunction));
         }
 
         this.buildingDatas.sort((a, b) => {

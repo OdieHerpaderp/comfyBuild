@@ -1,7 +1,7 @@
 class BuildingData {
     static template;
 
-    constructor(name, data, infoField) {
+    constructor(name, data, infoField, buildFunction) {
         this.name = name;
         this.age = this.default(data.age, -1);
         this.info = this.default(data.info, "[no info available]");
@@ -23,7 +23,7 @@ class BuildingData {
         this.fillProperty("produce", this.getResourceInfo(this.produce));
 
         var buildButton = this.HTML.querySelector("[data-action=build]");
-        buildButton.onclick = () => { buildTower(this.name); };
+        buildButton.onclick = () => { buildFunction(this.name); };
 
         if (infoField) {
             this.HTML.addEventListener("mouseover", () => { infoField.innerHTML = this.name + ": " + this.info; });

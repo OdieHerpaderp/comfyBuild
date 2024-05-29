@@ -1,4 +1,4 @@
-import Resource from "./resource.mjs";
+import { Resource } from "./resource.mjs";
 
 class ResourceList {
     static template;

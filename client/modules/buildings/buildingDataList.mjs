@@ -1,3 +1,4 @@
+import { getHtmlTemplate } from "../templateHelpers.mjs";
 import { BuildingData } from "./buildingData.mjs";
 
 class BuildingDataList {
@@ -31,9 +32,7 @@ class BuildingDataList {
     }
 }
 
-var templateHTML = await ( await fetch("client/modules/buildings/buildingDataList.html") ).text();
-var parser = new DOMParser();
-BuildingDataList.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+BuildingDataList.template = await getHtmlTemplate("client/modules/buildings/buildingDataList.html");
 
 export { BuildingDataList };
 export default BuildingDataList;

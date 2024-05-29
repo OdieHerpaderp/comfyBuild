@@ -1,3 +1,5 @@
+import { getHtmlTemplate } from "../templateHelpers.mjs";
+
 class BuildingData {
     static template;
 
@@ -53,9 +55,7 @@ class BuildingData {
     }
 }
 
-var templateHTML = await ( await fetch("client/modules/buildings/buildingData.html") ).text();
-var parser = new DOMParser();
-BuildingData.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+BuildingData.template = await getHtmlTemplate("client/modules/buildings/buildingData.html");
 
 export { BuildingData };
 export default BuildingData;

@@ -1,3 +1,5 @@
+import { getHtmlTemplate } from "../templateHelpers.mjs";
+
 class Resource {
     static template;
 
@@ -60,9 +62,7 @@ class Resource {
     }
 }
 
-var templateHTML = await (await fetch("client/modules/resources/resource.html")).text();
-var parser = new DOMParser();
-Resource.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+Resource.template = await getHtmlTemplate("client/modules/resources/resource.html");
 
 export { Resource };
 export default Resource;

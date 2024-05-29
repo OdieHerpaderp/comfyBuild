@@ -1,3 +1,4 @@
+import { getHtmlTemplate } from "../templateHelpers.mjs";
 import { Resource } from "./resource.mjs";
 
 class ResourceList {
@@ -29,9 +30,7 @@ class ResourceList {
     }
 }
 
-var templateHTML = await ( await fetch("client/modules/resources/resourceList.html") ).text();
-var parser = new DOMParser();
-ResourceList.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+ResourceList.template = await getHtmlTemplate("client/modules/resources/resourceList.html");
 
 export { ResourceList };
 export default ResourceList;

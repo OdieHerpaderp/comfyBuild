@@ -20,9 +20,6 @@ socket.on('stockpile', function (data) {
     stockpile.updateResources(data);
 });
 
-
-//--- old main.js ---//
-
 //ThreeJS
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 176) * 1.15, 0.1, 1000);

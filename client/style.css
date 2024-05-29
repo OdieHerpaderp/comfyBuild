@@ -360,23 +360,26 @@ td {
 }
 
 .resourceList {
-    padding: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .resource {
     display: flex;
+    font-size: 16px;
+    line-height: 16px;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-family: 'Roboto Slab';
 }
 
 .resource div {
-    line-height: 16px;
     height: 20px;
-    font-variant-numeric: tabular-nums lining-nums;
+    margin-left: 4px;
+    margin-right: 4px;
 }
 
 .resource > .resourceName {
     flex-grow: 1;
-    font-family: 'Roboto Slab';
-    font-size: 16px;
 }
 
 .resource > .resourceName:after {
@@ -384,8 +387,23 @@ td {
 }
 
 .resource > .resourceAmount {
-    font-size: 18px;
     text-align: right;
+}
+
+.resource > .resourceChange.red {
+    color: red;
+}
+
+.resource > .resourceChange.green {
+    color: rgb(0, 192, 0);
+}
+
+.resource > .resourceChange:before {
+    content: '(';
+}
+
+.resource > .resourceChange:after {
+    content: ')';
 }
 
 .hidden {

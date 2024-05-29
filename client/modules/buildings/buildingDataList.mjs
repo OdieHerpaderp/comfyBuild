@@ -1,16 +1,17 @@
-import BuildingData from "./buildingData.js";
+import { getHtmlTemplate } from "../templateHelpers.mjs";
+import { BuildingData } from "./buildingData.mjs";
 
 class BuildingDataList {
     static template;
     buildingDatas = [];
 
-    constructor(buildings) {
+    constructor(buildings, buildFunction) {
         this.HTML = BuildingDataList.template.content.cloneNode(true);
 
         let infoField = this.HTML.querySelector("#infoField");
 
         for (const buildingName in buildings) {
-            this.buildingDatas.push(new BuildingData(buildingName, buildings[buildingName], infoField));
+            this.buildingDatas.push(new BuildingData(buildingName, buildings[buildingName], infoField, buildFunction));
         }
 
         this.buildingDatas.sort((a, b) => {
@@ -31,9 +32,7 @@ class BuildingDataList {
     }
 }
 
-var templateHTML = await ( await fetch("client/modules/buildings/buildingDataList.html") ).text();
-var parser = new DOMParser();
-BuildingDataList.template = parser.parseFromString(templateHTML, "text/html").querySelector("template");
+BuildingDataList.template = await getHtmlTemplate("client/modules/buildings/buildingDataList.html");
 
 export { BuildingDataList };
 export default BuildingDataList;

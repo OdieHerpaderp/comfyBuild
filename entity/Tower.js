@@ -22,6 +22,7 @@ Tower = function(param){
 	self.transforms = 0;
 	self.value = param.value;
 	self.team = self.whatTeam; // none, west, east
+	self.status = "build";
 
 	self.heroic = false;
 
@@ -38,28 +39,32 @@ Tower = function(param){
 
 	self.comfyTick = function()
 	{
-		if(self.targetLevel > self.upgradeLevel){
+		if(self.targetLevel > self.upgradeLevel && Base.populationCurrent > 10 + Base.populationAvg / 100){
+			// TODO implement smarter way to make buildings (especially houses) prefer producing when population is low.
 			if(self.buildTimer > 0) {
-				for (let i = 0; i < self.upgradeLevel + 2; i++) { 
-					if(checkBuildingConsumptionAndBuild(self.towerType)){
+				for (let i = 0; i < self.upgradeLevel + 1; i++) { 
+					if(checkBuildingConsumptionAndBuild(self.towerType,self.upgradeLevel + 1)){
+						self.status = "build";
 						self.buildTimer -= 2 / ((self.upgradeLevel+1) * 1.35) * Base.constructionMultiplier;
-						Base.Tech += self.upgradeLevel;
+						//Base.Tech += self.upgradeLevel;
 					}
-					//else console.log("Could not build!");Base.constructionMultiplier
+					else self.status = "buildStop";
 				}
 			}
 			else { 
 				self.upgradeLevel++;
-				self.buildTimer = Math.round(45 + self.upgradeLevel * 1.25);
+				self.buildTimer = Math.round(45 + self.upgradeLevel * 1.5);
 			}
 			return;
 		}
 		else{
 			var active = false;
+			//TODO limit status to full production, atleast one production and no production
 			for (let i = 0; i < self.upgradeLevel; i++) { 
-				if(checkBuildingConsumptionAndProduce(self.towerType)) {Base.Tech += 1; active=true;}
+				if(checkBuildingConsumptionAndProduce(self.towerType)) {self.status = "produce" + i; Base.Tech += 1; active=true;}
 			}
-			if(active) Base.morale -= Math.ceil(10 - self.upgradeLevel / 100);
+			if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 100);
+			else self.status = "produceStop";
 		}
 	};
 
@@ -225,7 +230,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 	}
   }
 
-  function checkBuildingConsumptionAndBuild(buildingName) {
+  function checkBuildingConsumptionAndBuild(buildingName,upgradeLevel) {
 	const building = buildings[buildingName];
   
 	if (building && building.build) {
@@ -234,7 +239,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 		if (resource === 'population') {
 		  return building.build[resource] <= Base.populationCurrent;
 		} else {
-		  return building.build[resource] && Base.stockpile[resource] >= building.build[resource];
+		  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (1 + upgradeLevel / 10));
 		}
 	  });
   
@@ -245,7 +250,7 @@ function checkBuildingConsumptionAndProduce(buildingName) {
 		  if (resource === 'population') {
 			Base.populationCurrent -= building.build[resource];
 		  } else {
-			Base.stockpile[resource] -= building.build[resource];
+			Base.stockpile[resource] -= Math.round(building.build[resource] * (1 + upgradeLevel / 10));
 		  }
 		}
 		return true;

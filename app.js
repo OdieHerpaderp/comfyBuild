@@ -32,9 +32,9 @@ Base.leaks = 0;
 Base.leakWave = 0;
 
 //comfyBuild
-Base.population = 128;
-Base.populationAvg = 128;
-Base.populationCurrent = 128;
+Base.population = 32;
+Base.populationAvg = 32;
+Base.populationCurrent = 32;
 Base.constructionMultiplier = 1;
 Base.morale = 10000;
 Base.lastTick = 0;

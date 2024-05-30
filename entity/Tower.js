@@ -24,6 +24,8 @@ Tower = function(param){
 	self.value = param.value;
 	self.team = self.whatTeam; // none, west, east
 	self.status = "build";
+	self.active = true;
+	self.produceSuccess = 0;
 
 	self.heroic = false;
 
@@ -39,7 +41,7 @@ Tower = function(param){
 	}
 
 	self.comfyTick = function(){
-		if(self.targetLevel > self.upgradeLevel && Base.populationCurrent > 10 + Base.populationAvg / 100){
+		if(self.targetLevel > self.upgradeLevel && Base.populationCurrent > 8 + Base.populationAvg / 200){
 			// TODO implement smarter way to make buildings (especially houses) prefer producing when population is low.
 			if(self.buildTimer > 0) {
 				for (let i = 0; i < self.upgradeLevel + 1; i++) { 
@@ -59,21 +61,24 @@ Tower = function(param){
 		}
 		else{
 			var active = false;
-			//TODO limit status to full production, atleast one production and no production
+			// TODO limit status to full production, atleast one production and no production
 			if(self.productionTimer > 0){
+				// Housing buildings will generate population every tick when needs are met during production tick.
+				if(buildings[self.towerType].category == "housing" && self.produceSuccess > 0) 
+					for (let i = 0; i < self.produceSuccess; i++) { self.checkBuildingProduce(self.towerType); }
 				self.productionTimer--;
 				self.status = "produceWait";
 				active = true;
 			}
 			else{
-				if(buildings[self.towerType].category == "housing") self.productionTimer = 3;
-				else self.productionTimer = 5;
+				self.productionTimer = 3;
+				self.produceSuccess = 0;
 				for (let i = 0; i < self.upgradeLevel; i++) { 
-					if(self.checkBuildingConsumptionAndProduce(self.towerType)) {self.status = "produce" + i; Base.Tech += 1; active=true;}
+					if(self.checkBuildingConsumptionAndProduce(self.towerType)) {self.status = "produce" + i; Base.Tech += 1; active=true; self.produceSuccess++;}
 				}
-				if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 100);
-				else self.status = "produceStop";
+				self.status = "produceStop";
 			}
+			if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 100);
 		}
 	};
 
@@ -166,6 +171,7 @@ Tower = function(param){
 			return [420, 420];
 		}
 	}
+
 	self.checkBuildingConsumptionAndProduce = function(buildingName) {
 		const building = buildings[buildingName];
 	  
@@ -189,6 +195,36 @@ Tower = function(param){
 					Base.stockpile[resource] -= building.consume[resource];
 			  }
 			}
+	  
+			const producedItems = Object.entries(building.produce);
+			for (const [item, quantity] of producedItems) {
+			  if (item === 'population') {
+				Base.population += quantity;
+				//console.log(`The ${buildingName} building produced ${quantity} population.`);
+			  } else {
+					Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity;
+				//console.log(`The ${buildingName} building produced ${quantity} ${item}(s).`);
+			  }
+			}
+			return true;
+		  } else {
+				//console.log(`The ${buildingName} building does not have enough resources to produce: ${resources.join(', ')}.`);
+			return false;
+		  }
+		} else {
+			  console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
+		  return false;
+		}
+	};
+
+	self.checkBuildingProduce = function(buildingName) {
+		const building = buildings[buildingName];
+	  
+		if (building && building.consume && building.produce) {
+		  const resources = Object.keys(building.consume);
+		  const hasAllResources = true;
+		  if (hasAllResources) {
+			//console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
 	  
 			const producedItems = Object.entries(building.produce);
 			for (const [item, quantity] of producedItems) {

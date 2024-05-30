@@ -370,7 +370,6 @@ td {
     font-size: 16px;
     line-height: 16px;
     font-variant-numeric: tabular-nums lining-nums;
-    font-family: 'Roboto Slab';
 }
 
 .resource div {
@@ -381,6 +380,7 @@ td {
 
 .resource > .resourceName {
     flex-grow: 1;
+    font-family: 'Roboto Slab';
 }
 
 .resource > .resourceName:after {
@@ -392,9 +392,11 @@ td {
 }
 
 .resource > .resourceChange {
-    font-size: 14px;
+    font-size: 12px;
     min-width: 38px;
     text-align: right;
+    line-height: 14px;
+    font-weight: 700;
 }
 
 .resource > .resourceChange.red {
@@ -406,11 +408,11 @@ td {
 }
 
 .resource > .resourceChange:before {
-    content: '(';
+    content: '';
 }
 
 .resource > .resourceChange:after {
-    content: ')';
+    content: '';
 }
 
 .hidden {

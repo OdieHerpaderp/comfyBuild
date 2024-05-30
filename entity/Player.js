@@ -27,8 +27,8 @@ Player = function(param){
 	self.scoreBoard[2] = 0;
 	self.scoreBoard[3] = 0;
 	self.scoreBoard[4] = 0;
-	self.x = 8 * 48;
-	self.y = 32 * 48;
+	self.x = 64 * 48;
+	self.y = 64 * 48;
 
 	if(param.progress.score){
 		console.log("Level: " + param.progress.score);
@@ -206,6 +206,11 @@ Player.onConnect = function(socket,username,progress){
 		console.log("Ready recieved.");
 		player.ready = true;
 		socket.emit('gameState',{ready:true});
+	});
+
+	socket.on('fakePlayer',function(data){
+		player.x = Math.round(data.x / 48) * 48;
+		player.y = Math.round(data.y / 48) * 48;
 	});
 
 	socket.on('updateTooltip',function(data){

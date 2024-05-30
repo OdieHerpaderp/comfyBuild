@@ -23,6 +23,7 @@ socket.on('stockpile', function (data) {
 //ThreeJS
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 176) * 1.15, 0.1, 1000);
+var fakePlayer = {x: 64*48, y: 64*48, spdX: 0, spdY: 0, left: false, right: false, up: false, down:false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
@@ -156,6 +157,21 @@ window.damageDisplay = function () {
     else { displayDamage = 0; document.getElementById("buttonDisplayDAM").innerHTML = "Damage Display NONE"; }
 };
 
+var pollInputs = function (delta){
+    //TODO Handle SOCD properly. This implementation is lazy
+    if(fakePlayer.right) fakePlayer.spdX = 1;
+    else if(fakePlayer.left) fakePlayer.spdX = -1;
+    else fakePlayer.spdX = 0;
+
+    if(fakePlayer.down) fakePlayer.spdY = 1;
+    else if(fakePlayer.up) fakePlayer.spdY = -1;
+    else fakePlayer.spdY = 0;
+
+    fakePlayer.x += fakePlayer.spdX * delta * 0.7;
+    fakePlayer.y += fakePlayer.spdY * delta * 0.7;
+};
+
+var lastEmit = new Date().getTime();
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
@@ -163,6 +179,13 @@ var animate = function () {
     avgDelta = Math.min((avgDelta * 2 + delta + targetFrameTime * 2) / 5, 250);
     previousTime = currentTime;
 
+    pollInputs(delta);
+    camera.position.set(fakePlayer.x / 10, 292 - zoom * 27, fakePlayer.y / 10 + 334 - zoom * 30);
+    camera.lookAt(fakePlayer.x / 10, 1, fakePlayer.y / 10 + 11 - zoom);
+    if ( currentTime - 20 > lastEmit ) { 
+        socket.emit('fakePlayer', { x: fakePlayer.x, y: fakePlayer.y });
+        lastEmit = currentTime;
+    }
     if (avgDelta > frameTime + 4 && frameTime < 200) frameTime = Math.ceil((frameTime + avgDelta * 2) / 3);
     else if (avgDelta < frameTime + 1 && frameTime > targetFrameTime) frameTime = Math.floor((frameTime + avgDelta) / 2);
 
@@ -778,8 +801,7 @@ socket.on('update', function (data) {
 
             if (Player.list[selfId].id == pack.id) {
                 if (cubeplayer) {
-                    camera.position.set(Player.list[selfId].x / 10, 292 - zoom * 27, Player.list[selfId].y / 10 + 334 - zoom * 30);
-                    camera.lookAt(cubeplayer.position.x, cubeplayer.position.y, cubeplayer.position.z + 11 - zoom);
+                    
                 }
             }
         }
@@ -1102,24 +1124,24 @@ var drawScoreboard = function () {
 }
 document.onkeydown = function (event) {
     if (event.keyCode === 68)	//d
-        socket.emit('keyPress', { inputId: 'right', state: true });
+        fakePlayer.right = true;
     else if (event.keyCode === 83)	//s
-        socket.emit('keyPress', { inputId: 'down', state: true });
+        fakePlayer.down = true;
     else if (event.keyCode === 65) //a
-        socket.emit('keyPress', { inputId: 'left', state: true });
+        fakePlayer.left = true;
     else if (event.keyCode === 87) // w
-        socket.emit('keyPress', { inputId: 'up', state: true });
+        fakePlayer.up = true;
 
 }
 document.onkeyup = function (event) {
     if (event.keyCode === 68)	//d
-        socket.emit('keyPress', { inputId: 'right', state: false });
+        fakePlayer.right = false;
     else if (event.keyCode === 83)	//s
-        socket.emit('keyPress', { inputId: 'down', state: false });
+        fakePlayer.down = false;
     else if (event.keyCode === 65) //a
-        socket.emit('keyPress', { inputId: 'left', state: false });
+        fakePlayer.left = false;
     else if (event.keyCode === 87) // w
-        socket.emit('keyPress', { inputId: 'up', state: false });
+        fakePlayer.up = false;
 }
 
 document.onmousedown = function (event) {

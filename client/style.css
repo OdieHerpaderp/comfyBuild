@@ -418,3 +418,16 @@ td {
 .hidden {
     display: none;
 }
+
+.loginScreen {
+    display: flex;
+    font-size: 18px;
+    line-height: 18px;
+    font-family: 'Roboto Slab';
+    padding: 4px;
+}
+
+.loginScreen span {
+    text-align: right;
+    min-width: 100px;
+}

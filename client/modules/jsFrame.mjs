@@ -57,8 +57,14 @@ var jsFrameMixin = {
         this.frame = jsFrame.create(settings);
 
         if (this.HTML) {
-            this.frame.$("#content").appendChild(this.HTML);
+            this.frame.$("#content").replaceWith(this.HTML);
         }
+    },
+    setFramePosition(x, y, anchor) {
+        if (!this.frame) {
+            this.createFrame();
+        }
+        this.frame.setPosition(x, y, anchor);
     }
 }
 

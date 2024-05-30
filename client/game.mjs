@@ -1,21 +1,30 @@
 import { BuildingDataList } from "buildingDataList";
 import { ResourceList } from "resourceList";
 import { buildings } from "buildings";
-import { io } from "socket.io-client";
+import { LoginScreen } from "loginScreen";
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import TextSprite from '@seregpie/three.text-sprite';
+import { socket } from "singletons"
 
-var socket = io();
+//var socket = io();
 
 // Buildings
-let buildingList = new BuildingDataList(buildings, (name) => socket.emit('buildTower', name));
+var buildingList = new BuildingDataList(buildings, (name) => socket.emit('buildTower', name));
 
 // Stockpile
 var stockpile = new ResourceList();
 socket.on('stockpile', function (data) {
     stockpile.updateResources(data);
+});
+
+// Login
+var loginScreen = new LoginScreen();
+loginScreen.addEventListener("loginSuccessful", () => {
+    loginScreen.closeFrame();
+    stockpile.showFrame();
+    buildingList.showFrame();
 });
 
 //ThreeJS
@@ -255,8 +264,6 @@ var health = 0;
 var maxHealth = 0;
 var tech = 0;
 
-//sign
-var signDiv = document.getElementById('signDiv');
 var loadDiv = document.getElementById('loadDiv');
 var heroicTooltip = document.getElementById('heroicTooltip');
 var towerTooltip = document.getElementById('towerTooltip');
@@ -265,37 +272,7 @@ var towerTooltipText = document.getElementById('towerTooltipText');
 var buttonUpgrade = document.getElementById('buttonUpgrade');
 var buttonSell = document.getElementById('buttonSell');
 var settingsDiv = document.getElementById('settingsDiv');
-var signDivUsername = document.getElementById('signDiv-username');
-var signDivSignIn = document.getElementById('signDiv-signIn');
-var signDivSignUp = document.getElementById('signDiv-signUp');
-var signDivPassword = document.getElementById('signDiv-password');
 var hudButtons = document.getElementById('buttenz');
-
-signDivSignIn.onclick = function () {
-    var hashed = blowfish.encrypt(signDivPassword.value, 'sukkeltje', { cipherMode: 0, outputType: 1 });
-    //console.log("SignIn " + hashed);
-    socket.emit('signIn', { username: signDivUsername.value, password: hashed });
-}
-signDivSignUp.onclick = function () {
-    var hashed = blowfish.encrypt(signDivPassword.value, 'sukkeltje', { cipherMode: 0, outputType: 1 });
-    //console.log("SignUp " + hashed);
-    socket.emit('signUp', { username: signDivUsername.value, password: hashed });
-}
-socket.on('signInResponse', function (data) {
-    if (data.success) {
-        frameLogin.closeFrame();
-        //frameStockpile.show();
-        stockpile.showFrame();
-        buildingList.showFrame();
-    } else
-        alert("Sign in unsuccessul.");
-});
-socket.on('signUpResponse', function (data) {
-    if (data.success) {
-        alert("Sign up successul.");
-    } else
-        alert("Sign up unsuccessul.");
-});
 
 //chat
 var chatText = document.getElementById('chat-text');
@@ -1161,15 +1138,9 @@ document.oncontextmenu = function (event) {
 }
 
 console.log("*Main Loaded");
-frameLogin.show();
-frameLogin.setPosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+loginScreen.showFrame();
+loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+
 loadDiv.style.display = 'none';
-signDiv.style.display = 'none';
 settingsDiv.style.display = 'none';
 gameDiv.style.display = 'inline-block';
-
-
-
-//socket.onAny((eventname, ...args) => {
-//    console.log("Socket on '" + eventname + "'");
-//});

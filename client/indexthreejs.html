@@ -13,22 +13,6 @@
 			<center><img src="/client/img/loading.png"><br>Loading - Please wait...</center>
 		</div>
 	</div>
-	<div id="signDiv" style="display:none;">
-		<div>
-			<h3>Options</h3>
-			<a class="button" href="javascript:openSettings()"
-				style="position:relative;height:24px;top:0px;left:105px;width:31px">
-				Open Settings
-			</a>
-		</div>
-
-		<div>
-			<h3>Words of wisdom</h3>
-			<p>* Accounts now work. Please register an account to play.</p>
-			<p>* You can scroll down the list of towers. </p>
-			<p>* One kaasbroodje in the hand is better than ten in the sand! </p>
-		</div>
-	</div>
 
 	<div id="gameDiv" style="display:none;">
 		<div id="game" onwheel="scrollWheel(event)"
@@ -217,12 +201,14 @@
 	<script type="importmap">
 		{
 			"imports": {
+				"loginScreen": "./client/modules/loginScreen/loginScreen.mjs",
 				"resource": "./client/modules/resources/resource.mjs",
 				"resourceList": "./client/modules/resources/resourceList.mjs",
 				"buildings": "./lib/buildings.mjs",
 				"buildingData": "./client/modules/buildings/buildingData.mjs",
 				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
 				"templateHelpers": "./client/modules/templateHelpers.mjs",
+				"singletons": "./client/modules/singletons.mjs",
 
 				"JSFrame": "./client/modules/jsFrame.mjs",
 				

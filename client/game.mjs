@@ -51,7 +51,7 @@ scene.add(floor);
 // Global plane geom
 var bulletGeometry = new THREE.PlaneGeometry(3, 3, 1, 1);
 
-var directionalLight = new THREE.DirectionalLight(0xffffff, 1.3);
+var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
 directionalLight.position.x = 40;
 directionalLight.position.y = 280;
 directionalLight.position.z = 420;

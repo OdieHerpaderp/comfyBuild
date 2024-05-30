@@ -145,13 +145,18 @@ io.sockets.on('connection', function(socket){
 
 //TODO: Merge comfyBuild tick into main tick once movement is clientside
 function gameTick() {
-	if(tick === 5)
-	{
+	if(tick === 5){
 		Gamemode.prepare();
 	}
-	if(tick % 2 === 0)
-	{
+	if(tick % 2 === 0){
 		comfyBuild.tick();
+	}
+	if(tick % 10 === 0){
+		//console.log(Base.stockpile);
+		for(var i in SOCKET_LIST){
+			var sucket = SOCKET_LIST[i];
+			sucket.emit('stockpile', Base.stockpile);
+		}
 	}
 	var packs = Entity.getFrameUpdateData();
 	//TODO: updatePacks on the client assume that the updatePack contains every entity.
@@ -165,7 +170,7 @@ function gameTick() {
 };
 
 // New implementation that doesn't rely on raf
-const targetFrameRate = 30;
+const targetFrameRate = 20;
 const targetFrameTime = 1000 / targetFrameRate; // Target frame time in milliseconds
 
 let lastFrameTime = Date.now();

@@ -1,9 +1,15 @@
 import { getHtmlTemplate } from "templateHelpers";
 import { BuildingData } from "buildingData";
+import { jsFrameMixin } from "JSFrame";
 
 class BuildingDataList {
     static template;
     buildingDatas = [];
+    jsFrameSettings = {
+        name: "frameBuildings",
+        title: "Buildings",
+        left: 380, top: 360, width: 550, height: 420, minWidth: 535, minHeight: 110
+    };
 
     constructor(buildings, buildFunction) {
         this.HTML = BuildingDataList.template.content.cloneNode(true);
@@ -32,6 +38,7 @@ class BuildingDataList {
     }
 }
 
+Object.assign(BuildingDataList.prototype, jsFrameMixin);
 BuildingDataList.template = await getHtmlTemplate("client/modules/buildings/buildingDataList.html");
 
 export { BuildingDataList };

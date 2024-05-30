@@ -11,11 +11,9 @@ var socket = io();
 
 // Buildings
 let buildingList = new BuildingDataList(buildings, (name) => socket.emit('buildTower', name));
-document.getElementById('buildingsDiv').replaceWith(buildingList.HTML);
 
 // Stockpile
 var stockpile = new ResourceList();
-document.getElementById('stockpileDiv').replaceWith(stockpile.HTML);
 socket.on('stockpile', function (data) {
     stockpile.updateResources(data);
 });
@@ -286,8 +284,9 @@ signDivSignUp.onclick = function () {
 socket.on('signInResponse', function (data) {
     if (data.success) {
         frameLogin.closeFrame();
-        frameStockpile.show();
-        frameBuildings.show();
+        //frameStockpile.show();
+        stockpile.showFrame();
+        buildingList.showFrame();
     } else
         alert("Sign in unsuccessul.");
 });

@@ -1,9 +1,15 @@
 import { getHtmlTemplate } from "templateHelpers";
 import { Resource } from "resource";
+import { jsFrameMixin } from "JSFrame";
 
 class ResourceList {
     static template;
     resources = {};
+    jsFrameSettings = {
+        name: "frameStockpile",
+        title: "Stockpile",
+        left: 30, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110
+    };
 
     constructor() {
         this.HTML = ResourceList.template.content.cloneNode(true);
@@ -30,6 +36,7 @@ class ResourceList {
     }
 }
 
+Object.assign(ResourceList.prototype, jsFrameMixin);
 ResourceList.template = await getHtmlTemplate("client/modules/resources/resourceList.html");
 
 export { ResourceList };

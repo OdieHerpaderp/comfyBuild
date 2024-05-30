@@ -2,6 +2,7 @@ import { BuildingDataList } from "buildingDataList";
 import { ResourceList } from "resourceList";
 import { buildings } from "buildings";
 import { LoginScreen } from "loginScreen";
+import { Chat } from "chat";
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -19,23 +20,27 @@ socket.on('stockpile', function (data) {
     stockpile.updateResources(data);
 });
 
+// Chat
+var chat = new Chat();
+
 // Login
 var loginScreen = new LoginScreen();
 loginScreen.addEventListener("loginSuccessful", () => {
     loginScreen.closeFrame();
     stockpile.showFrame();
     buildingList.showFrame();
+    chat.showFrame();
 });
 
 //ThreeJS
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 176) * 1.15, 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
 var fakePlayer = {x: 64*48, y: 64*48, spdX: 0, spdY: 0, left: false, right: false, up: false, down:false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
 var oldHeight = 0;
-renderer.setSize(window.innerWidth, window.innerHeight - 176);
+renderer.setSize(window.innerWidth, window.innerHeight - 44);
 //document.body.appendChild( renderer.domElement );
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
@@ -208,10 +213,10 @@ var animate = function () {
         console.log("WE GON RESIZE");
         oldWidth = window.innerWidth;
         oldHeight = window.innerHeight;
-        renderer.setSize(window.innerWidth, window.innerHeight - 176);
+        renderer.setSize(window.innerWidth, window.innerHeight - 44);
         renderer.setPixelRatio(window.devicePixelRatio * renderScale / 100);
         const canvas = renderer.domElement;
-        camera.aspect = window.innerWidth / (window.innerHeight - 176) * 1.06;
+        camera.aspect = window.innerWidth / (window.innerHeight - 44) * 1.06;
         camera.updateProjectionMatrix();
     }
     renderer.render(scene, camera);
@@ -274,17 +279,6 @@ var buttonSell = document.getElementById('buttonSell');
 var settingsDiv = document.getElementById('settingsDiv');
 var hudButtons = document.getElementById('buttenz');
 
-//chat
-var chatText = document.getElementById('chat-text');
-var chatInput = document.getElementById('chat-input');
-var chatForm = document.getElementById('chat-form');
-
-
-socket.on('addToChat', function (data) {
-    var span = document.createElement("span");
-    span.innerHTML = data;
-    chatText.insertBefore(span, chatText.firstChild);
-});
 socket.on('evalAnswer', function (data) {
     console.log(data);
 });

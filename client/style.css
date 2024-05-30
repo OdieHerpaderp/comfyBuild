@@ -257,31 +257,11 @@ td {
     flex-grow: 1;
 }
 
-#bottom-bar {
-    font-family: 'Roboto Slab';
-    background-image: url('/client/img/bottombar.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: absolute;
-    width: 100%;
-    height: 132px;
-    /*line-height: 44px;*/
-    bottom: 0px;
-    left: 0px;
-    display: flex;
-}
-
-#bottom-bar>div {
-    display: flex;
-    flex-grow: 1;
-    top: 0;
-    bottom: 0;
-}
-
 #chat {
     font-size: 16px;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 #chat-text {

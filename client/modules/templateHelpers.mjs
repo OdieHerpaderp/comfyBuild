@@ -29,6 +29,7 @@ var templateMixin = {
     },
     setProperty: function (propertyName, value) {
         if (!this.propertyElements[propertyName]) { return; }
+        if (value === undefined) { value = "" };
         this.propertyElements[propertyName].innerHTML = value;
     },
     appendChildToProperty: function (propertyName, child) {

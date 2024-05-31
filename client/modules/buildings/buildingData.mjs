@@ -87,8 +87,8 @@ class BuildingData {
         this.produce = data.produce;
 
         if (infoField) {
-            this.HTML.firstElementChild.addEventListener("mouseover", () => { infoField.innerHTML = this.name + ": " + this.info; });
-            this.HTML.firstElementChild.addEventListener("mouseout", () => { infoField.innerHTML = String.fromCharCode(160); });
+            this.HTML.addEventListener("mouseover", () => { infoField.innerHTML = this.name + ": " + this.info; });
+            this.HTML.addEventListener("mouseout", () => { infoField.innerHTML = String.fromCharCode(160); });
         }
     }
 

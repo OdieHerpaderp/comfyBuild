@@ -13,46 +13,62 @@ var templateMixin = {
         if (!this.constructor.template) { return; }
         this.propertyElements = {};
         this.inputElements = {};
-        this.HTML = this.constructor.template.content.cloneNode(true);
+        this.HTML = this.constructor.template.content.cloneNode(true).firstElementChild;
     },
     registerProperty: function (propertyName, initialvalue) {
         if (!this.HTML) { return; }
-        this.propertyElements[propertyName] = this.HTML.querySelector(`[data-property=${propertyName}]`);
+        if (this.HTML.getAttribute("data-property") == propertyName) {
+            this.propertyElements[propertyName] = this.HTML;
+        }
+        else {
+            this.propertyElements[propertyName] = this.HTML.querySelector(`[data-property=${propertyName}]`);
+        }
         if (initialvalue) {
             this.setProperty(propertyName, initialvalue);
         }
     },
-    setProperty: function(propertyName, value) {
+    setProperty: function (propertyName, value) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].innerHTML = value;
     },
-    appendChildToProperty: function(propertyName, child) {
+    appendChildToProperty: function (propertyName, child) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].appendChild(child);
     },
-    prependChildToProperty: function(propertyName, child) {
+    prependChildToProperty: function (propertyName, child) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].insertBefore(child, this.propertyElements[propertyName].firstChild);
     },
-    addClassToProperty: function(propertyName, className) {
+    addClassToProperty: function (propertyName, className) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].classList.add(className);
     },
-    removeClassFromProperty: function(propertyName, className) {
+    removeClassFromProperty: function (propertyName, className) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].classList.remove(className);
     },
     registerAction: function (actionName, action) {
         if (!this.HTML) { return; }
-        var element = this.HTML.querySelector(`[data-action=${actionName}]`);
+        var element;
+        if (this.HTML.getAttribute("data-action") == actionName) {
+            element = this.HTML;
+        }
+        else {
+            element = this.HTML.querySelector(`[data-action=${actionName}]`);
+        }
         if (!element) { return; }
         element.onclick = action;
     },
-    registerInput: function(inputName) {
+    registerInput: function (inputName) {
         if (!this.HTML) { return; }
-        this.inputElements[inputName] = this.HTML.querySelector(`[data-input=${inputName}]`);
+        if (this.HTML.getAttribute("data-input") == inputName) {
+            this.inputElements[inputName] = this.HTML;
+        }
+        else {
+            this.inputElements[inputName] = this.HTML.querySelector(`[data-input=${inputName}]`);
+        }
     },
-    getInput: function(inputName) {
+    getInput: function (inputName) {
         if (!this.inputElements[inputName]) { return; }
         return this.inputElements[inputName].value;
     }

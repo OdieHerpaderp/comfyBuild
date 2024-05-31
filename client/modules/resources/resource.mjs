@@ -71,7 +71,7 @@ class Resource {
 
     showOnce() {
         this.showOnce = undefined;
-        this.HTML.querySelector(".hidden").classList.remove("hidden");
+        this.HTML.classList.remove("hidden");
     }
 
     setAmount(amount) {

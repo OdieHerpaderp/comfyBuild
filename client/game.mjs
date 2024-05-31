@@ -1080,6 +1080,8 @@ var drawStats = function () {
     document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
     document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();
     document.getElementById('paneWave').innerHTML = "Morale: " + wave / 100;
+
+    stockpile.updateResourceDisplays();
 }
 
 var drawScoreboard = function () {

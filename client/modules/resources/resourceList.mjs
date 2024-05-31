@@ -34,6 +34,12 @@ class ResourceList {
             this.resources[name].setAmount(amount);
         }
     }
+
+    updateResourceDisplays() {
+        for (const name in this.resources) {
+            this.resources[name].updateDisplay();
+        };
+    }
 }
 
 Object.assign(ResourceList.prototype, jsFrameMixin);

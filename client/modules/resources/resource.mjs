@@ -6,6 +6,7 @@ class Resource {
     constructor(name, amount) {
         this.name = name;
         this.amount = amount;
+        this.displayAmount = amount;
         this.change = 0;
 
         this.HTML = Resource.template.content.cloneNode(true);
@@ -52,12 +53,21 @@ class Resource {
         }
 
         this.amount = amount;
-        if (this.amountDiv) {
-            this.amountDiv.innerHTML = this.amount.toLocaleString();
-        }
 
         if (amount > 0) {
             this.containerDiv.classList.remove("hidden");
+        }
+    }
+
+    updateDisplay() {
+        if (this.amountDiv && this.amount != this.displayAmount) {
+            if (this.amount > this.displayAmount) {
+                this.displayAmount += Math.floor(1 + ((this.amount - this.displayAmount) / 10));
+            }
+            else {
+                this.displayAmount -= Math.floor(1 + ((this.displayAmount - this.amount) / 10));
+            }
+            this.amountDiv.innerHTML = this.displayAmount.toLocaleString();
         }
     }
 }

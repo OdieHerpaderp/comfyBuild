@@ -251,7 +251,7 @@ Player.onConnect = function(socket,username,progress){
 		socket.emit('addToChat',"Upgrading all towers to level " + amount);
 		for(var ti in Tower.list){
 			var tp = Tower.list[ti];
-			if(tp.upgradeLevel < amount) tp.targetLevel += amount;			
+			if(tp.upgradeLevel < amount) tp.targetLevel = amount;			
 		}
 	});
 

@@ -333,11 +333,10 @@ td {
 }
 
 #infoField {
-    position: sticky;
-    top: 0;
     background-color: rgba(0,0,0,0.5);
     padding: 3px;
     text-align: center;
+    min-height: 42px;
 }
 
 .resourceList {
@@ -410,4 +409,20 @@ td {
 .loginScreen span {
     text-align: right;
     min-width: 100px;
+}
+
+.building-data-list thead tr {
+    border-bottom: none;
+}
+
+.building-data-list th {
+    position: sticky;
+    top: 0;
+    background-color: rgba(0,0,0,0.5);
+    border-bottom: none;
+    box-shadow: inset 0 -1px 0 white;
+}
+
+.fullWidth {
+    width: 100%;
 }

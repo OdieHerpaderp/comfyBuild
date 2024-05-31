@@ -8,7 +8,14 @@ class BuildingDataList {
     jsFrameSettings = {
         name: "frameBuildings",
         title: "Buildings",
-        left: 380, top: 360, width: 550, height: 420, minWidth: 535, minHeight: 110
+        left: 380, top: 360, width: 560, height: 420, minWidth: 560, minHeight: 110,
+        style: {
+            backgroundColor: '#22222255',
+            overflow: 'hidden',
+            width: '100%',
+            fontSize: 18,
+            display: 'flex'
+        }
     };
 
     constructor(buildings, buildFunction) {

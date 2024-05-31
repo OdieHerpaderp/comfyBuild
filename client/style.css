@@ -322,9 +322,9 @@ td {
 }
 
 .comfyButton:active {
-    margin-top: 2px;
-    margin-bottom: -3px;
-    box-shadow: inset 0 -2px #333333;
+    margin-top: 4px;
+    margin-bottom: 0px;
+    box-shadow: 0 0 #333333;
     text-shadow: 0.5px 0.5px 1px #000000;
     color: #FFFFFF;
     text-decoration: none;

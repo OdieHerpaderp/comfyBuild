@@ -18,7 +18,7 @@ Tower = function(param){
 	self.attackTimer = 0;
 	self.upgradeLevel = 0;
 	self.targetLevel = 1;
-	self.buildTimer = 45;
+	self.buildTimer = 35;
 	self.productionTimer = 5;
 	self.transforms = 0;
 	self.value = param.value;
@@ -44,10 +44,10 @@ Tower = function(param){
 		if(self.targetLevel > self.upgradeLevel && Base.populationCurrent > 8 + Base.populationAvg / 200){
 			// TODO implement smarter way to make buildings (especially houses) prefer producing when population is low.
 			if(self.buildTimer > 0) {
-				for (let i = 0; i < self.upgradeLevel + 1; i++) { 
+				for (let i = 0; i < Math.round(self.upgradeLevel / 10 + 1); i++) { 
 					if(self.checkBuildingConsumptionAndBuild(self.towerType,self.upgradeLevel)){
 						self.status = "build";
-						self.buildTimer -= 2 / ((self.upgradeLevel+1) * 1.35) * Base.constructionMultiplier;
+						self.buildTimer -= 2 / ((self.upgradeLevel / 10 + 1) * 1.35) * Base.constructionMultiplier;
 						//Base.Tech += self.upgradeLevel;
 					}
 					else self.status = "buildStop";
@@ -55,7 +55,7 @@ Tower = function(param){
 			}
 			else { 
 				self.upgradeLevel++;
-				self.buildTimer = Math.round(45 + self.upgradeLevel * 1.5);
+				self.buildTimer = Math.round(35 + self.upgradeLevel * 2.5);
 			}
 			return;
 		}
@@ -78,7 +78,7 @@ Tower = function(param){
 				}
 				self.status = "produceStop";
 			}
-			if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 100);
+			if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 50);
 		}
 	};
 
@@ -256,7 +256,7 @@ Tower = function(param){
 			if (resource === 'population') {
 			  return building.build[resource] <= Base.populationCurrent;
 			} else {
-			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (1 + upgradeLevel / 10));
+			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (0.5 + upgradeLevel / 25));
 			}
 		  });
 	  

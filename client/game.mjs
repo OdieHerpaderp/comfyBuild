@@ -194,7 +194,8 @@ var animate = function () {
     pollInputs(delta);
     camera.position.set(fakePlayer.x / 10, 292 - zoom * 27, fakePlayer.y / 10 + 334 - zoom * 30);
     camera.lookAt(fakePlayer.x / 10, 1, fakePlayer.y / 10 + 11 - zoom);
-    if ( currentTime - 20 > lastEmit ) { 
+    if ( currentTime - 30 > lastEmit ) { 
+        drawStats();
         socket.emit('fakePlayer', { x: fakePlayer.x, y: fakePlayer.y });
         lastEmit = currentTime;
     }
@@ -268,6 +269,7 @@ var wave = 0;
 var health = 0;
 var maxHealth = 0;
 var tech = 0;
+var techCR = 0;
 
 var loadDiv = document.getElementById('loadDiv');
 var heroicTooltip = document.getElementById('heroicTooltip');
@@ -1053,7 +1055,6 @@ setInterval(function () {
 
 setInterval(function () {
     drawScoreboard();
-    drawStats();
 }, 100);
 
 var drawMap = function () {
@@ -1075,7 +1076,8 @@ var drawStats = function () {
     document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
     document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
     document.getElementById('paneLevel').innerHTML = "Level: " + Player.list[selfId].score + "(" + Player.list[selfId].exp + "/" + Math.round(2500 + Math.pow(Player.list[selfId].score * 750, 1.1)) + ")";
-    document.getElementById('paneTech').innerHTML = "Tech: " + tech.toLocaleString();
+    if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
+    document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
     document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();
     document.getElementById('paneWave').innerHTML = "Morale: " + wave / 100;
 }

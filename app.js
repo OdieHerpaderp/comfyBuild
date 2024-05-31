@@ -10,7 +10,6 @@ require('./lib/stockpile');
 require('./Entity');
 require('./Gamemode');
 //require('./geckosio');
-require('./client/Inventory');
 
 var express = require('express');
 var app = express();
@@ -156,6 +155,7 @@ function gameTick() {
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('stockpile', Base.stockpile);
+			sucket.emit('gameState',{wave:Base.morale, tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
 		}
 	}
 	var packs = Entity.getFrameUpdateData();

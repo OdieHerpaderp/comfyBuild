@@ -48,7 +48,7 @@ Player = function(param){
 	self.statPTS = param.progress.statpts;
 	self.gold = 9999;
 
-	self.inventory = new Inventory(param.progress.items,param.socket,true);
+	//self.inventory = new Inventory(param.progress.items,param.socket,true);
 
 	var super_update = self.update;
 	self.update = function(){
@@ -178,7 +178,7 @@ Player.onConnect = function(socket,username,progress){
 		socket:socket,
 		progress:progress,
 	});
-	player.inventory.refreshRender();
+	//player.inventory.refreshRender();
 
 	socket.on('keyPress',function(data){
 		if(data.inputId === 'left')

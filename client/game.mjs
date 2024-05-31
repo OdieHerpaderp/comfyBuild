@@ -11,7 +11,7 @@ import { socket } from "singletons"
 import { BuildingTooltip } from "./modules/buildings/buildingTooltip.mjs";
 
 // Buildings
-var buildingList = new BuildingDataList(buildings, (name) => socket.emit('buildTower', name));
+var buildingList = new BuildingDataList(buildings);
 var buildingTooltip = new BuildingTooltip();
 
 // Stockpile

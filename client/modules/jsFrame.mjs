@@ -47,6 +47,7 @@ var jsFrameMixin = {
             return;
         }
         this.frame.closeFrame();
+        this.frame = undefined;
     },
     hideFrame() {
         if (!this.frame) {

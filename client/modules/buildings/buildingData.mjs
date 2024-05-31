@@ -1,42 +1,95 @@
-import { getHtmlTemplate } from "templateHelpers";
+import { getHtmlTemplate, templateMixin } from "templateHelpers";
+import { socket } from "singletons";
 
 class BuildingData {
     static template;
 
-    constructor(name, data, infoField, buildFunction) {
+    // #region properties
+    _name;
+    get name() {
+        return this._name;
+    }
+    set name(value) {
+        this._name = value;
+        this.setProperty("name", value);
+    }
+    _age;
+    get age() {
+        return this._age;
+    }
+    set age(value) {
+        this._age = value ?? -1;
+        this.setProperty("age", this._age);
+    }
+    _info;
+    get info() {
+        return this._info;
+    }
+    set info(value) {
+        this._info = value ?? "[no info available]";
+        this.setProperty("info", this._info);
+    }
+    _node;
+    get node() {
+        return this._node;
+    }
+    set node(value) {
+        this._node = value;
+        this.setProperty("node", this._node);
+    }
+    _build;
+    get build() {
+        return this._build;
+    }
+    set build(value) {
+        this._build = value ?? {};
+        this.setProperty("build", this.getResourceInfo(this._build ?? {}));
+    }
+    _consume;
+    get consume() {
+        return this._consume;
+    }
+    set consume(value) {
+        this._consume = value ?? {};
+        this.setProperty("consume", this.getResourceInfo(this._consume ?? {}));
+    }
+    _produce;
+    get produce() {
+        return this._produce;
+    }
+    set produce(value) {
+        this._produce = value ?? {};
+        this.setProperty("produce", this.getResourceInfo(this._produce ?? {}));
+    }
+    // #endregion
+
+    constructor(name, data, infoField) {
+        var that = this;
+
+        this.loadTemplate();
+
+        this.registerProperty("name");
+        this.registerProperty("age");
+        this.registerProperty("info");
+        this.registerProperty("node");
+        this.registerProperty("build");
+        this.registerProperty("consume");
+        this.registerProperty("produce");
+
+        this.registerAction("build", () => { socket.emit('buildTower', that.name) });
+
         this.name = name;
-        this.age = this.default(data.age, -1);
-        this.info = this.default(data.info, "[no info available]");
+        this.age = data.age;
+        this.info = data.info;
         this.node = data.node;
-        this.build = this.default(data.build, {});
-        this.consume = this.default(data.consume, {});
-        this.produce = this.default(data.produce, {});
-
-        this.HTML = BuildingData.template.content.cloneNode(true).firstElementChild;
-
-        this.fillProperty("name", this.name);
-        this.fillProperty("age", this.age);
-        this.fillProperty("info", this.info);
-        if (this.node) {
-            this.fillProperty("node", this.node);
-        }
-        this.fillProperty("build", this.getResourceInfo(this.build));
-        this.fillProperty("consume", this.getResourceInfo(this.consume));
-        this.fillProperty("produce", this.getResourceInfo(this.produce));
-
-        var buildButton = this.HTML.querySelector("[data-action=build]");
-        buildButton.onclick = () => { buildFunction(this.name); };
+        this.build = data.build;
+        this.consume = data.consume;
+        this.produce = data.produce;
 
         if (infoField) {
-            this.HTML.addEventListener("mouseover", () => { infoField.innerHTML = this.name + ": " + this.info; });
-            this.HTML.addEventListener("mouseout", () => { infoField.innerHTML = String.fromCharCode(160); });
+            this.HTML.firstElementChild.addEventListener("mouseover", () => { infoField.innerHTML = this.name + ": " + this.info; });
+            this.HTML.firstElementChild.addEventListener("mouseout", () => { infoField.innerHTML = String.fromCharCode(160); });
         }
-    }
-
-    default(variable, defaultValue) {
-        if (typeof variable !== "undefined")
-            return variable;
-        return defaultValue;
     }
 
     getResourceInfo(list) {
@@ -46,15 +99,9 @@ class BuildingData {
         }
         return result;
     }
-
-    fillProperty(propertyName, value) {
-        var element = this.HTML.querySelector("[data-property=" + propertyName + "]");
-        if (element) {
-            element.innerHTML = value;
-        }
-    }
 }
 
+Object.assign(BuildingData.prototype, templateMixin);
 BuildingData.template = await getHtmlTemplate("client/modules/buildings/buildingData.html");
 
 export { BuildingData };

@@ -1,10 +1,9 @@
-import { getHtmlTemplate } from "templateHelpers";
+import { getHtmlTemplate, templateMixin } from "templateHelpers";
 import { BuildingData } from "buildingData";
 import { jsFrameMixin } from "JSFrame";
 
 class BuildingDataList {
     static template;
-    buildingDatas = [];
     jsFrameSettings = {
         name: "frameBuildings",
         title: "Buildings",
@@ -18,13 +17,17 @@ class BuildingDataList {
         }
     };
 
-    constructor(buildings, buildFunction) {
-        this.HTML = BuildingDataList.template.content.cloneNode(true);
+    buildingDatas = [];
+
+    constructor(buildings) {
+        this.loadTemplate();
+
+        this.registerProperty("buildingData");
 
         let infoField = this.HTML.querySelector("#infoField");
 
         for (const buildingName in buildings) {
-            this.buildingDatas.push(new BuildingData(buildingName, buildings[buildingName], infoField, buildFunction));
+            this.buildingDatas.push(new BuildingData(buildingName, buildings[buildingName], infoField));
         }
 
         this.buildingDatas.sort((a, b) => {
@@ -34,18 +37,14 @@ class BuildingDataList {
             return a.name.localeCompare(b.name);
         });
 
-        var element = this.HTML.querySelector("[data-property=buildingData]");
-        if (!element) {
-            element = this.HTML;
-        }
-
         this.buildingDatas.forEach((buildingData) => {
-            element.appendChild(buildingData.HTML);
+            this.appendChildToProperty("buildingData", buildingData.HTML);
         });
     }
 }
 
 Object.assign(BuildingDataList.prototype, jsFrameMixin);
+Object.assign(BuildingDataList.prototype, templateMixin);
 BuildingDataList.template = await getHtmlTemplate("client/modules/buildings/buildingDataList.html");
 
 export { BuildingDataList };

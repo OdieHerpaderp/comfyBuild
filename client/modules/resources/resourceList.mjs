@@ -1,4 +1,4 @@
-import { getHtmlTemplate } from "templateHelpers";
+import { getHtmlTemplate, templateMixin } from "templateHelpers";
 import { Resource } from "resource";
 import { jsFrameMixin } from "JSFrame";
 
@@ -12,11 +12,9 @@ class ResourceList {
     };
 
     constructor() {
-        this.HTML = ResourceList.template.content.cloneNode(true);
-        this.resourcesElement = this.HTML.querySelector("[data-property=resources]");
-        if (!this.resourcesElement) {
-            this.resourcesElement = this.HTML;
-        }
+        this.loadTemplate();
+
+        this.registerProperty("resources");
     }
 
     updateResources(resources) {
@@ -28,7 +26,7 @@ class ResourceList {
     updateResource(name, amount) {
         if (this.resources[name] === undefined) {
             this.resources[name] = new Resource(name, amount);
-            this.resourcesElement.appendChild(this.resources[name].HTML);
+            this.appendChildToProperty("resources", this.resources[name].HTML);
         }
         else {
             this.resources[name].setAmount(amount);
@@ -43,6 +41,7 @@ class ResourceList {
 }
 
 Object.assign(ResourceList.prototype, jsFrameMixin);
+Object.assign(ResourceList.prototype, templateMixin);
 ResourceList.template = await getHtmlTemplate("client/modules/resources/resourceList.html");
 
 export { ResourceList };

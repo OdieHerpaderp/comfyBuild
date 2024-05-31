@@ -1,4 +1,4 @@
-import { getHtmlTemplate } from "templateHelpers";
+import { getHtmlTemplate, templateMixin } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
 import { socket } from "singletons";
 
@@ -20,32 +20,35 @@ class Chat {
     }
 
     constructor() {
-        this.HTML = Chat.template.content.cloneNode(true);
-
-        this.chatOutput = this.HTML.querySelector("[data-property=chat]");
-        if (this.chatOutput) {
-            var element = document.createElement("span");
-            element.innerHTML = "Hello!";
-            this.chatOutput.appendChild(element);
-        }
-
-        this.chatInput = this.HTML.querySelector("[data-input=chat]");
-        this.sendButton = this.HTML.querySelector("[data-action=send]");
-
         var that = this;
-        socket.on('addToChat', function (text) {
-            that.addToChat(text);
-        });
+
+        this.loadTemplate();
+
+        this.registerProperty("chat");
+
+        this.registerInput("chat");
+        this.registerAction("send", () => { that.sendChat(); });
+
+        var span = document.createElement("span");
+        span.innerHTML = "Hello!";
+        this.appendChildToProperty("chat", span);
+
+        socket.on('addToChat', function (text) { that.addToChat(text); });
     }
 
     addToChat(text) {
         var span = document.createElement("span");
         span.innerHTML = text;
-        this.chatOutput.insertBefore(span, this.chatOutput.firstChild);
+        this.prependChildToProperty("chat", span);
+    }
+
+    sendChat() {
+        console.log(this.getInput("chat"));
     }
 }
 
 Object.assign(Chat.prototype, jsFrameMixin);
+Object.assign(Chat.prototype, templateMixin);
 Chat.template = await getHtmlTemplate("client/modules/chat/chat.html");
 
 export { Chat };

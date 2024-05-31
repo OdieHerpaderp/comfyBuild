@@ -1,4 +1,4 @@
-import { getHtmlTemplate } from "templateHelpers";
+import { getHtmlTemplate, templateMixin } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
 import { socket } from "singletons"
 
@@ -19,22 +19,15 @@ class LoginScreen {
     }
 
     constructor() {
-        this.HTML = LoginScreen.template.content.cloneNode(true);
-
-        this.usernameInput = this.HTML.querySelector("[data-input=username]");
-        this.passwordInput = this.HTML.querySelector("[data-input=password]");
-
-        var signInButton = this.HTML.querySelector("[data-action=signIn]");
-        if (signInButton) {
-            signInButton.onclick = () => { this.signIn() };
-        }
-
-        var signUpButton = this.HTML.querySelector("[data-action=signUp]");
-        if (signUpButton) {
-            signUpButton.onclick = () => { this.signUp() };
-        }
-
         var that = this;
+        this.loadTemplate();
+
+        this.registerInput("username");
+        this.registerInput("password");
+
+        this.registerAction("signIn", () => { that.signIn(); });
+        this.registerAction("signUp", () => { that.signUp(); });
+
         socket.on('signInResponse', function (data) {
             if (data.success) {
                 that.dispatchEvent(LoginScreen.loginSuccessfulEvent);
@@ -55,13 +48,13 @@ class LoginScreen {
     }
 
     signIn() {
-        var hashed = blowfish.encrypt(this.passwordInput.value, 'sukkeltje', { cipherMode: 0, outputType: 1 });
-        socket.emit('signIn', { username: this.usernameInput.value, password: hashed });
+        var hashed = blowfish.encrypt(this.getInput("password"), 'sukkeltje', { cipherMode: 0, outputType: 1 });
+        socket.emit('signIn', { username: this.getInput("username"), password: hashed });
     }
 
     signUp() {
-        var hashed = blowfish.encrypt(this.passwordInput.value, 'sukkeltje', { cipherMode: 0, outputType: 1 });
-        socket.emit('signUp', { username: this.usernameInput.value, password: hashed });
+        var hashed = blowfish.encrypt(this.getInput("password"), 'sukkeltje', { cipherMode: 0, outputType: 1 });
+        socket.emit('signUp', { username: this.getInput("username"), password: hashed });
     }
 
     addEventListener(name, callback) {
@@ -74,6 +67,7 @@ class LoginScreen {
 }
 
 Object.assign(LoginScreen.prototype, jsFrameMixin);
+Object.assign(LoginScreen.prototype, templateMixin);
 LoginScreen.template = await getHtmlTemplate("client/modules/loginScreen/loginScreen.html");
 
 export { LoginScreen };

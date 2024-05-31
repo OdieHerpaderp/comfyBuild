@@ -1,6 +1,6 @@
 import { getHtmlTemplate } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
-import { socket } from "singletons"
+import { socket } from "singletons";
 
 class Chat {
     static loginSuccessfulEvent = new Event("loginSuccessful");

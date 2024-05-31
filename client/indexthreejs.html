@@ -124,57 +124,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div id="towerTooltip"
-			style="position:absolute; left:62%; top:42%; height:80px; background-image: url('/client/img/bottombar.png'); padding:6px;font-size:14px">
-			<div id="transformDiv">
-				<span id="towerTooltipText" style="margin-bottom:8px;">LVL: 9 DMG: 99 AGI: 99 RNG: 99</span><br />
-			</div>
-			<a class="button" id="buttonAdd" href="javascript:upgradeAmount++"
-				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-				+
-			</a>
-			<a class="button" id="button" href="javascript:upgradeAll()"
-				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-				Upgrade All
-			</a>
-			<br>
-			<a class="button" id="buttonUpgrade" href="javascript:upgradeTower()"
-				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-				Upgrade x1
-			</a>
-			<a class="button" id="buttonSell" href="javascript:sellTower()"
-				style="float:right; height:22px;width:172px; margin-right:0px;margin-top:4px;font-size:24px;line-height:22px;">
-				Sell
-			</a>
-			<br>
-			<a class="button" id="buttonAdd" href="javascript:upgradeAmount--"
-				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-				-
-			</a>
-			<a class="button" id="button" href="javascript:upgradeSameType()"
-				style="float:left; height:22px;width:172px; margin-right:4px;margin-top:4px;font-size:24px;line-height:22px;">
-				Upg. Same Type
-			</a>
-		</div>
-
-		<div id="heroicTooltip"
-			style="position:absolute; left:56%; top:42%; height:65px; background-image: url('/client/img/bottombar.png'); padding:6px;font-size:14px">
-			<span id="heroicTooltipText" style="margin-bottom:8px;">Level: 99 Stat Points: 99<br />
-				STR: 99 AGI: 99 NTL: 99</span><br />
-			<a class="button" id="buttonHSTR" href="javascript:heroicSTR()"
-				style="float:left; height:24px;width:114px; margin-right:4px;margin-top:4px;font-size:20px;line-height:22px;">
-				STR Stat
-			</a>
-			<a class="button" id="buttonHAGI" href="javascript:heroicAGI()"
-				style="float:left; height:24px;width:114px; margin-right:4px;margin-top:4px;font-size:20px;line-height:22px;">
-				AGI Stat
-			</a>
-			<a class="button" id="buttonHNTL" href="javascript:heroicNTL()"
-				style="float:left; height:24px;width:114px; margin-right:0px;margin-top:4px;font-size:20px;line-height:22px;">
-				NTL Stat
-			</a>
-		</div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/jsframe.js/lib/jsframe.min.js"></script>
@@ -191,6 +140,7 @@
 				"buildings": "./lib/buildings.mjs",
 				"buildingData": "./client/modules/buildings/buildingData.mjs",
 				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
+				"buildingTooltip": "./client/modules/buildings/buildingTooltip.mjs",
 				"templateHelpers": "./client/modules/templateHelpers.mjs",
 				"singletons": "./client/modules/singletons.mjs",
 

@@ -1,0 +1,22 @@
+<template>
+    <div id="buildingTooltip" class="flex-column">
+        <div class="flex fullWidth">
+            <span>LVL: <span data-property="LVL">Over 9000</span></span>
+        </div>
+        <div class="flex">
+            <div class="flex">
+                <button class="comfyButton" data-action="upgrade">
+                    Upgrade (<span data-property="upgradeAmount"></span>)
+                </button>
+                <div class="flex-column">
+                    <button class="comfyButton" data-action="upgradePlus">+</button>
+                    <button class="comfyButton" data-action="upgradeMinus">-</button>
+                </div>
+            </div>
+
+            <button class="comfyButton" data-action="upgradeAll">Upgrade All</button>
+            <button class="comfyButton" data-action="upgradeSameType">Upgrade Same Type</button>
+            <button class="comfyButton" data-action="sell">Sell</button>
+        </div>
+    </div>
+</template>

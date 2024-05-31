@@ -426,3 +426,9 @@ td {
 .fullWidth {
     width: 100%;
 }
+
+#buildingTooltip {
+    font-family: 'Roboto Slab';
+    font-size: 16px;
+    padding: 4px;
+}

@@ -8,11 +8,11 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import TextSprite from '@seregpie/three.text-sprite';
 import { socket } from "singletons"
-
-//var socket = io();
+import { BuildingTooltip } from "./modules/buildings/buildingTooltip.mjs";
 
 // Buildings
 var buildingList = new BuildingDataList(buildings, (name) => socket.emit('buildTower', name));
+var buildingTooltip = new BuildingTooltip();
 
 // Stockpile
 var stockpile = new ResourceList();
@@ -35,7 +35,7 @@ loginScreen.addEventListener("loginSuccessful", () => {
 //ThreeJS
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
-var fakePlayer = {x: 64*48, y: 64*48, spdX: 0, spdY: 0, left: false, right: false, up: false, down:false };
+var fakePlayer = { x: 64 * 48, y: 64 * 48, spdX: 0, spdY: 0, left: false, right: false, up: false, down: false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
@@ -169,14 +169,14 @@ window.damageDisplay = function () {
     else { displayDamage = 0; document.getElementById("buttonDisplayDAM").innerHTML = "Damage Display NONE"; }
 };
 
-var pollInputs = function (delta){
+var pollInputs = function (delta) {
     //TODO Handle SOCD properly. This implementation is lazy
-    if(fakePlayer.right) fakePlayer.spdX = 1;
-    else if(fakePlayer.left) fakePlayer.spdX = -1;
+    if (fakePlayer.right) fakePlayer.spdX = 1;
+    else if (fakePlayer.left) fakePlayer.spdX = -1;
     else fakePlayer.spdX = 0;
 
-    if(fakePlayer.down) fakePlayer.spdY = 1;
-    else if(fakePlayer.up) fakePlayer.spdY = -1;
+    if (fakePlayer.down) fakePlayer.spdY = 1;
+    else if (fakePlayer.up) fakePlayer.spdY = -1;
     else fakePlayer.spdY = 0;
 
     fakePlayer.x += fakePlayer.spdX * delta * 0.7;
@@ -194,7 +194,7 @@ var animate = function () {
     pollInputs(delta);
     camera.position.set(fakePlayer.x / 10, 292 - zoom * 27, fakePlayer.y / 10 + 334 - zoom * 30);
     camera.lookAt(fakePlayer.x / 10, 1, fakePlayer.y / 10 + 11 - zoom);
-    if ( currentTime - 30 > lastEmit ) { 
+    if (currentTime - 30 > lastEmit) {
         drawStats();
         socket.emit('fakePlayer', { x: fakePlayer.x, y: fakePlayer.y });
         lastEmit = currentTime;
@@ -237,7 +237,7 @@ window.openSettings = function (e) {
     settingsDiv.style.display = 'initial';
 }
 
-window.closeSettings = function(e) {
+window.closeSettings = function (e) {
     settingsDiv.style.display = 'none';
 }
 
@@ -272,31 +272,11 @@ var tech = 0;
 var techCR = 0;
 
 var loadDiv = document.getElementById('loadDiv');
-var heroicTooltip = document.getElementById('heroicTooltip');
-var towerTooltip = document.getElementById('towerTooltip');
-var heroicTooltipText = document.getElementById('heroicTooltipText');
-var towerTooltipText = document.getElementById('towerTooltipText');
-var buttonUpgrade = document.getElementById('buttonUpgrade');
-var buttonSell = document.getElementById('buttonSell');
 var settingsDiv = document.getElementById('settingsDiv');
 var hudButtons = document.getElementById('buttenz');
 
 socket.on('evalAnswer', function (data) {
     console.log(data);
-});
-
-socket.on('heroicTooltip', function (data) {
-    //console.log(data);
-    heroicTooltipText.innerHTML = "EXP: " + data.heroicEXP + " Level: " + data.heroicLVL + " Stat Pts: " + data.heroicPTS
-        + "<br />STR: " + data.heroicSTR + " AGI: " + data.heroicAGI + " NTL: " + data.heroicNTL +
-        "<br />WEP: " + data.heroicWEP + "ARM: " + data.heroicARM + "JWL: " + data.heroicJWL;
-});
-
-socket.on('towerTooltip', function (data) {
-    //console.log(data);
-    towerTooltipText.innerHTML = "LVL: " + data.LVL + " DMG: " + data.damage + " AGI: " + data.AGI + " RNG: " + data.range;
-    buttonUpgrade.innerHTML = "Upgrade (" + window.upgradeAmount + ")";
-    //buttonSell.innerHTML = "Sell (+" + data.value + ")";
 });
 
 socket.on('gameState', function (data) {
@@ -354,21 +334,6 @@ socket.on('gameState', function (data) {
 //}
 
 //UI
-window.sellTower = function () {
-    socket.emit('sellTower');
-}
-window.upgradeTower = function () {
-    socket.emit('upgradeTower', window.upgradeAmount);
-}
-
-window.upgradeAll = function () {
-    socket.emit('upgradeAll', window.upgradeAmount);
-}
-
-window.upgradeSameType = function () {
-    socket.emit('upgradeSameType', window.upgradeAmount);
-}
-
 var Damage = function (initPack) {
     var self = {};
     self.id = initPack.id;
@@ -773,7 +738,7 @@ socket.on('update', function (data) {
 
             if (Player.list[selfId].id == pack.id) {
                 if (cubeplayer) {
-                    
+
                 }
             }
         }
@@ -895,8 +860,6 @@ socket.on('update', function (data) {
     }
     */
     var needsTooltip = false;
-    var needsHeroicTooltip = false;
-
 
     for (var i = 0; i < data.tower.length; i++) {
         var pack = data.tower[i];
@@ -908,15 +871,8 @@ socket.on('update', function (data) {
             if (pack.y !== undefined)
                 b.y = pack.y;
 
-            if (Math.round(Player.list[selfId].x / 48) == Math.round(b.x / 48) && Math.round(Player.list[selfId].y / 48) == Math.round(b.y / 48) && (b.towerType == "heroicBarbarian" || b.towerType == "heroicArcher" || b.towerType == "heroicWizard")) {
-                needsTooltip = false;
-                needsHeroicTooltip = true;
-                //console.log("This is a heroic Archer");
-            }
-            else if (Math.round(Player.list[selfId].x / 48) == Math.round(b.x / 48) && Math.round(Player.list[selfId].y / 48) == Math.round(b.y / 48) && b.towerType != "heroicBarbarian" && b.towerType != "heroicArcher" && b.towerType != "heroicWizard" && b.towerType != "rock") {
+            if (Math.round(Player.list[selfId].x / 48) == Math.round(b.x / 48) && Math.round(Player.list[selfId].y / 48) == Math.round(b.y / 48) && b.towerType != "heroicBarbarian" && b.towerType != "heroicArcher" && b.towerType != "heroicWizard" && b.towerType != "rock") {
                 needsTooltip = true;
-                needsHeroicTooltip = false;
-                //console.log("This is a heroic Archer");
             }
 
             if (pack.value !== undefined)
@@ -967,14 +923,13 @@ socket.on('update', function (data) {
             }
         }
     }
-    if (needsHeroicTooltip == true) { socket.emit('updateTooltip'); heroicTooltip.style.display = 'inline-block'; }
-    else {
-        heroicTooltip.style.display = 'none';
-    }
 
-    if (needsTooltip == true) { socket.emit('updateTooltip'); towerTooltip.style.display = 'inline-block'; }
+    if (needsTooltip) {
+        socket.emit('updateTooltip');
+        buildingTooltip.showFrame();
+    }
     else {
-        towerTooltip.style.display = 'none';
+        buildingTooltip.hideFrame();
     }
 });
 

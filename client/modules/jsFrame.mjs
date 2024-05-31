@@ -48,6 +48,12 @@ var jsFrameMixin = {
         }
         this.frame.closeFrame();
     },
+    hideFrame() {
+        if (!this.frame) {
+            return;
+        }
+        this.frame.hide();
+    },
     createFrame() {
         var settings = structuredClone(jsFrameDefaults);
         if (this.jsFrameSettings) {

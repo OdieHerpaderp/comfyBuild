@@ -5,6 +5,37 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./client/style.css">
+	<script type="importmap">
+		{
+			"imports": {
+				"loginScreen": "./client/modules/loginScreen/loginScreen.mjs",
+				"chat": "./client/modules/chat/chat.mjs",
+				"resource": "./client/modules/resources/resource.mjs",
+				"resourceList": "./client/modules/resources/resourceList.mjs",
+				"buildings": "./lib/buildings.mjs",
+				"buildingData": "./client/modules/buildings/buildingData.mjs",
+				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
+				"buildingsFrame": "./client/modules/buildings/buildingsFrame.mjs",
+				"buildingTooltip": "./client/modules/buildings/buildingTooltip.mjs",
+				"entityManager": "./client/modules/entities/entityManager.mjs",
+				"modelCache": "./client/modules/entities/modelCache.mjs",
+				"baseEntity": "./client/modules/entities/baseEntity.mjs",
+				"building": "./client/modules/entities/building.mjs",
+				"player": "./client/modules/entities/player.mjs",
+				"resourceNode": "./client/modules/entities/resourceNode.mjs",
+				"templateHelpers": "./client/modules/templateHelpers.mjs",
+				"singletons": "./client/modules/singletons.mjs",
+
+				"JSFrame": "./client/modules/jsFrame.mjs",
+				"@seregpie/three.text-sprite":  "./client/modules/three.text-sprite/index.js",
+				"@seregpie/three.text-texture": "./client/modules/three.text-texture/index.js",
+
+				"socket.io-client": "./node_modules/socket.io-client/dist/socket.io.esm.min.js",
+				"three": "./node_modules/three/build/three.module.js",
+				"three/addons/": "./node_modules/three/examples/jsm/"
+			}
+		}
+	</script>
 </head>
 
 <body>
@@ -130,31 +161,7 @@
 
 	<script src="/client/blowfish.js"></script>
 
-	<script type="importmap">
-		{
-			"imports": {
-				"loginScreen": "./client/modules/loginScreen/loginScreen.mjs",
-				"chat": "./client/modules/chat/chat.mjs",
-				"resource": "./client/modules/resources/resource.mjs",
-				"resourceList": "./client/modules/resources/resourceList.mjs",
-				"buildings": "./lib/buildings.mjs",
-				"buildingData": "./client/modules/buildings/buildingData.mjs",
-				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
-				"buildingsFrame": "./client/modules/buildings/buildingsFrame.mjs",
-				"buildingTooltip": "./client/modules/buildings/buildingTooltip.mjs",
-				"templateHelpers": "./client/modules/templateHelpers.mjs",
-				"singletons": "./client/modules/singletons.mjs",
 
-				"JSFrame": "./client/modules/jsFrame.mjs",
-				
-				"@seregpie/three.text-sprite":  "./client/modules/three.text-sprite/index.js",
-				"@seregpie/three.text-texture": "./client/modules/three.text-texture/index.js",
-				"socket.io-client": "./node_modules/socket.io-client/dist/socket.io.esm.min.js",
-				"three": "./node_modules/three/build/three.module.js",
-				"three/addons/": "./node_modules/three/examples/jsm/"
-			}
-		}
-	</script>
 	<script type="module" src="/client/game.mjs" defer></script>
 
 </body>

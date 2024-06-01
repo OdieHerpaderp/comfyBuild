@@ -1,3 +1,4 @@
+import { buildings } from "buildings";
 import { getHtmlTemplate, templateMixin } from "templateHelpers";
 import { BuildingData } from "buildingData";
 
@@ -5,7 +6,7 @@ class BuildingDataList {
     static template;
     buildingDatas = [];
 
-    constructor(buildings) {
+    constructor() {
         var that = this;
         this.loadTemplate();
 

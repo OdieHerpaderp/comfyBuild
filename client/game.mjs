@@ -1,3 +1,4 @@
+import { EntityManager } from "entityManager";
 import { ResourceList } from "resourceList";
 import { LoginScreen } from "loginScreen";
 import { Chat } from "chat";
@@ -32,6 +33,10 @@ loginScreen.addEventListener("loginSuccessful", () => {
 
 //ThreeJS
 var scene = new THREE.Scene();
+
+// Don't mind me, I just need the scene...
+var entityManager = new EntityManager(scene);
+
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
 camera.position.z = 5;
 var fakePlayer = { x: 64 * 48, y: 64 * 48, spdX: 0, spdY: 0, left: false, right: false, up: false, down: false };
@@ -85,8 +90,6 @@ floor.rotation.x = Math.PI / 2;
 scene.add(floor);
 
 // Global plane geom
-var bulletGeometry = new THREE.PlaneGeometry(3, 3, 1, 1);
-
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
 directionalLight.position.x = 40;
 directionalLight.position.y = 280;
@@ -411,22 +414,6 @@ var NPC = function (initPack) {
 }
 NPC.list = {};
 
-var Bullet = function (initPack) {
-    var self = {};
-    self.id = initPack.id;
-    self.x = initPack.x;
-    self.y = initPack.y;
-    self.map = initPack.map;
-    self.bulletType = initPack.bulletType;
-    self.towerType = initPack.towerType;
-    self.angle = initPack.angle;
-    self.timer = initPack.timer;
-
-    Bullet.list[self.id] = self;
-    return self;
-}
-Bullet.list = {};
-
 var Tower = function (initPack) {
     var self = {};
     self.id = initPack.id;
@@ -498,22 +485,6 @@ socket.on('init', function (data) {
         cubeplayer.name = "Pl" + data.player[i].id;
 
         scene.add(cubeplayer);
-    }
-    for (var i = 0; i < data.bullet.length; i++) {
-        new Bullet(data.bullet[i]);
-
-        var Texture = new THREE.TextureLoader().load('/client/img/bullets/' + data.bullet[i].towerType + '.png');
-        Texture.wrapS = Texture.wrapT = THREE.RepeatWrapping;
-        Texture.repeat.set(1, 1);
-        // DoubleSide: render texture on both sides of mesh
-        var materialbullet = new THREE.MeshLambertMaterial({ map: Texture, transparent: true });
-        var cubebullet = new THREE.Mesh(bulletGeometry, materialbullet);
-
-        cubebullet.position.set(data.bullet[i].x / 10, 0.1, 0.1 + data.bullet[i].y / 10);
-        cubebullet.rotation.x = Math.PI * 1.5;
-        cubebullet.name = "Bu" + data.bullet[i].id;
-
-        scene.add(cubebullet);
     }
     for (var i = 0; i < data.npc.length; i++) {
         new NPC(data.npc[i]);
@@ -619,6 +590,7 @@ socket.on('init', function (data) {
         }
     }
     for (var i = 0; i < data.tower.length; i++) {
+        // TODO: fix tooltip logic and initial camera position logic
         if (firstInit && data.tower[i].towerType == "headquarters") {
             firstInit = false;
             controls.target.x = data.tower[i].x / 10;
@@ -627,79 +599,6 @@ socket.on('init', function (data) {
             controls.update();
         }
         new Tower(data.tower[i]);
-
-        var geometry = new THREE.PlaneGeometry(4.4, 6.4, 4.4);
-        var Texture = new THREE.TextureLoader().load('/client/img/towers/' + data.tower[i].towerType + '.png');
-        Texture.wrapS = Texture.wrapT = THREE.RepeatWrapping;
-        Texture.repeat.set(1, 2);
-        // DoubleSide: render texture on both sides of mesh
-        var materialtower = new THREE.MeshLambertMaterial({ map: Texture, side: THREE.DoubleSide, transparent: true });
-        var cubetower;
-
-        if (data.tower[i].towerType == "well" || data.tower[i].towerType == "grave" || data.tower[i].towerType == "rock") {
-            //console.log(modelData[data.tower[i].towerType]);
-            cubetower = modelData[data.tower[i].towerType].clone();
-        }
-        else {
-            cubetower = new THREE.Mesh(geometry, materialtower);
-        }
-
-
-        //console.log(cubetower);
-        cubetower.position.set(data.tower[i].x / 10, 0, data.tower[i].y / 10 + 0.6);
-        cubetower.name = "To" + data.tower[i].id;
-        scene.add(cubetower);
-
-        var Pgeometry = new THREE.PlaneGeometry(4.5, 4.5, 1, 1);
-        var PTex = new THREE.TextureLoader().load('/client/img/towerplane' + data.tower[i].bulletType + '.png');
-        var pl = Player.list[data.tower[i].parent];
-        console.log("test: " + data.tower[i].parent);
-        //if (data.tower[i].parent != 0) var Pmaterialtower = new THREE.MeshLambertMaterial( { map: PTex, side: THREE.DoubleSide,transparent: true, color: pl.color} );
-        var Pmaterialtower = new THREE.MeshLambertMaterial({ map: PTex, side: THREE.DoubleSide, transparent: true });
-        var planetower = new THREE.Mesh(Pgeometry, Pmaterialtower);
-
-        planetower.position.set(0, 0, -0.11);
-        planetower.rotation.x = 0 - Math.PI / 2;
-        planetower.name = "TP" + data.tower[i].id;
-
-        cubetower.add(planetower);
-
-        if (data.tower[i].manaMax > 0) {
-            var geometryB = new THREE.BoxGeometry(3.2, 0.5, 0.1);
-            var TextureB = new THREE.TextureLoader().load('/client/img/health.png');
-            TextureB.wrapS = TextureB.wrapT = THREE.RepeatWrapping;
-            TextureB.repeat.set(0.5, 1.0);
-            TextureB.offset.set(0);
-            var materialtB = new THREE.MeshPhongMaterial({ map: TextureB });
-            var cubetB = new THREE.Mesh(geometryB, materialtB);
-            cubetB.material.color.setHex(0x66ccff);
-            cubetB.name = "TM" + data.tower[i].id;
-            cubetB.position.set(0, -0.25, 0.7);
-
-            cubetower.add(cubetB);
-        }
-        if (data.tower[i].towerType != "rock") {
-            //var Lgeometry = new THREE.PlaneGeometry( 3.5, 0.9, 1, 1 );
-            //var LTex = new THREE.TextureLoader().load( '/client/img/upgrade1.png' );
-            //var Lmaterialtower = new THREE.MeshLambertMaterial( { map: LTex, side: THREE.DoubleSide,transparent: true, depthWrite: false, depthTest: false,} );
-            var textSprite = new TextSprite({
-                alignment: 'center',
-                color: '#fff',
-                fontFamily: 'Roboto Slab',
-                fontSize: 0.80,
-                lineGap: 0.05,
-                strokeColor: '#000',
-                strokeWidth: 0.15,
-                text: [
-                    '     ',
-                    Math.round(1),
-                ].join('\n'),
-            });
-
-            textSprite.position.set(0, 3.2, 1.6);
-            textSprite.name = "TL" + data.tower[i].id;
-            cubetower.add(textSprite);
-        }
     }
 });
 
@@ -836,32 +735,9 @@ socket.on('update', function (data) {
                 p.stoned = pack.stoned;
         }
     }
-    // Temporarily stop processing bullets, as they don't need updates
-    /*
-    for(var i = 0 ; i < data.bullet.length; i++){
-        var pack = data.bullet[i];
-        var b = Bullet.list[data.bullet[i].id];
-        if(b){
-            if(pack.x !== undefined)
-                b.x = Math.round(pack.x);
-            if(pack.y !== undefined)
-                b.y = Math.round(pack.y);
-            if(pack.bulletType !== undefined)
-                b.bulletType = pack.bulletType;
-            if(pack.angle !== undefined)
-                b.angle = pack.angle;
-            if(pack.timer !== undefined)
-                b.timer = pack.timer;
-                
-            var cubebullet = scene.getObjectByName("Bu" + pack.id);
-            if(cubebullet){
-                cubebullet.position.set(pack.x / 10, 1, pack.y / 10);
-            }
-        }
-    }
-    */
-    var needsTooltip = false;
 
+    // TODO: move tooltip logic somewhere else
+    var needsTooltip = false;
     for (var i = 0; i < data.tower.length; i++) {
         var pack = data.tower[i];
         if (pack == undefined) return;
@@ -874,53 +750,6 @@ socket.on('update', function (data) {
 
             if (Math.round(Player.list[selfId].x / 48) == Math.round(b.x / 48) && Math.round(Player.list[selfId].y / 48) == Math.round(b.y / 48) && b.towerType != "heroicBarbarian" && b.towerType != "heroicArcher" && b.towerType != "heroicWizard" && b.towerType != "rock") {
                 needsTooltip = true;
-            }
-
-            if (pack.value !== undefined)
-                b.value = pack.value;
-            if (pack.mana !== undefined)
-                b.mana = pack.mana;
-            if (pack.manaMax !== undefined)
-                b.manaMax = pack.manaMax;
-            if (pack.towerType !== undefined && pack.towerType !== b.towerType) {
-                console.log(pack.towerType);
-                var cubetower = scene.getObjectByName("To" + pack.id);
-                if (cubetower) {
-                    cubetower.material.map = new THREE.TextureLoader().load('/client/img/towers/' + pack.towerType + '.png');
-                    cubetower.material.needsUpdate = true;
-                }
-                b.towerType = pack.towerType;
-            }
-            if (pack.targetLevel !== undefined)
-                p.targetLevel = pack.targetLevel;
-            if ((pack.upgradeLevel !== undefined && pack.upgradeLevel !== b.upgradeLevel) || (pack.buildTimer !== undefined && pack.buildTimer !== b.buildTimer)) {
-                var spriteT = scene.getObjectByName("TL" + pack.id);
-                var status = "";
-                var levelText = Math.round(pack.upgradeLevel);
-                if (pack.targetLevel > pack.upgradeLevel) levelText = Math.round(pack.upgradeLevel) + " > " + Math.round(pack.targetLevel);
-                if (pack.targetLevel > pack.upgradeLevel) status = "Build: " + Math.round(Math.max(b.buildTimer * 0.65, 0)) / 10;
-                if (spriteT) {
-                    spriteT.text = [
-                        '       ',
-                        levelText,
-                        b.towerType,
-                        status,
-                    ].join('\n');
-                }
-                b.upgradeLevel = pack.upgradeLevel;
-                b.buildTimer = pack.buildTimer;
-            }
-            if (pack.x !== undefined && pack.y !== undefined) {
-                var cubetower = scene.getObjectByName("To" + pack.id);
-                if (cubetower) {
-                    //cubetower.position.set(b.x / 10, 2, b.y / 10 + 0.2);
-                }
-            }
-            var cubeM = scene.getObjectByName("TM" + pack.id);
-            if (cubeM) {
-                var texture = cubeM.material.map;
-                texture.repeat.set(0.5, 1.0);
-                texture.offset.set(0.5 - b.mana * 0.5 / b.manaMax, 0);
             }
         }
     }
@@ -943,38 +772,6 @@ socket.on('remove', function (data) {
         }
 
         delete Player.list[data.player[i]];
-    }
-    for (var i = 0; i < data.bullet.length; i++) {
-        var cubebullet = scene.getObjectByName("Bu" + Bullet.list[data.bullet[i]].id);
-        if (cubebullet) {
-            scene.remove(cubebullet);
-        }
-
-        delete Bullet.list[data.bullet[i]];
-    }
-    for (var i = 0; i < data.npc.length; i++) {
-        var cubenpc = scene.getObjectByName("Np" + NPC.list[data.npc[i]].id);
-        if (cubenpc) {
-            scene.remove(cubenpc);
-        }
-        var cubenpcB = scene.getObjectByName("NB" + NPC.list[data.npc[i]].id);
-        if (cubenpcB) {
-            scene.remove(cubenpcB);
-        }
-        var cubenpcH = scene.getObjectByName("NH" + NPC.list[data.npc[i]].id);
-        if (cubenpcH) {
-            scene.remove(cubenpcH);
-        }
-        var cubenpcH = scene.getObjectByName("NS" + NPC.list[data.npc[i]].id);
-        if (cubenpcH) {
-            scene.remove(cubenpcH);
-        }
-        var cubenpcH = scene.getObjectByName("NHs" + NPC.list[data.npc[i]].id);
-        if (cubenpcH) {
-            scene.remove(cubenpcH);
-        }
-
-        delete NPC.list[data.npc[i]];
     }
     for (var i = 0; i < data.tower.length; i++) {
         var cubetower = scene.getObjectByName("To" + Tower.list[data.tower[i]].id);

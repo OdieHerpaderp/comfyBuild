@@ -1,4 +1,3 @@
-import { buildings } from "buildings";
 import { BuildingDataList } from "buildingDataList";
 import { BuildingTooltip } from "buildingTooltip";
 import { getHtmlTemplate, templateMixin } from "templateHelpers";
@@ -20,15 +19,13 @@ class BuildingsFrame {
     };
 
     constructor() {
-        var that = this;
-
         this.loadTemplate();
         this.registerProperty("content");
 
         this.displayingBuildingList = false;
         this.displayingTooltip = false;
 
-        this.buildingList = new BuildingDataList(buildings);
+        this.buildingList = new BuildingDataList();
         this.buildingTooltip = new BuildingTooltip();
     }
 

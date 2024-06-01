@@ -15,34 +15,34 @@
 	</div>
 
 	<div id="gameDiv" style="display:none;">
-		<div id="game" onwheel="scrollWheel(event)"
-			style="overflow:hidden; position:absolute;width:100%;height:100%;top:44px; left:2px;">
+		<div id="game"
+			style="overflow:hidden; position:absolute;width:100%;height:100%;top:0px; left:0px;">
 			<canvas id="ctx" width="3744" height="1920" style="transition: transform .2s;"></canvas>
-			<canvas id="threejs" style="z-index: -1; position: absolute; left:0px; top:0px;"></canvas>
+			<canvas id="threejs" style="z-index: -1; position: absolute; left:0px; top:44px;"></canvas>
 			<canvas id="ctx-ui" width="1872" height="960" style="position:absolute;"></canvas>
 
 			<div id="scoreBoard"
-				style="position:absolute;top:0px; right:0px;width:700px;height:100px;overflow-y:scroll">
+				style="position:absolute;top:44px; right:0px;width:700px;height:100px;overflow-y:scroll">
 				<div>Wajo</div>
 			</div>
 
 			<a class="button" href="javascript:zoomOut()"
-				style="position:absolute;height:24px;top:0px;left:0px;width:31px">
+				style="position:absolute;height:24px;top:44px;left:0px;width:31px">
 				-
 			</a>
 			<a class="button" href="javascript:zoomDefault()"
-				style="position:absolute;height:24px;top:0px;left:35px;width:31px">
+				style="position:absolute;height:24px;top:44px;left:35px;width:31px">
 				R
 			</a>
 			<a class="button" href="javascript:zoomIn()"
-				style="position:absolute;height:24px;top:0px;left:70px;width:31px">
+				style="position:absolute;height:24px;top:44px;left:70px;width:31px">
 				+
 			</a>
 			<a class="button" href="javascript:openSettings()"
-				style="position:absolute;height:24px;top:0px;left:105px;width:31px">
+				style="position:absolute;height:24px;top:44px;left:105px;width:31px">
 				S
 			</a>
-			<a id="fpsCounter" style="position:absolute;height:22px;top:32px;left:0px;width:93px;font-size:14px;">
+			<a id="fpsCounter" style="position:absolute;height:22px;top:76px;left:0px;width:93px;font-size:14px;">
 				Perf: ?
 			</a>
 		</div>
@@ -140,6 +140,7 @@
 				"buildings": "./lib/buildings.mjs",
 				"buildingData": "./client/modules/buildings/buildingData.mjs",
 				"buildingDataList": "./client/modules/buildings/buildingDataList.mjs",
+				"buildingsFrame": "./client/modules/buildings/buildingsFrame.mjs",
 				"buildingTooltip": "./client/modules/buildings/buildingTooltip.mjs",
 				"templateHelpers": "./client/modules/templateHelpers.mjs",
 				"singletons": "./client/modules/singletons.mjs",

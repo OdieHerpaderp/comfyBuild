@@ -8,6 +8,29 @@ function setDisplayValue(element, value) {
     if (element) { element.innerHTML = value }
 }
 
+
+function highlightText(element, searchText) {
+    if (!element.hasChildNodes()) {
+        return;
+    }
+
+    for (const node of element.childNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            highlightText(node, searchText);
+        }
+        else if (node.nodeType == Node.TEXT_NODE) {
+            const regex = new RegExp(searchText, 'gi');
+            let text = element.innerHTML;
+            // This shouldn't work but it does
+            text = text.replace(/(<mark class="highlight">|<\/mark>)/gim, '');
+            if (searchText !== "") {
+                text = text.replace(regex, '<mark class="highlight">$&</mark>');
+            }
+            element.innerHTML = text;
+        }
+    }
+}
+
 var templateMixin = {
     loadTemplate: function () {
         if (!this.constructor.template) { return; }
@@ -32,6 +55,10 @@ var templateMixin = {
         if (value === undefined) { value = "" };
         this.propertyElements[propertyName].innerHTML = value;
     },
+    highlightPropertyText: function(propertyName, searchText) {
+        if (!this.propertyElements[propertyName]) { return; }
+        highlightText(this.propertyElements[propertyName], searchText);
+    },
     appendChildToProperty: function (propertyName, child) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].appendChild(child);
@@ -39,6 +66,10 @@ var templateMixin = {
     prependChildToProperty: function (propertyName, child) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].insertBefore(child, this.propertyElements[propertyName].firstChild);
+    },
+    replacePropertyWithChild: function (propertyName, child) {
+        if (!this.propertyElements[propertyName]) { return; }
+        this.propertyElements[propertyName].replaceChildren(child);
     },
     addClassToProperty: function (propertyName, className) {
         if (!this.propertyElements[propertyName]) { return; }
@@ -72,6 +103,10 @@ var templateMixin = {
     getInput: function (inputName) {
         if (!this.inputElements[inputName]) { return; }
         return this.inputElements[inputName].value;
+    },
+    addEventListenerToInput: function(inputName, eventName, callback) {
+        if (!this.inputElements[inputName]) { return; }
+        this.inputElements[inputName].addEventListener(eventName, callback);
     }
 };
 

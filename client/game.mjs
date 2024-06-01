@@ -1,18 +1,16 @@
-import { BuildingDataList } from "buildingDataList";
 import { ResourceList } from "resourceList";
-import { buildings } from "buildings";
 import { LoginScreen } from "loginScreen";
 import { Chat } from "chat";
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import TextSprite from '@seregpie/three.text-sprite';
 import { socket } from "singletons"
-import { BuildingTooltip } from "./modules/buildings/buildingTooltip.mjs";
+import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
 
 // Buildings
-var buildingList = new BuildingDataList(buildings);
-var buildingTooltip = new BuildingTooltip();
+var buildingsFrame = new BuildingsFrame();
 
 // Stockpile
 var stockpile = new ResourceList();
@@ -28,13 +26,14 @@ var loginScreen = new LoginScreen();
 loginScreen.addEventListener("loginSuccessful", () => {
     loginScreen.closeFrame();
     stockpile.showFrame();
-    buildingList.showFrame();
+    buildingsFrame.showFrame();
     chat.showFrame();
 });
 
 //ThreeJS
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
+camera.position.z = 5;
 var fakePlayer = { x: 64 * 48, y: 64 * 48, spdX: 0, spdY: 0, left: false, right: false, up: false, down: false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
@@ -42,6 +41,31 @@ var oldWidth = 0;
 var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight - 44);
 //document.body.appendChild( renderer.domElement );
+
+// Camera controls
+const gameElement = document.getElementById("game");
+// note: normally renderer.domElement is used, but that's hidden behind other elements so it doesn't capture mouse events.
+const controls = new MapControls(camera, gameElement);
+controls.maxDistance = 750;
+controls.minDistance = 50;
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.4;
+controls.mouseButtons = {
+    LEFT: THREE.MOUSE.PAN,
+    RIGHT: THREE.MOUSE.ROTATE
+};
+
+var raycaster = new THREE.Raycaster();
+raycaster.params.Points.threshold = 0.1;
+var mousePosition = new THREE.Vector2();
+gameElement.addEventListener('mousemove', (event) => {
+    let boundingRect = renderer.domElement.getBoundingClientRect();
+    mousePosition.x = (((event.clientX - boundingRect.left) / boundingRect.width) * 2) - 1;
+    mousePosition.y = - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1;
+});
+gameElement.addEventListener('click', () => {
+    lockPosition = !lockPosition;
+});
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
 var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/map.png');
@@ -74,7 +98,6 @@ directionalLight.target = floor;
 const light = new THREE.HemisphereLight(0xaabbff, 0x228811, 0.8);
 scene.add(light);
 
-camera.position.z = 5;
 
 //var skyColor = 0xFFEEDD;
 //var groundColor = 0xAAA099;
@@ -170,30 +193,47 @@ window.damageDisplay = function () {
 };
 
 var pollInputs = function (delta) {
+    let movement = new THREE.Vector2();
+
     //TODO Handle SOCD properly. This implementation is lazy
-    if (fakePlayer.right) fakePlayer.spdX = 1;
-    else if (fakePlayer.left) fakePlayer.spdX = -1;
-    else fakePlayer.spdX = 0;
+    if (fakePlayer.right) movement.x = 1;
+    else if (fakePlayer.left) movement.x = -1;
 
-    if (fakePlayer.down) fakePlayer.spdY = 1;
-    else if (fakePlayer.up) fakePlayer.spdY = -1;
-    else fakePlayer.spdY = 0;
+    if (fakePlayer.down) movement.y = 1;
+    else if (fakePlayer.up) movement.y = -1;
 
-    fakePlayer.x += fakePlayer.spdX * delta * 0.7;
-    fakePlayer.y += fakePlayer.spdY * delta * 0.7;
+    movement.rotateAround(new THREE.Vector2(), -controls.getAzimuthalAngle()); // Follow camera direction
+    movement.normalize();
+    movement.multiplyScalar(delta * 0.07);
+
+    camera.position.x += movement.x;
+    camera.position.z += movement.y;
+    controls.target.x += movement.x;
+    controls.target.z += movement.y;
 };
 
 var lastEmit = new Date().getTime();
+var lockPosition = false;
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
     var delta = currentTime - previousTime;
     avgDelta = Math.min((avgDelta * 2 + delta + targetFrameTime * 2) / 5, 250);
     previousTime = currentTime;
-
     pollInputs(delta);
-    camera.position.set(fakePlayer.x / 10, 292 - zoom * 27, fakePlayer.y / 10 + 334 - zoom * 30);
-    camera.lookAt(fakePlayer.x / 10, 1, fakePlayer.y / 10 + 11 - zoom);
+
+    controls.update();
+
+    if (!lockPosition) {
+        raycaster.setFromCamera(mousePosition, camera);
+        var intersections = raycaster.intersectObject(floor);
+        var intersection = (intersections.length > 0 ? intersections[0] : null);
+        if (intersection) {
+            fakePlayer.x = intersection.point.x * 10;
+            fakePlayer.y = intersection.point.z * 10;
+        }
+    }
+
     if (currentTime - 30 > lastEmit) {
         drawStats();
         socket.emit('fakePlayer', { x: fakePlayer.x, y: fakePlayer.y });
@@ -239,30 +279,6 @@ window.openSettings = function (e) {
 
 window.closeSettings = function (e) {
     settingsDiv.style.display = 'none';
-}
-
-var zoom = 6;
-window.zoomIn = function (e) {
-    zoom += 0.3;
-
-    if (zoom > 2.5) zoom = 2.5;
-    else if (zoom < 0.25) zoom = 0.25;
-}
-window.zoomOut = function (e) {
-    zoom -= 0.3;
-
-    if (zoom > 8) zoom = 8;
-    else if (zoom < 0.15) zoom = 0.15;
-}
-window.zoomDefault = function (e) {
-    zoom = 1.0;
-}
-window.scrollWheel = function (e) {
-    if (e.deltaY < 0) zoom += 0.3;
-    else zoom -= 0.3;
-
-    if (zoom > 9) zoom = 9;
-    else if (zoom < -8) zoom = -8;
 }
 
 var wave = 0;
@@ -488,6 +504,7 @@ socket.on('damage', function (data) {
 
 });
 
+var firstInit = true;
 socket.on('init', function (data) {
     if (data.selfId) selfId = data.selfId;
     //{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
@@ -625,6 +642,13 @@ socket.on('init', function (data) {
         }
     }
     for (var i = 0; i < data.tower.length; i++) {
+        if (firstInit && data.tower[i].towerType == "headquarters") {
+            firstInit = false;
+            controls.target.x = data.tower[i].x / 10;
+            controls.target.z = data.tower[i].y / 10;
+            camera.position.set(data.tower[i].x / 10, 100, (data.tower[i].y / 10) + 200);
+            controls.update();
+        }
         new Tower(data.tower[i]);
 
         var geometry = new THREE.PlaneGeometry(4.4, 4.4, 4.4);
@@ -926,10 +950,10 @@ socket.on('update', function (data) {
 
     if (needsTooltip) {
         socket.emit('updateTooltip');
-        buildingTooltip.showFrame();
+        buildingsFrame.showTooltip();
     }
     else {
-        buildingTooltip.hideFrame();
+        buildingsFrame.showBuildingList();
     }
 });
 
@@ -1051,7 +1075,7 @@ var drawScoreboard = function () {
     text += "</table>";
     document.getElementById('scoreBoard').innerHTML = text;
 }
-document.onkeydown = function (event) {
+gameElement.onkeydown = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = true;
     else if (event.keyCode === 83)	//s
@@ -1062,7 +1086,7 @@ document.onkeydown = function (event) {
         fakePlayer.up = true;
 
 }
-document.onkeyup = function (event) {
+gameElement.onkeyup = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = false;
     else if (event.keyCode === 83)	//s

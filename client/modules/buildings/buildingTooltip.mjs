@@ -1,21 +1,8 @@
 import { getHtmlTemplate, templateMixin } from "templateHelpers";
-import { jsFrameMixin } from "JSFrame";
 import { socket } from "singletons";
 
 class BuildingTooltip {
     static template;
-    jsFrameSettings = {
-        name: "frameBuildingTooltip",
-        title: "Building Info",
-        left: 620, top: 800, width: 600, height: 150, minWidth: 110, minHeight: 110,
-        style: {
-            backgroundColor: '#22222255',
-            overflow: 'hidden',
-            width: '100%',
-            fontSize: 18,
-            display: 'flex'
-        }
-    };
 
     _upgradeAmount = 0;
 
@@ -76,7 +63,6 @@ class BuildingTooltip {
     }
 }
 
-Object.assign(BuildingTooltip.prototype, jsFrameMixin);
 Object.assign(BuildingTooltip.prototype, templateMixin);
 BuildingTooltip.template = await getHtmlTemplate("client/modules/buildings/buildingTooltip.html");
 

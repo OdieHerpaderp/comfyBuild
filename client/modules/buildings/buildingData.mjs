@@ -95,9 +95,46 @@ class BuildingData {
     getResourceInfo(list) {
         var result = "";
         for (const resource in list) {
-            result += `${resource}: ${list[resource]}<br />`;
+            result += `<span>${resource}: ${list[resource]}</span>`;
         }
         return result;
+    }
+
+    hide() {
+        this.HTML.classList.add("hidden");
+    }
+
+    show() {
+        this.HTML.classList.remove("hidden");
+    }
+
+    checkSearch(searchText) {
+        let nameResult = this._updateSearchValue("name", this.name.toLowerCase().includes(searchText), searchText);
+        let buildResult = this._updateSearchValue("build", this._resourceListMatchesSearch(this.build, searchText), searchText);
+        let consumeResult = this._updateSearchValue("consume", this._resourceListMatchesSearch(this.consume, searchText), searchText);
+        let produceResult = this._updateSearchValue("produce", this._resourceListMatchesSearch(this.produce, searchText), searchText);
+
+        if (nameResult || buildResult || consumeResult || produceResult) {
+            this.show();
+        }
+        else {
+            this.hide();
+        }
+    }
+
+    _updateSearchValue(propertyName, searchResult, searchText) {
+        this.highlightPropertyText(propertyName, searchText);
+
+        return searchResult;
+    }
+
+    _resourceListMatchesSearch(list, searchText) {
+        for (const resource in list) {
+            if (resource.toLowerCase().includes(searchText)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

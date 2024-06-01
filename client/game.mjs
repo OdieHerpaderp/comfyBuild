@@ -1067,7 +1067,7 @@ var drawScoreboard = function () {
     text += "</table>";
     document.getElementById('scoreBoard').innerHTML = text;
 }
-document.onkeydown = function (event) {
+gameElement.onkeydown = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = true;
     else if (event.keyCode === 83)	//s
@@ -1078,7 +1078,7 @@ document.onkeydown = function (event) {
         fakePlayer.up = true;
 
 }
-document.onkeyup = function (event) {
+gameElement.onkeyup = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = false;
     else if (event.keyCode === 83)	//s

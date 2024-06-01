@@ -1,5 +1,8 @@
 <template>
     <div class="text-normal building-data-list flex-column fullWidth">
+        <div class="flex">
+            <span>Search: <input type="text" data-input="search"></input></span>
+        </div>
         <div class="flex-grow overflow-auto">
             <table>
                 <thead>
@@ -15,6 +18,6 @@
                 <tbody data-property="buildingData"></tbody>
             </table>
         </div>
-        <div id="infoField">Test</div>
+        <div id="infoField"></div>
     </div>
 </template>

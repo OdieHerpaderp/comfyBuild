@@ -20,9 +20,13 @@ class BuildingDataList {
     buildingDatas = [];
 
     constructor(buildings) {
+        var that = this;
         this.loadTemplate();
 
         this.registerProperty("buildingData");
+
+        this.registerInput("search");
+        this.addEventListenerToInput("search", "input", (event) => { that.searchInputChanged(event.target.value); });
 
         let infoField = this.HTML.querySelector("#infoField");
 
@@ -39,6 +43,16 @@ class BuildingDataList {
 
         this.buildingDatas.forEach((buildingData) => {
             this.appendChildToProperty("buildingData", buildingData.HTML);
+        });
+    }
+
+    searchInputChanged(newValue) {
+        if (typeof newValue !== "string") {
+            newValue = "";
+        }
+        newValue = newValue.toLowerCase();
+        this.buildingDatas.forEach((buildingData) => {
+            buildingData.checkSearch(newValue);
         });
     }
 }

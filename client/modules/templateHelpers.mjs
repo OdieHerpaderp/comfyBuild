@@ -67,6 +67,10 @@ var templateMixin = {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].insertBefore(child, this.propertyElements[propertyName].firstChild);
     },
+    replacePropertyWithChild: function (propertyName, child) {
+        if (!this.propertyElements[propertyName]) { return; }
+        this.propertyElements[propertyName].replaceChildren(child);
+    },
     addClassToProperty: function (propertyName, className) {
         if (!this.propertyElements[propertyName]) { return; }
         this.propertyElements[propertyName].classList.add(className);

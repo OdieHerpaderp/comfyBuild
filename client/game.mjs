@@ -1,6 +1,4 @@
-import { BuildingDataList } from "buildingDataList";
 import { ResourceList } from "resourceList";
-import { buildings } from "buildings";
 import { LoginScreen } from "loginScreen";
 import { Chat } from "chat";
 import * as THREE from 'three';
@@ -9,11 +7,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import TextSprite from '@seregpie/three.text-sprite';
 import { socket } from "singletons"
-import { BuildingTooltip } from "./modules/buildings/buildingTooltip.mjs";
+import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
 
 // Buildings
-var buildingList = new BuildingDataList(buildings);
-var buildingTooltip = new BuildingTooltip();
+var buildingsFrame = new BuildingsFrame();
 
 // Stockpile
 var stockpile = new ResourceList();
@@ -29,7 +26,7 @@ var loginScreen = new LoginScreen();
 loginScreen.addEventListener("loginSuccessful", () => {
     loginScreen.closeFrame();
     stockpile.showFrame();
-    buildingList.showFrame();
+    buildingsFrame.showFrame();
     chat.showFrame();
 });
 
@@ -60,6 +57,15 @@ controls.mouseButtons = {
 
 var raycaster = new THREE.Raycaster();
 raycaster.params.Points.threshold = 0.1;
+var mousePosition = new THREE.Vector2();
+gameElement.addEventListener('mousemove', (event) => {
+    let boundingRect = renderer.domElement.getBoundingClientRect();
+    mousePosition.x = (((event.clientX - boundingRect.left) / boundingRect.width) * 2) - 1;
+    mousePosition.y = - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1;
+});
+gameElement.addEventListener('click', () => {
+    lockPosition = !lockPosition;
+});
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
 var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/map.png');
@@ -188,7 +194,7 @@ window.damageDisplay = function () {
 
 var pollInputs = function (delta) {
     let movement = new THREE.Vector2();
-    
+
     //TODO Handle SOCD properly. This implementation is lazy
     if (fakePlayer.right) movement.x = 1;
     else if (fakePlayer.left) movement.x = -1;
@@ -197,9 +203,9 @@ var pollInputs = function (delta) {
     else if (fakePlayer.up) movement.y = -1;
 
     movement.rotateAround(new THREE.Vector2(), -controls.getAzimuthalAngle()); // Follow camera direction
-    movement.normalize(); 
+    movement.normalize();
     movement.multiplyScalar(delta * 0.07);
-    
+
     camera.position.x += movement.x;
     camera.position.z += movement.y;
     controls.target.x += movement.x;
@@ -207,6 +213,7 @@ var pollInputs = function (delta) {
 };
 
 var lastEmit = new Date().getTime();
+var lockPosition = false;
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
@@ -217,15 +224,16 @@ var animate = function () {
 
     controls.update();
 
-    raycaster.setFromCamera({ x: 0, y: 0 }, camera);
-    var intersections = raycaster.intersectObject(floor);
-    var intersection = (intersections.length > 0 ? intersections[0] : null);
-    if (intersection) {
-        fakePlayer.x = intersection.point.x * 10;
-        fakePlayer.y = intersection.point.z * 10;
+    if (!lockPosition) {
+        raycaster.setFromCamera(mousePosition, camera);
+        var intersections = raycaster.intersectObject(floor);
+        var intersection = (intersections.length > 0 ? intersections[0] : null);
+        if (intersection) {
+            fakePlayer.x = intersection.point.x * 10;
+            fakePlayer.y = intersection.point.z * 10;
+        }
     }
 
-    
     if (currentTime - 30 > lastEmit) {
         drawStats();
         socket.emit('fakePlayer', { x: fakePlayer.x, y: fakePlayer.y });
@@ -942,10 +950,10 @@ socket.on('update', function (data) {
 
     if (needsTooltip) {
         socket.emit('updateTooltip');
-        buildingTooltip.showFrame();
+        buildingsFrame.showTooltip();
     }
     else {
-        buildingTooltip.hideFrame();
+        buildingsFrame.showBuildingList();
     }
 });
 

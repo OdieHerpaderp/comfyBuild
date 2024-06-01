@@ -131,45 +131,22 @@ var pop = 100;
 const loader = new GLTFLoader();
 
 var modelData = [];
-
-loader.load('client/models/tower/pawn.glb', function (gltf) {
-    const root = gltf.scene;
-    //console.log(root.children[0].geometry);
-    var cubetower = root.children[0];
-    console.log(cubetower);
-    modelData["pawn"] = cubetower;
-
-}, undefined, function (error) {
-
-    console.error(error);
-
-});
-
-loader.load('client/models/tower/rock.glb', function (gltf) {
-    const root = gltf.scene;
-    //console.log(root.children[0].geometry);
-    var cubetower = root.children[0];
-    console.log(cubetower);
-    modelData["rock"] = cubetower;
-
-}, undefined, function (error) {
-
-    console.error(error);
-
-});
-
-loader.load('client/models/tower/grave.glb', function (gltf) {
-    const root = gltf.scene;
-    //console.log(root.children[0].geometry);
-    var cubetower = root.children[0];
-    console.log(cubetower);
-    modelData["grave"] = cubetower;
-
-}, undefined, function (error) {
-
-    console.error(error);
-
-});
+var preloadModel = function(model){
+    loader.load('client/models/tower/' + model + '.glb', function (gltf) {
+        const root = gltf.scene;
+        //console.log(root.children[0].geometry);
+        var cubetower = root;
+        console.log(cubetower);
+        modelData[model] = cubetower;
+        console.log("Model " + model + "loaded");
+    
+    }, undefined, function (error) {
+    
+        console.error(error);
+    
+    });
+}
+preloadModel("well");
 
 document.getElementById("frameTimeSlider").oninput = function () {
     targetFrameTime = this.value;
@@ -651,17 +628,17 @@ socket.on('init', function (data) {
         }
         new Tower(data.tower[i]);
 
-        var geometry = new THREE.PlaneGeometry(4.4, 4.4, 4.4);
+        var geometry = new THREE.PlaneGeometry(4.4, 6.4, 4.4);
         var Texture = new THREE.TextureLoader().load('/client/img/towers/' + data.tower[i].towerType + '.png');
         Texture.wrapS = Texture.wrapT = THREE.RepeatWrapping;
-        Texture.repeat.set(1, 1);
+        Texture.repeat.set(1, 2);
         // DoubleSide: render texture on both sides of mesh
         var materialtower = new THREE.MeshLambertMaterial({ map: Texture, side: THREE.DoubleSide, transparent: true });
         var cubetower;
 
-        if (data.tower[i].towerType == "pawn" || data.tower[i].towerType == "grave" || data.tower[i].towerType == "rock") {
+        if (data.tower[i].towerType == "well" || data.tower[i].towerType == "grave" || data.tower[i].towerType == "rock") {
             //console.log(modelData[data.tower[i].towerType]);
-            cubetower = new THREE.Mesh(modelData[data.tower[i].towerType].geometry, modelData[data.tower[i].towerType].material);
+            cubetower = modelData[data.tower[i].towerType].clone();
         }
         else {
             cubetower = new THREE.Mesh(geometry, materialtower);
@@ -669,7 +646,7 @@ socket.on('init', function (data) {
 
 
         //console.log(cubetower);
-        cubetower.position.set(data.tower[i].x / 10, 2, data.tower[i].y / 10 + 0.6);
+        cubetower.position.set(data.tower[i].x / 10, 0, data.tower[i].y / 10 + 0.6);
         cubetower.name = "To" + data.tower[i].id;
         scene.add(cubetower);
 
@@ -681,7 +658,7 @@ socket.on('init', function (data) {
         var Pmaterialtower = new THREE.MeshLambertMaterial({ map: PTex, side: THREE.DoubleSide, transparent: true });
         var planetower = new THREE.Mesh(Pgeometry, Pmaterialtower);
 
-        planetower.position.set(0, -1.98, -0.11);
+        planetower.position.set(0, 0, -0.11);
         planetower.rotation.x = 0 - Math.PI / 2;
         planetower.name = "TP" + data.tower[i].id;
 
@@ -719,7 +696,7 @@ socket.on('init', function (data) {
                 ].join('\n'),
             });
 
-            textSprite.position.set(0, 0.2, 1.6);
+            textSprite.position.set(0, 3.2, 1.6);
             textSprite.name = "TL" + data.tower[i].id;
             cubetower.add(textSprite);
         }

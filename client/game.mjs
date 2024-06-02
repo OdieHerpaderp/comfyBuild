@@ -77,12 +77,12 @@ gameElement.addEventListener('click', (event) => {
 });
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
-var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/grass.png');
+var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/ground.webp');
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-floorTexture.repeat.set(128, 128);
-var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/grassN.png');
+floorTexture.repeat.set(16, 16);
+var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/groundN.png');
 floorTextureN.wrapS = floorTextureN.wrapT = THREE.RepeatWrapping;
-floorTextureN.repeat.set(128, 128);
+floorTextureN.repeat.set(64, 64);
 // DoubleSide: render texture on both sides of mesh
 var size = 614.4;
 var floorMaterial = new THREE.MeshStandardMaterial({ color: '#ccddcc', map: floorTexture, normalMap: floorTextureN, roughness: 0.6, });
@@ -91,6 +91,7 @@ var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.x = size / 2 - 2.4;
 floor.position.y = -0.17;
 floor.position.z = size / 2 - 2.4;
+floor.rotation.z = Math.PI / 2;
 floor.rotation.x = Math.PI * 1.5;
 scene.add(floor);
 
@@ -98,7 +99,7 @@ var gridTexture = new THREE.ImageUtils.loadTexture('/client/img/grid.png');
 gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping;
 gridTexture.repeat.set(128, 128);
 // DoubleSide: render texture on both sides of mesh
-var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridTexture, transparent: true, depthWrite: false, depthTest: false, roughness: 0.1, });
+var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridTexture, transparent: true, roughness: 0.99, });
 var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var grid = new THREE.Mesh(gridGeometry, gridMaterial);
 grid.position.x = size / 2 - 2.4;
@@ -110,10 +111,10 @@ scene.add(grid);
 // Global plane geom
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
 directionalLight.position.x = -200;
-directionalLight.position.y = 600;
-directionalLight.position.z = 400;
+directionalLight.position.y = 700;
+directionalLight.position.z = 300;
 directionalLight.name = "Direc";
-directionalLight.target.position.set(50, -200, -500); // (x, y, z)
+directionalLight.target.position.set(50, -200, -300); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 

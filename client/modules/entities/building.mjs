@@ -58,7 +58,7 @@ class Building extends BaseEntity {
             planemesh.position.set(0, 0, -0.01);
             planemesh.rotation.x = 0 - Math.PI / 2;
 
-            this.mesh.add(planemesh);
+            //this.mesh.add(planemesh);
         }
 
         // Text

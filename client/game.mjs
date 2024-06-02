@@ -56,8 +56,8 @@ controls.minDistance = 50;
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.4;
 controls.mouseButtons = {
-    LEFT: THREE.MOUSE.PAN,
-    RIGHT: THREE.MOUSE.ROTATE
+    RIGHT: THREE.MOUSE.PAN,
+    MIDDLE: THREE.MOUSE.ROTATE
 };
 
 var raycaster = new THREE.Raycaster();
@@ -69,7 +69,13 @@ gameElement.addEventListener('mousemove', (event) => {
     mousePosition.y = - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1;
 });
 gameElement.addEventListener('click', () => {
-    lockPosition = !lockPosition;
+    raycaster.setFromCamera(mousePosition, camera);
+        var intersections = raycaster.intersectObject(floor);
+        var intersection = (intersections.length > 0 ? intersections[0] : null);
+        if (intersection) {
+            fakePlayer.x = intersection.point.x * 10;
+            fakePlayer.y = intersection.point.z * 10;
+        }
 });
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
@@ -91,12 +97,13 @@ scene.add(floor);
 
 // Global plane geom
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
-directionalLight.position.x = 40;
+directionalLight.position.x = -40;
 directionalLight.position.y = 280;
-directionalLight.position.z = 420;
+directionalLight.position.z = 400;
 directionalLight.name = "Direc";
+directionalLight.target.position.set(0, -100, 0); // (x, y, z)
 scene.add(directionalLight);
-directionalLight.target = floor;
+scene.add(directionalLight.target);
 
 const light = new THREE.HemisphereLight(0xaabbff, 0x228811, 0.8);
 scene.add(light);
@@ -193,7 +200,6 @@ var pollInputs = function (delta) {
 };
 
 var lastEmit = new Date().getTime();
-var lockPosition = false;
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
@@ -203,16 +209,6 @@ var animate = function () {
     pollInputs(delta);
 
     controls.update();
-
-    if (!lockPosition) {
-        raycaster.setFromCamera(mousePosition, camera);
-        var intersections = raycaster.intersectObject(floor);
-        var intersection = (intersections.length > 0 ? intersections[0] : null);
-        if (intersection) {
-            fakePlayer.x = intersection.point.x * 10;
-            fakePlayer.y = intersection.point.z * 10;
-        }
-    }
 
     if (currentTime - 30 > lastEmit) {
         drawStats();

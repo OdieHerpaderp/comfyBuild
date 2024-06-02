@@ -25,15 +25,26 @@ class Building extends BaseEntity {
             this.mesh = model.clone();
         }
         else {
+            let fbmodel = modelCache.getModel('fallback');
+            if (fbmodel) {
+                // Use model if available
+                this.mesh = fbmodel.clone();
+                //this.mesh.add(fbmesh);
+            }
             // Sprite fallback
-            let geometry = new THREE.PlaneGeometry(4.4, 6.4, 4.4);
+            let geometry = new THREE.PlaneGeometry(2, 2, 2);
 
             let texture = new THREE.TextureLoader().load('/client/img/towers/' + this.buildingType + '.png');
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(1, 2);
+            texture.repeat.set(1, 1);
 
             let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-            this.mesh = new THREE.Mesh(geometry, material);
+            let fbmesh = new THREE.Mesh(geometry, material);
+            fbmesh.position.set(0, 2.3, 2.1);
+            this.mesh.add(fbmesh);
+
+            //let fallback = modelCache.getModel('fallback');
+            //if (fallback) { let fallbackmesh = fallback.clone(); this.mesh.add(fallbackmesh); }
         }
         this.mesh.position.set(this.worldX, 0, this.worldY + 0.6);
 
@@ -55,14 +66,14 @@ class Building extends BaseEntity {
             alignment: 'center',
             color: '#fff',
             fontFamily: 'Roboto Slab',
-            fontSize: 0.80,
-            lineGap: 0.05,
+            fontSize: 0.60,
+            lineGap: 0.02,
             strokeColor: '#000',
             strokeWidth: 0.15,
             text: this.upgradeLevel + "\n" + this.buildingType,
         });
 
-        this.textSprite.position.set(0, 3.2, 1.6);
+        this.textSprite.position.set(0, 3.4, 0.6);
         this.mesh.add(this.textSprite);
     }
 

@@ -69,6 +69,7 @@ gameElement.addEventListener('mousemove', (event) => {
     mousePosition.y = - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1;
 });
 gameElement.addEventListener('click', () => {
+    // now left click selects whichever tile you click, as panning is moved to right click
     raycaster.setFromCamera(mousePosition, camera);
         var intersections = raycaster.intersectObject(floor);
         var intersection = (intersections.length > 0 ? intersections[0] : null);
@@ -86,7 +87,7 @@ var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/map_n.png');
 floorTextureN.wrapS = floorTextureN.wrapT = THREE.RepeatWrapping;
 floorTextureN.repeat.set(10, 10);
 // DoubleSide: render texture on both sides of mesh
-var floorMaterial = new THREE.MeshStandardMaterial({ color: '#BBBBBB', map: floorTexture, side: THREE.BackSide, normalMap: floorTextureN, roughness: 0.7, });
+var floorMaterial = new THREE.MeshStandardMaterial({ color: '#BBBBBB', map: floorTexture, side: THREE.BackSide, normalMap: floorTextureN, roughness: 0.8, });
 var floorGeometry = new THREE.PlaneGeometry(960, 960, 1, 1);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.x = 237.75;

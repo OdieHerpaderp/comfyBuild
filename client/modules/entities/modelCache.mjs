@@ -10,6 +10,8 @@ class ModelCache {
         for (const buildingName in buildings) {
             this.loadModel(buildingName);
         }
+        // Load any non-building models in advance.
+        this.loadModel('fallback');
     }
 
     loadModel(modelName) {

@@ -80,33 +80,47 @@ gameElement.addEventListener('click', () => {
 });
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
-var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/map.png');
+var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/grass.png');
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-floorTexture.repeat.set(10, 10);
-var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/map_n.png');
+floorTexture.repeat.set(128, 128);
+var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/grassN.png');
 floorTextureN.wrapS = floorTextureN.wrapT = THREE.RepeatWrapping;
-floorTextureN.repeat.set(10, 10);
+floorTextureN.repeat.set(128, 128);
 // DoubleSide: render texture on both sides of mesh
-var floorMaterial = new THREE.MeshStandardMaterial({ color: '#BBBBBB', map: floorTexture, side: THREE.BackSide, normalMap: floorTextureN, roughness: 0.8, });
-var floorGeometry = new THREE.PlaneGeometry(960, 960, 1, 1);
+var size = 614.4;
+var floorMaterial = new THREE.MeshStandardMaterial({ color: '#ccddcc', map: floorTexture, normalMap: floorTextureN, roughness: 0.6, });
+var floorGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.position.x = 237.75;
-floor.position.y = -0.2;
-floor.position.z = 237.75;
-floor.rotation.x = Math.PI / 2;
+floor.position.x = size / 2 - 2.4;
+floor.position.y = -0.02;
+floor.position.z = size / 2 - 2.4;
+floor.rotation.x = Math.PI * 1.5;
 scene.add(floor);
+
+var gridTexture = new THREE.ImageUtils.loadTexture('/client/img/grid.png');
+gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping;
+gridTexture.repeat.set(128, 128);
+// DoubleSide: render texture on both sides of mesh
+var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridTexture, transparent: true, roughness: 0.1, });
+var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
+var grid = new THREE.Mesh(gridGeometry, gridMaterial);
+grid.position.x = size / 2 - 2.4;
+grid.position.y = -0.01;
+grid.position.z = size / 2 - 2.4;
+grid.rotation.x = Math.PI * 1.5;
+scene.add(grid);
 
 // Global plane geom
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
-directionalLight.position.x = -40;
-directionalLight.position.y = 280;
+directionalLight.position.x = -200;
+directionalLight.position.y = 600;
 directionalLight.position.z = 400;
 directionalLight.name = "Direc";
-directionalLight.target.position.set(0, -100, 0); // (x, y, z)
+directionalLight.target.position.set(50, -200, -500); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xaabbff, 0x228811, 0.8);
+const light = new THREE.HemisphereLight(0xffffff, 0xaaffaa, 0.5);
 scene.add(light);
 
 
@@ -472,7 +486,7 @@ socket.on('init', function (data) {
     for (var i = 0; i < data.player.length; i++) {
         new Player(data.player[i]);
 
-        var geometry = new THREE.PlaneGeometry(5, 5, 1, 1);
+        var geometry = new THREE.PlaneGeometry(4.8, 4.8, 1, 1);
         var PTex = new THREE.TextureLoader().load('/client/img/player.png');
         var materialplayer = new THREE.MeshLambertMaterial({ map: PTex, transparent: true, depthWrite: false, depthTest: false, color: data.player[i].color, });
         var cubeplayer = new THREE.Mesh(geometry, materialplayer);
@@ -630,7 +644,7 @@ socket.on('update', function (data) {
 
             var cubeplayer = scene.getObjectByName("Pl" + pack.id);
             if (cubeplayer) {
-                cubeplayer.position.set(pack.x / 10, 0.01, pack.y / 10);
+                cubeplayer.position.set(pack.x / 10, -0.02, pack.y / 10);
             }
 
             if (Player.list[selfId].id == pack.id) {

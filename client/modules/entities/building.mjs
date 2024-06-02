@@ -32,21 +32,21 @@ class Building extends BaseEntity {
                 //this.mesh.add(fbmesh);
             }
             // Sprite fallback
-            let geometry = new THREE.PlaneGeometry(2, 2, 2);
+            let geometry = new THREE.PlaneGeometry(1.8, 1.8, 1.8);
 
             let texture = new THREE.TextureLoader().load('/client/img/towers/' + this.buildingType + '.png');
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             texture.repeat.set(1, 1);
 
-            let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+            let material = new THREE.MeshLambertMaterial({ color: '#EEEEEE', map: texture, side: THREE.DoubleSide, transparent: true });
             let fbmesh = new THREE.Mesh(geometry, material);
-            fbmesh.position.set(0, 2.3, 2.1);
+            fbmesh.position.set(0, 1.5, 1.8);
             this.mesh.add(fbmesh);
 
             //let fallback = modelCache.getModel('fallback');
             //if (fallback) { let fallbackmesh = fallback.clone(); this.mesh.add(fallbackmesh); }
         }
-        this.mesh.position.set(this.worldX, 0, this.worldY + 0.6);
+        this.mesh.position.set(this.worldX, 0, this.worldY - 0.01);
 
         // Bottom plane
         {
@@ -55,7 +55,7 @@ class Building extends BaseEntity {
             let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
             let planemesh = new THREE.Mesh(geometry, material);
 
-            planemesh.position.set(0, 0, -0.11);
+            planemesh.position.set(0, 0, -0.01);
             planemesh.rotation.x = 0 - Math.PI / 2;
 
             this.mesh.add(planemesh);
@@ -73,7 +73,7 @@ class Building extends BaseEntity {
             text: this.upgradeLevel + "\n" + this.buildingType,
         });
 
-        this.textSprite.position.set(0, 3.4, 0.6);
+        this.textSprite.position.set(0, 3.4, 1.1);
         this.mesh.add(this.textSprite);
     }
 

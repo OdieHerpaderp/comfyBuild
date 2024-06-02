@@ -69,9 +69,9 @@ gameElement.addEventListener('click', (event) => {
 
     raycaster.setFromCamera({
         x: (((event.clientX - boundingRect.left) / boundingRect.width) * 2) - 1,
-        y: (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1
-     }, camera);
-     
+        y: - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1
+    }, camera);
+    
     var intersections = raycaster.intersectObject(floor);
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
@@ -141,24 +141,6 @@ window.upgradeAmount = 1;
 var pop = 100;
 
 const loader = new GLTFLoader();
-
-var modelData = [];
-var preloadModel = function (model) {
-    loader.load('client/models/tower/' + model + '.glb', function (gltf) {
-        const root = gltf.scene;
-        //console.log(root.children[0].geometry);
-        var cubetower = root;
-        console.log(cubetower);
-        modelData[model] = cubetower;
-        console.log("Model " + model + "loaded");
-
-    }, undefined, function (error) {
-
-        console.error(error);
-
-    });
-}
-preloadModel("well");
 
 document.getElementById("frameTimeSlider").oninput = function () {
     targetFrameTime = this.value;

@@ -71,7 +71,7 @@ gameElement.addEventListener('click', (event) => {
         x: (((event.clientX - boundingRect.left) / boundingRect.width) * 2) - 1,
         y: - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1
     }, camera);
-    
+
     var intersections = raycaster.intersectObject(floor);
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
@@ -365,18 +365,10 @@ var Player = function (initPack) {
     var self = {};
     self.id = initPack.id;
     self.color = initPack.color;
-    console.log(self.color);
     self.number = initPack.number;
     self.username = initPack.username;
     self.x = initPack.x;
     self.y = initPack.y;
-    self.hp = initPack.hp;
-    self.hpMax = initPack.hpMax;
-    self.exp = initPack.exp;
-    self.research = initPack.research;
-    self.score = initPack.score;
-    self.map = initPack.map;
-    self.kills = 0;
     self.scoreBoard = [];
 
     Player.list[self.id] = self;
@@ -413,14 +405,7 @@ var Tower = function (initPack) {
     self.id = initPack.id;
     self.x = initPack.x;
     self.y = initPack.y;
-    self.parent = initPack.parent;
-    self.mana = initPack.mana;
-    self.manaMax = initPack.manaMax;
-    self.map = initPack.map;
     self.towerType = initPack.towerType;
-    self.upgradeLevel = initPack.upgradeLevel;
-    self.targetLevel = initPack.targetLevel;
-    self.buildTimer = initPack.buildTimer;
 
     Tower.list[self.id] = self;
     return self;
@@ -467,18 +452,8 @@ socket.on('init', function (data) {
     if (data.selfId) selfId = data.selfId;
     //{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
     for (var i = 0; i < data.player.length; i++) {
+        // TODO: tooltips still use this...
         new Player(data.player[i]);
-
-        var geometry = new THREE.PlaneGeometry(4.8, 4.8, 1, 1);
-        var PTex = new THREE.TextureLoader().load('/client/img/player.png');
-        var materialplayer = new THREE.MeshLambertMaterial({ map: PTex, transparent: true, depthWrite: false, depthTest: false, color: data.player[i].color, });
-        var cubeplayer = new THREE.Mesh(geometry, materialplayer);
-
-        cubeplayer.position.set(-400, -40, -400);
-        cubeplayer.rotation.x = Math.PI * 1.5;
-        cubeplayer.name = "Pl" + data.player[i].id;
-
-        scene.add(cubeplayer);
     }
     for (var i = 0; i < data.npc.length; i++) {
         new NPC(data.npc[i]);
@@ -608,33 +583,6 @@ socket.on('update', function (data) {
                 p.x = Math.round(pack.x);
             if (pack.y !== undefined)
                 p.y = Math.round(pack.y);
-            if (pack.hp !== undefined)
-                p.hp = pack.hp;
-            if (pack.exp !== undefined)
-                p.exp = pack.exp;
-            if (pack.score !== undefined)
-                p.score = pack.score;
-            if (pack.map !== undefined)
-                p.map = pack.map;
-            if (pack.gold !== undefined)
-                p.gold = pack.gold;
-            if (pack.research !== undefined)
-                p.research = pack.research;
-            if (pack.kills !== undefined)
-                p.kills = pack.kills;
-            if (pack.scoreboard !== undefined)
-                p.scoreBoard = pack.scoreboard;
-
-            var cubeplayer = scene.getObjectByName("Pl" + pack.id);
-            if (cubeplayer) {
-                cubeplayer.position.set(pack.x / 10, -0.02, pack.y / 10);
-            }
-
-            if (Player.list[selfId].id == pack.id) {
-                if (cubeplayer) {
-
-                }
-            }
         }
     }
     for (var i = 0; i < data.npc.length; i++) {
@@ -760,23 +708,9 @@ socket.on('update', function (data) {
 socket.on('remove', function (data) {
     //{player:[12323],bullet:[12323,123123]}
     for (var i = 0; i < data.player.length; i++) {
-        var cubeplayer = scene.getObjectByName("Pl" + Player.list[data.player[i]].id);
-        if (cubeplayer) {
-            scene.remove(cubeplayer);
-        }
-
         delete Player.list[data.player[i]];
     }
     for (var i = 0; i < data.tower.length; i++) {
-        var cubetower = scene.getObjectByName("To" + Tower.list[data.tower[i]].id);
-        if (cubetower) {
-            scene.remove(cubetower);
-        }
-        var cubetowerL = scene.getObjectByName("TL" + Tower.list[data.tower[i]].id);
-        if (cubetowerL) {
-
-            scene.remove(cubetowerL);
-        }
         delete Tower.list[data.tower[i]];
     }
 });

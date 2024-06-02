@@ -93,7 +93,7 @@ var floorMaterial = new THREE.MeshStandardMaterial({ color: '#ccddcc', map: floo
 var floorGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.x = size / 2 - 2.4;
-floor.position.y = -0.02;
+floor.position.y = -0.17;
 floor.position.z = size / 2 - 2.4;
 floor.rotation.x = Math.PI * 1.5;
 scene.add(floor);
@@ -102,11 +102,11 @@ var gridTexture = new THREE.ImageUtils.loadTexture('/client/img/grid.png');
 gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping;
 gridTexture.repeat.set(128, 128);
 // DoubleSide: render texture on both sides of mesh
-var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridTexture, transparent: true, roughness: 0.1, });
+var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridTexture, transparent: true, depthWrite: false, depthTest: false, roughness: 0.1, });
 var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var grid = new THREE.Mesh(gridGeometry, gridMaterial);
 grid.position.x = size / 2 - 2.4;
-grid.position.y = -0.01;
+grid.position.y = -0.16;
 grid.position.z = size / 2 - 2.4;
 grid.rotation.x = Math.PI * 1.5;
 scene.add(grid);
@@ -121,7 +121,7 @@ directionalLight.target.position.set(50, -200, -500); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xffffff, 0xaaffaa, 0.5);
+const light = new THREE.HemisphereLight(0xffffff, 0x77ff77, 0.5);
 scene.add(light);
 
 

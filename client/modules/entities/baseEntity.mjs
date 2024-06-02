@@ -1,7 +1,25 @@
 class BaseEntity {
     id;
-    x;
-    y;
+    _x;
+    get x() {
+        return this._x;
+    }
+    set x(value) {
+        this._x = value;
+        if (this.mesh) {
+            this.mesh.position.x = this.worldX;
+        }
+    }
+    _y;
+    get y() {
+        return this._y;
+    }
+    set y(value) {
+        this._y = value;
+        if (this.mesh) {
+            this.mesh.position.z = this.worldY;
+        }
+    }
 
     mesh;
 

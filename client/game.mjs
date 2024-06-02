@@ -62,21 +62,22 @@ controls.mouseButtons = {
 
 var raycaster = new THREE.Raycaster();
 raycaster.params.Points.threshold = 0.1;
-var mousePosition = new THREE.Vector2();
-gameElement.addEventListener('mousemove', (event) => {
-    let boundingRect = renderer.domElement.getBoundingClientRect();
-    mousePosition.x = (((event.clientX - boundingRect.left) / boundingRect.width) * 2) - 1;
-    mousePosition.y = - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1;
-});
-gameElement.addEventListener('click', () => {
+
+gameElement.addEventListener('click', (event) => {
     // now left click selects whichever tile you click, as panning is moved to right click
-    raycaster.setFromCamera(mousePosition, camera);
-        var intersections = raycaster.intersectObject(floor);
-        var intersection = (intersections.length > 0 ? intersections[0] : null);
-        if (intersection) {
-            fakePlayer.x = intersection.point.x * 10;
-            fakePlayer.y = intersection.point.z * 10;
-        }
+    let boundingRect = renderer.domElement.getBoundingClientRect();
+
+    raycaster.setFromCamera({
+        x: (((event.clientX - boundingRect.left) / boundingRect.width) * 2) - 1,
+        y: - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1
+    }, camera);
+    
+    var intersections = raycaster.intersectObject(floor);
+    var intersection = (intersections.length > 0 ? intersections[0] : null);
+    if (intersection) {
+        fakePlayer.x = intersection.point.x * 10;
+        fakePlayer.y = intersection.point.z * 10;
+    }
 });
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
@@ -154,24 +155,6 @@ window.upgradeAmount = 1;
 var pop = 100;
 
 const loader = new GLTFLoader();
-
-var modelData = [];
-var preloadModel = function(model){
-    loader.load('client/models/tower/' + model + '.glb', function (gltf) {
-        const root = gltf.scene;
-        //console.log(root.children[0].geometry);
-        var cubetower = root;
-        console.log(cubetower);
-        modelData[model] = cubetower;
-        console.log("Model " + model + "loaded");
-    
-    }, undefined, function (error) {
-    
-        console.error(error);
-    
-    });
-}
-preloadModel("well");
 
 document.getElementById("frameTimeSlider").oninput = function () {
     targetFrameTime = this.value;

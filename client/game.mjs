@@ -4,9 +4,7 @@ import { LoginScreen } from "loginScreen";
 import { Chat } from "chat";
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
-import TextSprite from '@seregpie/three.text-sprite';
 import { socket } from "singletons"
 import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
 
@@ -39,13 +37,12 @@ var entityManager = new EntityManager(scene);
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
 camera.position.z = 5;
-var fakePlayer = { x: 64 * 48, y: 64 * 48, spdX: 0, spdY: 0, left: false, right: false, up: false, down: false };
+var fakePlayer = { left: false, right: false, up: false, down: false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
 var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight - 44);
-//document.body.appendChild( renderer.domElement );
 
 // Camera controls
 const gameElement = document.getElementById("game");
@@ -75,8 +72,7 @@ gameElement.addEventListener('click', (event) => {
     var intersections = raycaster.intersectObject(floor);
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
-        fakePlayer.x = intersection.point.x * 10;
-        fakePlayer.y = intersection.point.z * 10;
+        socket.emit('fakePlayer', { x: intersection.point.x * 10, y: intersection.point.z * 10 });
     }
 });
 
@@ -124,13 +120,6 @@ scene.add(directionalLight.target);
 const light = new THREE.HemisphereLight(0xffffff, 0x77ff77, 0.5);
 scene.add(light);
 
-
-//var skyColor = 0xFFEEDD;
-//var groundColor = 0xAAA099;
-//var light = new THREE.HemisphereLight(skyColor, groundColor, 0.7);
-//light.name = "Hemi";
-//scene.add(light);
-
 //cubemap HDR
 new RGBELoader()
     .setPath('/client/img/')
@@ -151,10 +140,6 @@ var previousTime = 10;
 var avgDelta = 30;
 var displayHealth = true;
 var displayDamage = 2;
-window.upgradeAmount = 1;
-var pop = 100;
-
-const loader = new GLTFLoader();
 
 document.getElementById("frameTimeSlider").oninput = function () {
     targetFrameTime = this.value;
@@ -210,7 +195,6 @@ var animate = function () {
 
     if (currentTime - 30 > lastEmit) {
         drawStats();
-        socket.emit('fakePlayer', { x: fakePlayer.x, y: fakePlayer.y });
         lastEmit = currentTime;
     }
     if (avgDelta > frameTime + 4 && frameTime < 200) frameTime = Math.ceil((frameTime + avgDelta * 2) / 3);
@@ -239,14 +223,6 @@ var animate = function () {
 
 animate();
 
-function mouseUp() {
-    window.removeEventListener('mousemove', divMove, true);
-}
-
-function mouseDown(e) {
-    window.addEventListener('mousemove', divMove, true);
-}
-
 window.openSettings = function (e) {
     settingsDiv.style.display = 'initial';
 }
@@ -270,29 +246,7 @@ socket.on('evalAnswer', function (data) {
 });
 
 socket.on('gameState', function (data) {
-    //console.log(data);
-    if (data.gameState !== undefined) {
-        if (data.gameState == 1) {
-            hudButtons.style.display = 'none';
-            //var light = scene.getObjectByName("Hemi");
-            //light.color.setHex( 0xccd0dd );
-            //light.groundColor.setHex( 0x656667 );
-            var Dlight = scene.getObjectByName("Direc");
-            if (wave % 10 === 9) Dlight.color.setHex(0xffcccc);
-            else Dlight.color.setHex(0x66aadd);
-        }
-        else {
-            hudButtons.style.display = 'inline-block';
-            //var light = scene.getObjectByName("Hemi");
-            //light.color.setHex( 0xffeedd );
-            //light.groundColor.setHex( 0xAAA099 );
-            var Dlight = scene.getObjectByName("Direc");
-            Dlight.color.setHex(0xffffff);
-        }
-    }
-    if (data.wave !== undefined) {
-        wave = data.wave;
-    }
+    // TODO: move to a module and rename to the actual values
     if (data.health !== undefined) {
         health = data.health;
     }
@@ -302,65 +256,9 @@ socket.on('gameState', function (data) {
     if (data.tech !== undefined) {
         tech = data.tech;
     }
-    if (data.ready !== undefined) {
-        if (data.ready == true) document.getElementById('buttonReady').innerHTML = "Unready!";
-        else document.getElementById('buttonReady').innerHTML = "Ready!";
-    }
 });
 
-//chatForm.onsubmit = function(e){
-//    e.preventDefault();
-//    if(chatInput.value[0] === '/')
-//        socket.emit('evalServer',chatInput.value.slice(1));
-//    else if(chatInput.value[0] === '@'){
-//        //@username,message
-//        socket.emit('sendPmToServer',{
-//            username:chatInput.value.slice(1,chatInput.value.indexOf(',')),
-//            message:chatInput.value.slice(chatInput.value.indexOf(',') + 1)
-//        });
-//    } else
-//        socket.emit('sendMsgToServer',chatInput.value);
-//    chatInput.value = '';
-//}
-
 //UI
-var Damage = function (initPack) {
-    var self = {};
-    self.id = initPack.id;
-    self.damage = initPack.damage;
-    self.x = initPack.x;
-    self.y = initPack.y;
-    self.z = 3;
-    self.type = initPack.type;
-
-    self.lifespan = 25;
-    if (self.type == "damage" || self.type == "damageShield") self.lifespan = 20;
-    else if (self.type == "miss") self.lifespan = 18;
-    else if (self.type == "explosion") self.lifespan = 12;
-    else if (self.type == "corrosion") self.lifespan = 7;
-    else if (self.type == "fire") self.lifespan = 7;
-
-
-
-    self.draw = function () {
-        self.z += (0.1 + 0.3 * (self.lifespan / 10));
-
-        var sprite = scene.getObjectByName("DAM" + self.id);
-        sprite.position.set(self.x / 10, self.z, self.y / 10 + 0.25);
-
-        self.lifespan -= 1;
-        if (self.lifespan < 1) {
-            if (sprite) {
-                scene.remove(sprite);
-            }
-            delete Damage.list[self.id];
-        }
-    }
-    Damage.list[self.id] = self;
-    return self;
-}
-Damage.list = {};
-
 var Player = function (initPack) {
     var self = {};
     self.id = initPack.id;
@@ -376,30 +274,6 @@ var Player = function (initPack) {
 }
 Player.list = {};
 
-var NPC = function (initPack) {
-    var self = {};
-    self.id = initPack.id;
-    self.number = initPack.number;
-    self.creepType = initPack.creepType;
-    self.x = initPack.x;
-    self.y = initPack.y;
-    self.hp = initPack.hp;
-    self.hpMax = initPack.hpMax;
-    self.shield = initPack.shield;
-    self.shieldMax = initPack.shieldMax;
-    self.score = initPack.score;
-    self.armor = initPack.armor;
-    self.map = initPack.map;
-    self.corrosion = initPack.corrosion;
-    self.frost = initPack.frost;
-    self.fire = initPack.fire;
-    self.stoned = initPack.stoned;
-
-    NPC.list[self.id] = self;
-    return self;
-}
-NPC.list = {};
-
 var Tower = function (initPack) {
     var self = {};
     self.id = initPack.id;
@@ -414,39 +288,6 @@ Tower.list = {};
 
 var selfId = null;
 
-socket.on('damage', function (data) {
-    if (displayDamage == 0) return;
-    else if (frameTime > 80 + targetFrameTime) return;
-
-    data.id = Math.random(256000);
-    new Damage(data);
-
-    var textColor = '#ffffff';
-    if (data.type == "explosion") textColor = '#ffdd88';
-    else if (data.type == "damageShield") textColor = '#22ddff';
-    else if (data.type == "fire") textColor = '#ff9922';
-    else if (data.type == "miss") textColor = '#ff0000';
-    else if (data.type == "crit") textColor = '#ff2222';
-    else if (data.type == "corrosion") textColor = '#33ff66';
-
-    let sprite = new TextSprite({
-        align: 'center',
-        fillStyle: textColor,
-        fontFamily: 'Nanum Gothic Coding',
-        fontSize: (0.6 + Math.pow(0.45 * data.damage, 0.4) / 20),
-        lineGap: -0.95,
-        strokeStyle: '#000',
-        strokeWidth: 0.15,
-        text: [
-            Math.round(data.damage),
-        ].join('\n'),
-    });
-    sprite.position.set(data.x / 10, 3, data.y / 10 + 0.25);
-    sprite.name = "DAM" + data.id;
-    scene.add(sprite);
-
-});
-
 var firstInit = true;
 socket.on('init', function (data) {
     if (data.selfId) selfId = data.selfId;
@@ -454,109 +295,6 @@ socket.on('init', function (data) {
     for (var i = 0; i < data.player.length; i++) {
         // TODO: tooltips still use this...
         new Player(data.player[i]);
-    }
-    for (var i = 0; i < data.npc.length; i++) {
-        new NPC(data.npc[i]);
-
-        var geometry = new THREE.PlaneGeometry(4, 4, 4);
-        var Texture = new THREE.TextureLoader().load('/client/img/creeps/' + data.npc[i].creepType + '.png');
-        Texture.wrapS = Texture.wrapT = THREE.RepeatWrapping;
-        Texture.repeat.set(1, 1);
-        // DoubleSide: render texture on both sides of mesh
-        var color = "#ffffff";
-        if (data.npc[i].armorType == "infernal") color = "#ee0055";
-        else if (data.npc[i].armorType == "divine") color = "#e6faff";
-        else if (data.npc[i].armorType == "draconic") color = "#ffaa11";
-        var materialnpc = new THREE.MeshPhongMaterial({ map: Texture, side: THREE.DoubleSide, transparent: true, color: color });
-        var cubenpc = new THREE.Mesh(geometry, materialnpc);
-
-        cubenpc.position.set(data.npc[i].x / 10, 1.5, data.npc[i].y / 10 + 1);
-        cubenpc.name = "Np" + data.npc[i].id;
-        scene.add(cubenpc);
-
-        var geometryB = new THREE.BoxGeometry(3.2, 1, 0.1);
-        var TextureB = new THREE.TextureLoader().load('/client/img/health.png');
-        TextureB.wrapS = TextureB.wrapT = THREE.RepeatWrapping;
-        TextureB.repeat.set(0.5, 1.0);
-        TextureB.offset.set(0);
-
-        var materialnpcB = new THREE.MeshPhongMaterial({ map: TextureB });
-        var cubenpcB = new THREE.Mesh(geometryB, materialnpcB);
-
-        cubenpcB.position.set(data.npc[i].x / 10, 3, data.npc[i].y / 10);
-        cubenpcB.name = "NB" + data.npc[i].id;
-        scene.add(cubenpcB);
-
-        let sprite = new TextSprite({
-            align: 'right',
-            fillStyle: '#ffffff',
-            fontFamily: 'Nanum Gothic Coding',
-            fontSize: 0.85,
-            lineGap: -0.95,
-            strokeStyle: '#000',
-            strokeWidth: 0.15,
-            text: [
-                '       ',
-                Math.round(data.npc[i].hp),
-            ].join('\n'),
-        });
-        sprite.position.set(data.npc[i].x / 10, 3.05, data.npc[i].y / 10 + 0.25);
-        sprite.name = "NH" + data.npc[i].id;
-        scene.add(sprite);
-
-        var geometryA = new THREE.PlaneGeometry(1.25, 1.25, 1.25);
-        var TextureA = new THREE.TextureLoader().load('/client/img/status/shieldGood.png');
-        TextureA.wrapS = TextureA.wrapT = THREE.RepeatWrapping;
-        TextureA.repeat.set(1, 1);
-        var materialnpcArm = new THREE.MeshPhongMaterial({ map: TextureA, side: THREE.DoubleSide, transparent: true });
-        var cubenpcArm = new THREE.Mesh(geometryA, materialnpcArm);
-
-        cubenpcArm.position.set(0.75, 4.4, -0.25);
-        cubenpcArm.name = "NA" + data.npc[i].id;
-        cubenpc.add(cubenpcArm);
-
-        let asprite = new TextSprite({
-            align: 'center',
-            fillStyle: '#ffffff',
-            fontFamily: 'Nanum Gothic Coding',
-            fontSize: 0.75,
-            lineGap: -0.95,
-            strokeStyle: '#000',
-            strokeWidth: 0.15,
-            text: [
-                '     ',
-                Math.round(data.npc[i].armor),
-            ].join('\n'),
-        });
-        asprite.position.set(0.75, 4.5, -0.05);
-        asprite.name = "NArm" + data.npc[i].id;
-        cubenpc.add(asprite);
-
-        if (data.npc[i].shield > 0) {
-            var materialnpcBS = new THREE.MeshLambertMaterial({ map: TextureB, color: '#28f' });
-            var cubenpcBS = new THREE.Mesh(geometryB, materialnpcBS);
-
-            cubenpcBS.position.set(data.npc[i].x / 10, 3, data.npc[i].y / 10);
-            cubenpcBS.name = "NS" + data.npc[i].id;
-            scene.add(cubenpcBS);
-
-            let spriteS = new TextSprite({
-                align: 'right',
-                fillStyle: '#ffffff',
-                fontFamily: 'Nanum Gothic Coding',
-                fontSize: 0.85,
-                lineGap: -0.95,
-                strokeStyle: '#000',
-                strokeWidth: 0.15,
-                text: [
-                    '       ',
-                    Math.round(data.npc[i].hp),
-                ].join('\n'),
-            });
-            spriteS.position.set(data.npc[i].x / 10, 3.05, data.npc[i].y / 10 + 0.25);
-            spriteS.name = "NHs" + data.npc[i].id;
-            scene.add(spriteS);
-        }
     }
     for (var i = 0; i < data.tower.length; i++) {
         // TODO: fix tooltip logic and initial camera position logic
@@ -583,98 +321,6 @@ socket.on('update', function (data) {
                 p.x = Math.round(pack.x);
             if (pack.y !== undefined)
                 p.y = Math.round(pack.y);
-        }
-    }
-    for (var i = 0; i < data.npc.length; i++) {
-        var pack = data.npc[i];
-        var p = NPC.list[pack.id];
-        if (p) {
-            var cubenpc = scene.getObjectByName("Np" + pack.id);
-            if (cubenpc) {
-                cubenpc.position.set(p.x / 10, 1.5, p.y / 10);
-            }
-            var cubenpcB = scene.getObjectByName("NB" + pack.id);
-            if (cubenpcB) {
-                cubenpcB.position.set(p.x / 10, 5, p.y / 10);
-                if (pack.armor < 1 && p.armor > 0 && pack.armor !== undefined) {
-                    console.log("no armor");
-                    cubenpcB.material.map = new THREE.TextureLoader().load('/client/img/healthBroken.png');
-                    cubenpcB.material.needsUpdate = true;
-                }
-                if (p.corrosion > 1) cubenpcB.material.color.setHex(0x00dd00);
-                else if (p.fire > 1) cubenpcB.material.color.setHex(0xddcc00);
-                else cubenpcB.material.color.setHex(0xdd0000);
-                var texture = cubenpcB.material.map;
-                texture.repeat.set(0.5, 1.0);
-                if (pack.hp !== undefined) texture.offset.set(0.5 - ((p.hp + pack.hp) * 0.25) / p.hpMax, 0);
-                else texture.offset.set(0.5 - p.hp * 0.5 / p.hpMax, 0);
-            }
-            var sprite = scene.getObjectByName("NH" + pack.id);
-            if (sprite) {
-                if (pack.hp !== p.hp && pack.hp !== undefined) {
-                    sprite.text = [
-                        '       ',
-                        Math.round(pack.hp),
-                    ].join('\n');
-                }
-                sprite.position.set(p.x / 10, 5.25, p.y / 10 + 0.25);
-            }
-
-            var cubenpcS = scene.getObjectByName("NS" + pack.id);
-            if (cubenpcS) {
-                cubenpcS.position.set(p.x / 10, 6.2, p.y / 10);
-                if (pack.shield !== p.shield && pack.shield !== undefined) {
-                    var textureS = cubenpcS.material.map;
-                    textureS.repeat.set(0.5, 1.0);
-                    textureS.offset.set(0.5 - pack.shield * 0.5 / p.shieldMax, 0);
-                }
-            }
-            var spriteS = scene.getObjectByName("NHs" + pack.id);
-            if (spriteS) {
-                if (pack.shield !== p.shield && pack.shield !== undefined) {
-                    spriteS.text = [
-                        '     ',
-                        Math.round(pack.shield),
-                    ].join('\n');
-                }
-                spriteS.position.set(p.x / 10, 6.45, p.y / 10 + 0.25);
-            }
-            var spriteAr = scene.getObjectByName("NArm" + pack.id);
-            if (spriteAr) {
-                if (pack.armor !== p.armor && pack.armor !== undefined) {
-                    spriteAr.text = [
-                        '       ',
-                        Math.round(pack.armor),
-                    ].join('\n');
-                }
-            }
-
-            if (pack.x !== undefined)
-                p.x = pack.x;
-            if (pack.y !== undefined)
-                p.y = pack.y;
-            if (pack.hp !== undefined)
-                p.hp = pack.hp;
-            if (pack.shield !== undefined)
-                p.shield = pack.shield;
-            if (pack.shieldMax !== undefined)
-                p.shieldMax = pack.shieldMax;
-            if (pack.score !== undefined)
-                p.score = pack.score;
-            if (pack.armor !== undefined)
-                p.armor = pack.armor;
-            if (pack.map !== undefined)
-                p.map = pack.map;
-            if (pack.corrosion !== undefined)
-                p.corrosion = pack.corrosion;
-            if (pack.frost !== undefined)
-                p.frost = pack.frost;
-            if (pack.fire !== undefined)
-                p.fire = pack.fire;
-            if (pack.stun !== undefined)
-                p.stun = pack.stun;
-            if (pack.stoned !== undefined)
-                p.stoned = pack.stoned;
         }
     }
 
@@ -716,39 +362,8 @@ socket.on('remove', function (data) {
 });
 
 setInterval(function () {
-    if (!selfId)
-        return;
-    //fixWindow();
-    //ctx.clearRect(0,0,960,500);
-    //drawMap();
-    //drawScore();
-    //for(var i in Player.list)
-    //Player.list[i].draw();
-    //for(var i in Bullet.list)
-    //Bullet.list[i].draw();
-    //for(var i in Tower.list)
-    //Tower.list[i].draw();
-    //for(var i in NPC.list)
-    //NPC.list[i].draw();
-    for (var i in Damage.list)
-        Damage.list[i].draw();
-}, 30);
-
-setInterval(function () {
     drawScoreboard();
 }, 100);
-
-var drawMap = function () {
-    var player = Player.list[selfId];
-    var x = player.x;
-    var y = player.y;
-    var ptrn = ctx.createPattern(Img.map[player.map], 'repeat');
-    ctx.fillStyle = ptrn;
-    //ctx.fillRect(x % 48, y % 48, WIDTH, HEIGHT);
-    ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) - 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) - 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 0 - 48 + WIDTH / 2, (y * -2) % (960 * 2) - 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) - 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2);
-    ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) - 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 0 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 1 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2);
-    ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) - 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 3 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 0 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 3 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2); ctx.drawImage(Img.map[player.map], ((x * -2) % (960 * 2)) + 960 * 2 - 48 + WIDTH / 2, (y * -2) % (960 * 2) + 960 * 3 + 48, Img.map[player.map].width * 2, Img.map[player.map].height * 2);
-}
 
 var drawStats = function () {
     if (!selfId)
@@ -777,6 +392,7 @@ var drawScoreboard = function () {
     text += "</table>";
     document.getElementById('scoreBoard').innerHTML = text;
 }
+
 gameElement.onkeydown = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = true;
@@ -797,19 +413,6 @@ gameElement.onkeyup = function (event) {
         fakePlayer.left = false;
     else if (event.keyCode === 87) // w
         fakePlayer.up = false;
-}
-
-document.onmousedown = function (event) {
-    //socket.emit('keyPress',{inputId:'attack',state:true});
-}
-document.onmouseup = function (event) {
-    //socket.emit('keyPress',{inputId:'attack',state:false});
-}
-document.onmousemove = function (event) {
-    var x = -250 + event.clientX - 8;
-    var y = -250 + event.clientY - 8;
-    var angle = Math.round(Math.atan2(y, x) / Math.PI * 4) * 45;
-    socket.emit('keyPress', { inputId: 'mouseAngle', state: angle });
 }
 
 document.oncontextmenu = function (event) {

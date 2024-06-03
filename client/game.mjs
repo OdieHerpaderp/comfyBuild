@@ -77,12 +77,12 @@ gameElement.addEventListener('click', (event) => {
 });
 
 // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
-var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/ground.webp');
+var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/ground.jpg');
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 floorTexture.repeat.set(16, 16);
-var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/groundN.png');
+var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/groundN.jpg');
 floorTextureN.wrapS = floorTextureN.wrapT = THREE.RepeatWrapping;
-floorTextureN.repeat.set(64, 64);
+floorTextureN.repeat.set(16, 16);
 // DoubleSide: render texture on both sides of mesh
 var size = 614.4;
 var floorMaterial = new THREE.MeshStandardMaterial({ color: '#ccddcc', map: floorTexture, normalMap: floorTextureN, roughness: 0.6, });
@@ -110,15 +110,15 @@ scene.add(grid);
 
 // Global plane geom
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
-directionalLight.position.x = -200;
-directionalLight.position.y = 700;
-directionalLight.position.z = 300;
+directionalLight.position.x = -1100;
+directionalLight.position.y = 1700;
+directionalLight.position.z = 1100;
 directionalLight.name = "Direc";
-directionalLight.target.position.set(50, -200, -300); // (x, y, z)
+directionalLight.target.position.set(0, -200, 0); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xffffff, 0x77ff77, 0.5);
+const light = new THREE.HemisphereLight(0xffffff, 0x77ff77, 0.9);
 scene.add(light);
 
 //cubemap HDR

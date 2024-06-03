@@ -46,7 +46,7 @@ Gamemode.prepare = function(){
 	PFGrid.grid.setWalkableAt(54, 54, false);
 	PFGrid.gridBackup.setWalkableAt(54, 54, false);
 	Tower({
-		towerType:"quarry",
+		towerType:"caveDiggers",
 		parent:0,
 		x:50 * 48,
 		y:50 * 48,

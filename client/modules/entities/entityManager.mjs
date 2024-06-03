@@ -3,14 +3,22 @@ import { socket } from "singletons";
 import { Building } from "building";
 import { Player } from "player";
 
-class EntityManager {
+class EntityManager extends EventTarget {
+    selectedBuildingChangedEvent = new Event("selectedBuildingChanged");
+
     players = {};
     buildings = {};
     resourceNodes = {};
 
     localPlayerId;
+    selectedBuilding;
+
+    get localPlayer() {
+        return this.players[this.localPlayerId];
+    }
 
     constructor(scene) {
+        super();
         var that = this;
         this.scene = scene;
 
@@ -30,6 +38,10 @@ class EntityManager {
             let player = new Player(data.player[i], data.player[i].id == this.localPlayerId);
             this.players[player.id] = player;
             this.scene.add(player.mesh);
+            if (player.isLocal) {
+                var that = this;
+                player.addEventListener("propertyChanged", (event) => { that.localPlayerPropertyChanged(event); });
+            }
         }
         for (var i = 0; i < data.tower.length; i++) {
             if (this.buildings[data.tower[i].id]) {
@@ -92,6 +104,36 @@ class EntityManager {
             if (resourceNode.mesh) { this.scene.remove(resourceNode.mesh); }
             delete this.resourceNodes[id];
         }
+    }
+
+    localPlayerPropertyChanged(event) {
+        if (event.type === "propertyChanged" && event.detail.propertyName === "position") {
+            this.updateSelectedBuilding();
+        }
+    }
+
+    updateSelectedBuilding() {
+        let player = this.players[this.localPlayerId];
+        if (!player) { return; }
+        let building = this.getBuildingAtCoordinates(player.x, player.y);
+        if (this.selectedBuilding === building) { return; }
+        this.selectedBuilding = building
+        this.dispatchEvent(new CustomEvent("selectedBuildingChanged", { detail: { "building": this.selectedBuilding } }));
+    }
+
+    getBuildingAtCoordinates(x, y) {
+        // Do we need something more efficient for this?
+        console.log(`getBuildingAtCoordinates(${x}, ${y});`);
+        for (let buildingId in this.buildings) {
+            let building = this.buildings[buildingId];
+            if (building.x === x && building.y === y) {
+                return building;
+            }
+        }
+    }
+
+    getSelectedBuilding() {
+        return this.selectedBuilding;
     }
 }
 

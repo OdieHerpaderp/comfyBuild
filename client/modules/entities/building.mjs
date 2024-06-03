@@ -4,10 +4,44 @@ import * as THREE from 'three';
 import TextSprite from '@seregpie/three.text-sprite';
 
 class Building extends BaseEntity {
-    buildingType;
-    upgradeLevel;
-    targetLevel;
-    buildTimer;
+    _buildingType;
+    get buildingType() {
+        return this._buildingType;
+    }
+    set buildingType(value) {
+        if (this._buildingType == value) { return; }
+        this._buildingType = value;
+        this.propertyChanged("buildingType", value);
+    }
+    _upgradeLevel;
+    get upgradeLevel() {
+        return this._upgradeLevel;
+    }
+    set upgradeLevel(value) {
+        if (this._upgradeLevel == value) { return; }
+        this._upgradeLevel = value;
+        this.propertyChanged("upgradeLevel", value);
+    }
+
+    _targetLevel;
+    get targetLevel() {
+        return this._targetLevel;
+    }
+    set targetLevel(value) {
+        if (this._targetLevel == value) { return; }
+        this._targetLevel = value;
+        this.propertyChanged("targetLevel", value);
+    }
+
+    _buildTimer;
+    get buildTimer() {
+        return this._buildTimer;
+    }
+    set buildTimer(value) {
+        if (this._buildTimer == value) { return; }
+        this._buildTimer = value;
+        this.propertyChanged("buildTimer", value);
+    }
 
     textSprite;
 
@@ -25,11 +59,10 @@ class Building extends BaseEntity {
             this.mesh = model.clone();
         }
         else {
-            let fbmodel = modelCache.getModel('fallback');
-            if (fbmodel) {
+            model = modelCache.getModel('fallback');
+            if (model) {
                 // Use model if available
-                this.mesh = fbmodel.clone();
-                //this.mesh.add(fbmesh);
+                this.mesh = model.clone();
             }
             // Sprite fallback
             let geometry = new THREE.PlaneGeometry(1.8, 1.8, 1.8);
@@ -39,12 +72,15 @@ class Building extends BaseEntity {
             texture.repeat.set(1, 1);
 
             let material = new THREE.MeshLambertMaterial({ color: '#EEEEEE', map: texture, side: THREE.DoubleSide, transparent: true });
-            let fbmesh = new THREE.Mesh(geometry, material);
-            fbmesh.position.set(0, 1.5, 1.8);
-            this.mesh.add(fbmesh);
+            let spriteMesh = new THREE.Mesh(geometry, material);
+            spriteMesh.position.set(0, 1.5, 1.8);
 
-            //let fallback = modelCache.getModel('fallback');
-            //if (fallback) { let fallbackmesh = fallback.clone(); this.mesh.add(fallbackmesh); }
+            if (this.mesh) {
+                this.mesh.add(spriteMesh);
+            }
+            else {
+                this.mesh = spriteMesh;
+            }
         }
         this.mesh.position.set(this.worldX, 0, this.worldY - 0.01);
 
@@ -78,6 +114,8 @@ class Building extends BaseEntity {
     }
 
     update(data) {
+        super.update(data);
+
         var textNeedsUpdate = false;
         if (data.upgradeLevel && data.upgradeLevel !== this.upgradeLevel) {
             this.upgradeLevel = data.upgradeLevel;
@@ -88,7 +126,7 @@ class Building extends BaseEntity {
             textNeedsUpdate = true;
         }
         if (data.buildTimer && data.buildTimer !== this.buildTimer) {
-            this.buildTimer = data.buildTimer;
+            this.buildTimer = Math.round(Math.max(data.buildTimer * 0.65, 0)) / 10;
             textNeedsUpdate = true;
         }
         if (textNeedsUpdate) {
@@ -103,7 +141,7 @@ class Building extends BaseEntity {
         var statusText = "";
         if (this.targetLevel > this.upgradeLevel) {
             levelText += " > " + Math.round(this.targetLevel);
-            statusText = "Build: " + Math.round(Math.max(this.buildTimer * 0.65, 0)) / 10;
+            statusText = "Build: " + this.buildTimer;
         }
 
         this.textSprite.text = ` \n${levelText}\n${this.buildingType}\n${statusText}`;

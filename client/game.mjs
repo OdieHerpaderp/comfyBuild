@@ -34,9 +34,12 @@ var scene = new THREE.Scene();
 
 // Don't mind me, I just need the scene...
 var entityManager = new EntityManager(scene);
+entityManager.addEventListener("selectedBuildingChanged", (event) => {
+    buildingsFrame.updateDisplay(event.detail.building);
+});
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
-camera.position.z = 5;
+camera.position.set(260, 100, 460);
 var fakePlayer = { left: false, right: false, up: false, down: false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
@@ -48,6 +51,8 @@ renderer.setSize(window.innerWidth, window.innerHeight - 44);
 const gameElement = document.getElementById("game");
 // note: normally renderer.domElement is used, but that's hidden behind other elements so it doesn't capture mouse events.
 const controls = new MapControls(camera, gameElement);
+controls.target.x = 260;
+controls.target.z = 260;
 controls.maxDistance = 750;
 controls.minDistance = 50;
 controls.enableDamping = true;
@@ -103,7 +108,7 @@ var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridT
 var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var grid = new THREE.Mesh(gridGeometry, gridMaterial);
 grid.position.x = size / 2 - 2.4;
-grid.position.y = -0.16;
+grid.position.y = -0.14;
 grid.position.z = size / 2 - 2.4;
 grid.rotation.x = Math.PI * 1.5;
 scene.add(grid);
@@ -275,80 +280,13 @@ var Player = function (initPack) {
 }
 Player.list = {};
 
-var Tower = function (initPack) {
-    var self = {};
-    self.id = initPack.id;
-    self.x = initPack.x;
-    self.y = initPack.y;
-    self.towerType = initPack.towerType;
-
-    Tower.list[self.id] = self;
-    return self;
-}
-Tower.list = {};
-
 var selfId = null;
-
-var firstInit = true;
 socket.on('init', function (data) {
     if (data.selfId) selfId = data.selfId;
-    //{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
+
     for (var i = 0; i < data.player.length; i++) {
-        // TODO: tooltips still use this...
+        // TODO: top bar still uses this...
         new Player(data.player[i]);
-    }
-    for (var i = 0; i < data.tower.length; i++) {
-        // TODO: fix tooltip logic and initial camera position logic
-        if (firstInit && data.tower[i].towerType == "headquarters") {
-            firstInit = false;
-            controls.target.x = data.tower[i].x / 10;
-            controls.target.z = data.tower[i].y / 10;
-            camera.position.set(data.tower[i].x / 10, 100, (data.tower[i].y / 10) + 200);
-            controls.update();
-        }
-        new Tower(data.tower[i]);
-    }
-});
-
-socket.on('update', function (data) {
-    //TODO don't use getObjectByName
-    if (frameTime > 80 + targetFrameTime) return;
-    //{ player : [{id:123,x:0,y:0},{id:1,x:0,y:0}], bullet: []}
-    for (var i = 0; i < data.player.length; i++) {
-        var pack = data.player[i];
-        var p = Player.list[pack.id];
-        if (p) {
-            if (pack.x !== undefined)
-                p.x = Math.round(pack.x);
-            if (pack.y !== undefined)
-                p.y = Math.round(pack.y);
-        }
-    }
-
-    // TODO: move tooltip logic somewhere else
-    var needsTooltip = false;
-    for (var i = 0; i < data.tower.length; i++) {
-        var pack = data.tower[i];
-        if (pack == undefined) return;
-        var b = Tower.list[data.tower[i].id];
-        if (b) {
-            if (pack.x !== undefined)
-                b.x = pack.x;
-            if (pack.y !== undefined)
-                b.y = pack.y;
-
-            if (Math.round(Player.list[selfId].x / 48) == Math.round(b.x / 48) && Math.round(Player.list[selfId].y / 48) == Math.round(b.y / 48) && b.towerType != "heroicBarbarian" && b.towerType != "heroicArcher" && b.towerType != "heroicWizard" && b.towerType != "rock") {
-                needsTooltip = true;
-            }
-        }
-    }
-
-    if (needsTooltip) {
-        socket.emit('updateTooltip');
-        buildingsFrame.showTooltip();
-    }
-    else {
-        buildingsFrame.showBuildingList();
     }
 });
 
@@ -356,9 +294,6 @@ socket.on('remove', function (data) {
     //{player:[12323],bullet:[12323,123123]}
     for (var i = 0; i < data.player.length; i++) {
         delete Player.list[data.player[i]];
-    }
-    for (var i = 0; i < data.tower.length; i++) {
-        delete Tower.list[data.tower[i]];
     }
 });
 
@@ -371,8 +306,8 @@ var drawStats = function () {
         return;
     //TODO don't use getElementById
     document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
-    document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
-    document.getElementById('paneLevel').innerHTML = "Level: " + Player.list[selfId].score + "(" + Player.list[selfId].exp + "/" + Math.round(2500 + Math.pow(Player.list[selfId].score * 750, 1.1)) + ")";
+    //document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
+    //document.getElementById('paneLevel').innerHTML = "Level: " + Player.list[selfId].score + "(" + Player.list[selfId].exp + "/" + Math.round(2500 + Math.pow(Player.list[selfId].score * 750, 1.1)) + ")";
     if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
     document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
     document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();

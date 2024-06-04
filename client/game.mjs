@@ -135,7 +135,7 @@ new RGBELoader()
         texture.minFilter = THREE.LinearFilter;
         //texture.generateMipmaps = true;
         scene.background = texture;
-        scene.backgroundBlurriness = 1;
+        scene.backgroundBlurriness = 2;
         scene.environment = texture;
     });
 

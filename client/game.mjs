@@ -83,34 +83,65 @@ gameElement.addEventListener('click', (event) => {
 });
 
 var size = 614.4;
-var gridTexture = new THREE.ImageUtils.loadTexture('/client/img/grid.png');
+// Get the maximum anisotropy value supported by the renderer
+const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
+
+// Load the texture
+var gridTexture = new THREE.TextureLoader().load('/client/img/grid.png');
+
+// Set the wrap mode and repeat
 gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping;
 gridTexture.repeat.set(128, 128);
-// DoubleSide: render texture on both sides of mesh
-var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridTexture, transparent: true, roughness: 0.99, });
+
+// Enable anisotropic filtering
+gridTexture.anisotropy = Math.min(maxAnisotropy, 16);
+
+// Create the material
+var gridMaterial = new THREE.MeshStandardMaterial({
+  color: '#EEEEEE',
+  map: gridTexture,
+  transparent: true,
+  roughness: 0.99,
+});
+
+// Create the geometry and mesh
 var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var grid = new THREE.Mesh(gridGeometry, gridMaterial);
+
+// Position and rotate the mesh
 grid.position.x = size / 2 - 2.4;
 grid.position.y = -0.13;
 grid.position.z = size / 2 - 2.4;
 grid.rotation.x = Math.PI * 1.5;
+
+// Add the mesh to the scene
 scene.add(grid);
 
 const loader = new GLTFLoader();
 var terrain;
-loader.load( 'client/models/terrain.glb', function ( gltf ) {
 
+loader.load('client/models/terrain.glb', function (gltf) {
     terrain = gltf.scene;
     terrain.position.x = size / 2 - 2.4;
     terrain.position.y = -0.16;
     terrain.position.z = size / 2 - 2.4;
-	scene.add( terrain );
 
-}, undefined, function ( error ) {
+    // Traverse the scene and apply anisotropic filtering to all textures
+    gltf.scene.traverse(function (child) {
+        if (child.isMesh) {
+            child.material.map && (child.material.map.anisotropy = Math.min(maxAnisotropy, 16));
+            child.material.emissiveMap && (child.material.emissiveMap.anisotropy = Math.min(maxAnisotropy, 16));
+            child.material.roughnessMap && (child.material.roughnessMap.anisotropy = Math.min(maxAnisotropy, 16));
+            child.material.metalnessMap && (child.material.metalnessMap.anisotropy = Math.min(maxAnisotropy, 16));
+            child.material.normalMap && (child.material.normalMap.anisotropy = Math.min(maxAnisotropy, 16));
+            // Add more texture types if needed
+        }
+    });
 
-	console.error( error );
-
-} );
+    scene.add(terrain);
+}, undefined, function (error) {
+    console.error(error);
+});
 
 // Global plane geom
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);

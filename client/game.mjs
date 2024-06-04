@@ -3,6 +3,7 @@ import { ResourceList } from "resourceList";
 import { LoginScreen } from "loginScreen";
 import { Chat } from "chat";
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
@@ -74,32 +75,14 @@ gameElement.addEventListener('click', (event) => {
         y: - (((event.clientY - boundingRect.top) / boundingRect.height) * 2) + 1
     }, camera);
 
-    var intersections = raycaster.intersectObject(floor);
+    var intersections = raycaster.intersectObject(grid);
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
         socket.emit('fakePlayer', { x: intersection.point.x * 10, y: intersection.point.z * 10 });
     }
 });
 
-// note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
-var floorTexture = new THREE.ImageUtils.loadTexture('/client/img/ground.jpg');
-floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-floorTexture.repeat.set(16, 16);
-var floorTextureN = new THREE.ImageUtils.loadTexture('/client/img/groundN.jpg');
-floorTextureN.wrapS = floorTextureN.wrapT = THREE.RepeatWrapping;
-floorTextureN.repeat.set(16, 16);
-// DoubleSide: render texture on both sides of mesh
 var size = 614.4;
-var floorMaterial = new THREE.MeshStandardMaterial({ color: '#ccddcc', map: floorTexture, normalMap: floorTextureN, roughness: 0.6, });
-var floorGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
-var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.position.x = size / 2 - 2.4;
-floor.position.y = -0.17;
-floor.position.z = size / 2 - 2.4;
-floor.rotation.z = Math.PI / 2;
-floor.rotation.x = Math.PI * 1.5;
-scene.add(floor);
-
 var gridTexture = new THREE.ImageUtils.loadTexture('/client/img/grid.png');
 gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping;
 gridTexture.repeat.set(128, 128);
@@ -108,10 +91,26 @@ var gridMaterial = new THREE.MeshStandardMaterial({ color: '#EEEEEE', map: gridT
 var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
 var grid = new THREE.Mesh(gridGeometry, gridMaterial);
 grid.position.x = size / 2 - 2.4;
-grid.position.y = -0.14;
+grid.position.y = -0.13;
 grid.position.z = size / 2 - 2.4;
 grid.rotation.x = Math.PI * 1.5;
 scene.add(grid);
+
+const loader = new GLTFLoader();
+var terrain;
+loader.load( 'client/models/terrain.glb', function ( gltf ) {
+
+    terrain = gltf.scene;
+    terrain.position.x = size / 2 - 2.4;
+    terrain.position.y = -0.16;
+    terrain.position.z = size / 2 - 2.4;
+	scene.add( terrain );
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
 
 // Global plane geom
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);

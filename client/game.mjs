@@ -219,11 +219,14 @@ var pollInputs = function (delta) {
 };
 
 var lastEmit = new Date().getTime();
+var deltaAvg = 0;
+var deltaCount = 0;
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
     var delta = currentTime - previousTime;
-    avgDelta = Math.min((avgDelta * 2 + delta + targetFrameTime * 2) / 5, 250);
+    deltaAvg += delta;
+    deltaCount++;
     previousTime = currentTime;
     pollInputs(delta);
 
@@ -233,15 +236,17 @@ var animate = function () {
         drawStats();
         lastEmit = currentTime;
     }
-    if (avgDelta > frameTime + 4 && frameTime < 200) frameTime = Math.ceil((frameTime + avgDelta * 2) / 3);
-    else if (avgDelta < frameTime + 1 && frameTime > targetFrameTime) frameTime = Math.floor((frameTime + avgDelta) / 2);
 
-    if (frameTime > 80 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
-    if (frameTime > 60 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";
-    else if (frameTime > 40 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
+    if (delta > 45 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
+    if (delta > 30 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";
+    else if (delta > 15 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
     else document.getElementById('fpsCounter').style.color = "white";
 
-    document.getElementById('fpsCounter').innerHTML = "FT: " + delta + " ms";
+    document.getElementById('fpsCounter').innerHTML = "Fps: " + Math.round(1000 / (deltaAvg / deltaCount));
+    if (deltaCount >= 20) {
+        deltaCount /= 2;
+        deltaAvg /= 2; 
+    }
 
     //cube.rotation.x += 0.01;
     if (oldWidth != window.innerWidth || oldHeight != window.innerHeight) {

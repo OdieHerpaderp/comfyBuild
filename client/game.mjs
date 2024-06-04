@@ -41,6 +41,7 @@ entityManager.addEventListener("selectedBuildingChanged", (event) => {
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
 camera.position.set(260, 100, 460);
+
 var fakePlayer = { left: false, right: false, up: false, down: false };
 
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
@@ -144,17 +145,25 @@ loader.load('client/models/terrain.glb', function (gltf) {
 });
 
 // Global plane geom
-var directionalLight = new THREE.DirectionalLight(0xffffff, 1.1);
+var directionalLight = new THREE.DirectionalLight(0xfffefa, 1.4);
 directionalLight.position.x = -1100;
 directionalLight.position.y = 1700;
-directionalLight.position.z = 1100;
+directionalLight.position.z = -1100;
 directionalLight.name = "Direc";
-directionalLight.target.position.set(0, -200, 0); // (x, y, z)
+directionalLight.target.position.set(0, 0, 0); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xffffff, 0x77ff77, 0.9);
+const light = new THREE.HemisphereLight(0xffffff, 0xeeffee, 0.8);
 scene.add(light);
+
+// Create a point light
+const pointLight = new THREE.PointLight(0xeeeeee);
+pointLight.position.set(0, 20, 20);
+pointLight.intensity = 0.8;
+
+// Add the point light to the scene
+scene.add(pointLight);
 
 //cubemap HDR
 new RGBELoader()
@@ -248,6 +257,13 @@ var animate = function () {
         deltaAvg /= 2; 
     }
 
+    const cameraPosition = camera.position.clone();
+    const offset = new THREE.Vector3(0, 250, -500); // Offset vector (x, y, z)
+
+    // Add the offset vector to the camera's position
+    const lightPosition = cameraPosition.add(offset);
+    pointLight.position.copy(lightPosition);
+
     //cube.rotation.x += 0.01;
     if (oldWidth != window.innerWidth || oldHeight != window.innerHeight) {
         console.log("WE GON RESIZE");
@@ -272,7 +288,7 @@ window.closeSettings = function (e) {
     settingsDiv.style.display = 'none';
 }
 
-var wave = 0;
+var morale = 0;
 var health = 0;
 var maxHealth = 0;
 var tech = 0;
@@ -296,6 +312,9 @@ socket.on('gameState', function (data) {
     }
     if (data.tech !== undefined) {
         tech = data.tech;
+    }
+    if (data.morale !== undefined) {
+        morale = data.morale;
     }
 });
 
@@ -346,7 +365,7 @@ var drawStats = function () {
     if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
     document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
     document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();
-    document.getElementById('paneWave').innerHTML = "Morale: " + wave / 100;
+    document.getElementById('paneWave').innerHTML = "Morale: " + morale / 100;
 
     stockpile.updateResourceDisplays();
 }

@@ -3,7 +3,7 @@ import BaseEntity from "baseEntity";
 
 class ResourceNode extends BaseEntity {
     resourceType;
-    
+
     constructor(initData) {
         super(initData);
         this.resourceType = initData.towerType ?? "unknown";
@@ -12,7 +12,7 @@ class ResourceNode extends BaseEntity {
 
         let texture = new THREE.TextureLoader().load('/client/img/bullets/' + this.resourceType + '.png');
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(1,1);
+        texture.repeat.set(1, 1);
 
         let material = new THREE.MeshLambertMaterial({ map: texture, transparent: true });
 

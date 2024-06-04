@@ -18,6 +18,8 @@ class BuildingsFrame {
         }
     };
 
+    currentBuilding;
+
     constructor() {
         this.loadTemplate();
         this.registerProperty("content");
@@ -27,20 +29,20 @@ class BuildingsFrame {
 
         this.buildingList = new BuildingDataList();
         this.buildingTooltip = new BuildingTooltip();
-    }
 
-    showTooltip() {
-        if (this.displayingTooltip) { return; }
-        this.replacePropertyWithChild("content", this.buildingTooltip.HTML);
-        this.displayingTooltip = true;
-        this.displayingBuildingList = false;
-    }
-
-    showBuildingList() {
-        if (this.displayingBuildingList) { return; }
         this.replacePropertyWithChild("content", this.buildingList.HTML);
-        this.displayingTooltip = false;
-        this.displayingBuildingList = true;
+    }
+
+    updateDisplay(building) {
+        if (building === this.currentBuilding) { return; }
+        this.currentBuilding = building;
+        if (building) {
+            this.buildingTooltip.updateDisplay(building);
+            this.replacePropertyWithChild("content", this.buildingTooltip.HTML);
+        }
+        else {
+            this.replacePropertyWithChild("content", this.buildingList.HTML);
+        }
     }
 }
 

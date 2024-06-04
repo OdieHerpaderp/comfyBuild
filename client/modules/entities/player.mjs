@@ -25,8 +25,7 @@ class Player extends BaseEntity {
     }
 
     update(data) {
-        if (data.x) { this.x = Math.round(data.x); }
-        if (data.y) { this.y = Math.round(data.y); }
+        super.update(data);
     }
 }
 

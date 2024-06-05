@@ -19,12 +19,11 @@ class ModelCache {
         this.constructor.loader.load('client/models/tower/' + modelName + '.glb',
             (data) => { that.modelLoadedCallback(data, modelName); },
             undefined,
-            (error) => { console.error(error); });
+            () => {  });
     }
 
     modelLoadedCallback(data, modelName) {
         this.models[modelName] = data.scene;
-        console.log("Model " + modelName + " loaded");
     }
 
     getModel(modelName) {

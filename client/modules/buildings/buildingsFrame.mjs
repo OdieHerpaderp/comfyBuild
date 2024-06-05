@@ -37,8 +37,8 @@ class BuildingsFrame {
         if (building === this.currentBuilding) { return; }
         this.currentBuilding = building;
         if (building) {
-            this.buildingTooltip.updateDisplay(building);
-            this.replacePropertyWithChild("content", this.buildingTooltip.HTML);
+            this.buildingTooltip.selectedBuilding = building;
+            this.replacePropertyWithChild("content", this.buildingTooltip.domElement);
         }
         else {
             this.replacePropertyWithChild("content", this.buildingList.HTML);

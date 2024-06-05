@@ -1,93 +1,62 @@
-import { getHtmlTemplate, templateMixin } from "templateHelpers";
+import { getHTMLTemplate, useTemplate } from "templateHelper";
 import { socket } from "singletons";
 
+let template = await getHTMLTemplate("client/modules/buildings/buildingTooltip.html");
 class BuildingTooltip {
     static template;
 
-    _upgradeAmount = 0;
+    upgradeAmount = 1;
 
-    get upgradeAmount() {
-        return this._upgradeAmount;
-    }
-    set upgradeAmount(value) {
-        this._upgradeAmount = value;
-        this.setProperty("upgradeAmount", value);
-    }
-
-    constructor() {
-        var that = this;
-
-        this.loadTemplate();
-
-        this.registerProperty("buildingType");
-        this.registerProperty("upgradeLevel");
-        this.registerProperty("targetLevel");
-        this.registerProperty("buildTimer");
-        this.registerProperty("upgradeAmount");
-
-        this.registerAction("upgrade", () => { that.upgradeClick(); });
-        this.registerAction("upgradeAll", () => { that.upgradeAllClick(); });
-        this.registerAction("upgradeSameType", () => { that.upgradeSameTypeClick(); });
-        this.registerAction("upgradePlus", () => { that.upgradePlusClick(); });
-        this.registerAction("upgradeMinus", () => { that.upgradeMinusClick(); });
-        this.registerAction("sell", () => { that.sellClick(); });
-
-        socket.on('towerTooltip', (data) => { that.updateTooltip(data); });
-
-        this.upgradeAmount = 1;
-    }
-
-    updateTooltip(data) {
-        this.setProperty("LVL", data.LVL);
-    }
-
-    upgradeClick() {
-        socket.emit('upgradeTower', this.upgradeAmount);
-    }
-
-    upgradeAllClick() {
-        socket.emit('upgradeAll', this.upgradeAmount);
-    }
-
-    upgradeSameTypeClick() {
-        socket.emit('upgradeSameType', this.upgradeAmount);
-    }
-
-    upgradePlusClick() {
-        this.upgradeAmount++;
-    }
-
-    upgradeMinusClick() {
-        this.upgradeAmount--;
-    }
-
-    sellClick() {
-        socket.emit('sellTower');
-    }
-
-    updateDisplay(building) {
-        if (building == this.selectedBuilding) { return; }
+    _selectedBuilding;
+    get selectedBuilding() { return this._selectedBuilding; }
+    set selectedBuilding(value) {
+        if (this._selectedBuilding === value) { return; }
         if (this.selectedBuilding) {
             this.selectedBuilding.removeEventListener("propertyChanged", this);
         }
-        this.selectedBuilding = building;
+        this._selectedBuilding = value;
         this.selectedBuilding.addEventListener("propertyChanged", this);
 
-        this.setProperty("buildingType", building.buildingType);
-        this.setProperty("upgradeLevel", building.upgradeLevel);
-        this.setProperty("targetLevel", building.targetLevel);
-        this.setProperty("buildTimer", building.buildTimer);
+        this.buildingType = this.selectedBuilding.buildingType;
+        this.upgradeLevel = this.selectedBuilding.upgradeLevel;
+        this.targetLevel = this.selectedBuilding.targetLevel;
+        this.buildTimer = this.selectedBuilding.buildTimer;
+    }
+
+    constructor() {
+        useTemplate.bind(this)(template);
+    }
+
+    upgrade() {
+        socket.emit('upgradeTower', this.upgradeAmount);
+    }
+
+    upgradeAll() {
+        socket.emit('upgradeAll', this.upgradeAmount);
+    }
+
+    upgradeSameType() {
+        socket.emit('upgradeSameType', this.upgradeAmount);
+    }
+
+    upgradePlus() {
+        this.upgradeAmount++;
+    }
+
+    upgradeMinus() {
+        this.upgradeAmount--;
+    }
+
+    sell() {
+        socket.emit('sellTower');
     }
 
     handleEvent(event) {
-        if (event.type === "propertyChanged"){
-            this.setProperty(event.detail.propertyName, event.detail.newValue);
+        if (event.type === "propertyChanged") {
+            this[event.detail.propertyName] = event.detail.newValue;
         }
     }
 }
-
-Object.assign(BuildingTooltip.prototype, templateMixin);
-BuildingTooltip.template = await getHtmlTemplate("client/modules/buildings/buildingTooltip.html");
 
 export { BuildingTooltip };
 export default BuildingTooltip;

@@ -12,6 +12,7 @@
 				"loginScreen": "./client/modules/loginScreen/loginScreen.mjs",
 				"chat": "./client/modules/chat/chat.mjs",
 				"playerList": "./client/modules/playerList/playerList.mjs",
+				"worldInfo": "./client/modules/worldInfo/worldInfo.mjs",
 				"resource": "./client/modules/resources/resource.mjs",
 				"resourceList": "./client/modules/resources/resourceList.mjs",
 				"buildings": "./lib/buildings.mjs",
@@ -45,82 +46,28 @@
 	<div id="gameDiv" style="display:none;">
 		<div id="game" style="overflow:hidden; position:absolute;width:100%;height:100%;top:0px; left:0px;">
 			<canvas id="ctx" width="3744" height="1920" style="transition: transform .2s;"></canvas>
-			<canvas id="threejs" style="z-index: -1; position: absolute; left:0px; top:44px;"></canvas>
+			<canvas id="threejs" style="z-index: -1; position: absolute; left:0; top:0;"></canvas>
 			<canvas id="ctx-ui" width="1872" height="960" style="position:absolute;"></canvas>
 
 			<a class="button" href="javascript:zoomOut()"
-				style="position:absolute;height:24px;top:44px;left:0px;width:31px">
+				style="position:absolute;height:24px;top:4px;left:4px;width:31px">
 				-
 			</a>
 			<a class="button" href="javascript:zoomDefault()"
-				style="position:absolute;height:24px;top:44px;left:35px;width:31px">
+				style="position:absolute;height:24px;top:4px;left:39px;width:31px">
 				R
 			</a>
 			<a class="button" href="javascript:zoomIn()"
-				style="position:absolute;height:24px;top:44px;left:70px;width:31px">
+				style="position:absolute;height:24px;top:4px;left:74px;width:31px">
 				+
 			</a>
 			<a class="button" href="javascript:openSettings()"
-				style="position:absolute;height:24px;top:44px;left:105px;width:31px">
+				style="position:absolute;height:24px;top:4px;left:109px;width:31px">
 				S
 			</a>
-			<a id="fpsCounter" style="position:absolute;height:22px;top:76px;left:0px;width:93px;font-size:14px;">
+			<a id="fpsCounter" style="position:absolute;height:22px;top:36px;left:4px;width:93px;font-size:14px;">
 				Perf: ?
 			</a>
-		</div>
-
-		<div class="uiButtonsVersus" id="uiVersus"
-			style="display: none; background-image: url('/client/img/bottombar.png'); background-size:cover; background-repeat:no-repeat;position:absolute;width:100%;height:132px;line-height:44px;bottom:134px;left:0px;">
-			<div id="buttenz">
-				<a class="button" id="buttonWest" href="javascript:joinWest()"
-					style="position:absolute;height:76px;top:20px;left:0px;width:148px">
-					Join West
-				</a>
-				<a class="button" id="buttonEast" href="javascript:joinEast()"
-					style="position:absolute;height:76px;top:20px;left:152px;width:148px">
-					Join East
-				</a>
-				<div
-					style="position:absolute;width:568px;height:132px;right:0px;top:0px;overflow-y:scroll;overflow-x:hidden">
-					<table>
-						<tr>
-							<td>
-								<p>Health: Lv 1</p><a class="button" id="buttonPawn" href="javascript:towerPawn()"
-									style="height:26px;width:180px;">
-									Upgrade (100G)
-								</a>
-							</td>
-							<td>
-								<p>Armor: Lv 1</p><a class="button" id="buttonArrow" href="javascript:towerArrow()"
-									style="height:26px;width:180px;">
-									Upgrade (100G)
-								</a>
-							</td>
-							<td>
-								<p>Speed: Lv 1</p><a class="button" id="buttonCannon" href="javascript:towerCannon()"
-									style="height:26px;width:180px;">
-									Upgrade (100G)
-								</a>
-							</td>
-						</tr>
-						</tr>
-					</table>
-				</div>
-			</div>
-
-		</div>
-
-		<div id="hud"
-			style="position:absolute;top:0px; left:0px;width:100%;height:44px; background-image: url('/client/img/topbar.png')">
-			<span id="statuspane">
-				<div class='logo'></div>
-				<div id="panePos" class='pane'>X:</div>
-				<div id="paneGold" class='pane'>Gold:</div>
-				<div id="paneLevel" class='pane'>Level:</div>
-				<div id="paneTech" class='pane'>Tech:</div>
-				<div id="paneHealth" class='pane'>Health:</div>
-				<div id="paneWave" class='pane'>Wave:</div>
-			</span>
 		</div>
 
 		<div id="settingsDiv" style="position:absolute; width:100%; height:100%; display:none;">

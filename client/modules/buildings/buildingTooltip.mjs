@@ -59,5 +59,4 @@ class BuildingTooltip {
 }
 
 export { BuildingTooltip };
-
 export default BuildingTooltip;

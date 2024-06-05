@@ -11,7 +11,15 @@ class EntityManager extends EventTarget {
     resourceNodes = {};
 
     localPlayerId;
-    selectedBuilding;
+    _selectedBuilding;
+    get selectedBuilding() {
+        return this._selectedBuilding;
+    }
+    set selectedBuilding(value) {
+        if (this._selectedBuilding === value) { return; }
+        this._selectedBuilding = value;
+        this.dispatchEvent(new CustomEvent("selectedBuildingChanged", { detail: { "building": this.selectedBuilding } }));
+    }
 
     get localPlayer() {
         return this.players[this.localPlayerId];
@@ -19,12 +27,11 @@ class EntityManager extends EventTarget {
 
     constructor(scene) {
         super();
-        var that = this;
         this.scene = scene;
 
-        socket.on('init', (data) => { that.onInitEntities(data) });
-        socket.on('update', (data) => { that.onUpdateEntities(data) });
-        socket.on('remove', (data) => { that.onRemoveEntities(data) });
+        socket.on('init', (data) => { this.onInitEntities(data) });
+        socket.on('update', (data) => { this.onUpdateEntities(data) });
+        socket.on('remove', (data) => { this.onRemoveEntities(data) });
     }
 
     onInitEntities(data) {
@@ -51,6 +58,9 @@ class EntityManager extends EventTarget {
             let building = new Building(data.tower[i]);
             this.buildings[building.id] = building;
             this.scene.add(building.mesh);
+            if (this.localPlayer && building.x == this.localPlayer.x && building.y == this.localPlayer.y) {
+                this.selectedBuilding = building;
+            }
         }
         for (var i = 0; i < data.bullet.length; i++) {
             if (this.resourceNodes[data.bullet[i].id]) {
@@ -94,6 +104,9 @@ class EntityManager extends EventTarget {
             let building = this.buildings[id];
             if (!building) { continue; }
             if (building.mesh) { this.scene.remove(building.mesh); }
+            if (this.selectedBuilding === building) {
+                this.selectedBuilding = undefined;
+            }
             delete this.buildings[id];
         }
 
@@ -113,12 +126,8 @@ class EntityManager extends EventTarget {
     }
 
     updateSelectedBuilding() {
-        let player = this.players[this.localPlayerId];
-        if (!player) { return; }
-        let building = this.getBuildingAtCoordinates(player.x, player.y);
-        if (this.selectedBuilding === building) { return; }
-        this.selectedBuilding = building
-        this.dispatchEvent(new CustomEvent("selectedBuildingChanged", { detail: { "building": this.selectedBuilding } }));
+        if (!this.localPlayer) { return; }
+        this.selectedBuilding = this.getBuildingAtCoordinates(this.localPlayer.x, this.localPlayer.y);
     }
 
     getBuildingAtCoordinates(x, y) {

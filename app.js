@@ -138,7 +138,15 @@ io.sockets.on('connection', function(socket){
 		socket.emit('evalAnswer',res);
 	});
 
-
+	socket.on('sendInit',function(){
+		socket.emit('init',{
+			selfId:socket.id,
+			player:Player.getAllInitPack(),
+			bullet:Bullet.getAllInitPack(),
+			npc:NPC.getAllInitPack(),
+			tower:Tower.getAllInitPack(),
+		});
+	});
 
 });
 
@@ -155,7 +163,7 @@ function gameTick() {
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('stockpile', Base.stockpile);
-			sucket.emit('gameState',{wave:Base.morale, tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
+			sucket.emit('gameState',{morale:Base.morale, tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
 		}
 	}
 	var packs = Entity.getFrameUpdateData();

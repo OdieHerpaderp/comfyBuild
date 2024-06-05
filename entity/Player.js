@@ -375,15 +375,6 @@ Player.onConnect = function(socket,username,progress){
 			socket.emit('addToChat','To ' + data.username + ':' + data.message);
 		}
 	});
-
-	//TODO move this to when user connects without breaking the client.
-	socket.emit('init',{
-		selfId:socket.id,
-		player:Player.getAllInitPack(),
-		bullet:Bullet.getAllInitPack(),
-		npc:NPC.getAllInitPack(),
-		tower:Tower.getAllInitPack(),
-	});
 }
 
 Player.getAllInitPack = function(){

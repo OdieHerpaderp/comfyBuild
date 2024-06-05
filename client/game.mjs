@@ -1,5 +1,6 @@
 import { EntityManager } from "entityManager";
 import { ResourceList } from "resourceList";
+import { LoadingScreen } from "loadingScreen";
 import { LoginScreen } from "loginScreen";
 import { Chat } from "chat";
 import * as THREE from 'three';
@@ -9,24 +10,15 @@ import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
 import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
 
-let loadProgressBar = document.getElementById("loadProgressBar");
-let loadProgressText = document.getElementById("loadProgressText");
-THREE.DefaultLoadingManager.onProgress = function(url, itemsLoaded, itemsTotal) {
-    let percentage = Math.round((itemsLoaded/itemsTotal) * 100);
-    loadProgressBar.setAttribute("value", percentage);
-    loadProgressText.textContent = `${itemsLoaded}/${itemsTotal} (${percentage}%)`;
-}
-
-THREE.DefaultLoadingManager.onLoad = function () {
+// Loading screen
+let loadingScreen = new LoadingScreen();
+loadingScreen.addEventListener("loadComplete", () => {
+    gameDiv.style.display = 'inline-block';
     loginScreen.showFrame();
     loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
-
-    loadDiv.style.display = 'none';
-    settingsDiv.style.display = 'none';
-    gameDiv.style.display = 'inline-block';
-    THREE.DefaultLoadingManager.onLoad = undefined;
-    THREE.DefaultLoadingManager.onProgress = undefined;
-}
+    loadingScreen = undefined;
+});
+document.body.appendChild(loadingScreen.domElement);
 
 // Buildings
 var buildingsFrame = new BuildingsFrame();

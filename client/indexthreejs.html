@@ -8,6 +8,7 @@
 	<script type="importmap">
 		{
 			"imports": {
+				"loadingScreen": "./client/modules/loadingScreen/loadingScreen.mjs",
 				"loginScreen": "./client/modules/loginScreen/loginScreen.mjs",
 				"chat": "./client/modules/chat/chat.mjs",
 				"resource": "./client/modules/resources/resource.mjs",
@@ -40,15 +41,6 @@
 </head>
 
 <body>
-	<div id="loadDiv">
-		<div class="flex-center flex-column" style="height:100%;">
-			<img src="/client/img/loading.png">
-			<span>Loading - Please wait...</span>
-			<progress id="loadProgressBar" value="0" max="100"></progress>
-			<span id="loadProgressText">0/? (0%)</span>
-		</div>
-	</div>
-
 	<div id="gameDiv" style="display:none;">
 		<div id="game" style="overflow:hidden; position:absolute;width:100%;height:100%;top:0px; left:0px;">
 			<canvas id="ctx" width="3744" height="1920" style="transition: transform .2s;"></canvas>
@@ -135,7 +127,7 @@
 			</span>
 		</div>
 
-		<div id="settingsDiv" style="position:absolute; width:100%; height:100%;">
+		<div id="settingsDiv" style="position:absolute; width:100%; height:100%; display:none;">
 			<div
 				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:40px; margin: auto auto;text-align: center; border-style: solid; line-height: 40px;">
 				Settings <a class="button" href="javascript:closeSettings()"

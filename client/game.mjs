@@ -145,10 +145,10 @@ loader.load('client/models/terrain.glb', function (gltf) {
 });
 
 // Global plane geom
-var directionalLight = new THREE.DirectionalLight(0xfffefa, 1.1);
+var directionalLight = new THREE.DirectionalLight(0xfffefa, 0.8);
 directionalLight.position.x = -11;
 directionalLight.position.y = 1700;
-directionalLight.position.z = 11;
+directionalLight.position.z = 2500;
 directionalLight.name = "Direc";
 directionalLight.target.position.set(0, 0, 0); // (x, y, z)
 scene.add(directionalLight);
@@ -160,7 +160,7 @@ scene.add(light);
 // Create a point light
 const pointLight = new THREE.PointLight(0xeeeeee);
 pointLight.position.set(0, 0, 0);
-pointLight.intensity = 0.8;
+pointLight.intensity = 1.4;
 
 // Add the point light to the scene
 scene.add(pointLight);
@@ -258,7 +258,7 @@ var animate = function () {
     }
 
     const cameraPosition = camera.position.clone();
-    const offset = new THREE.Vector3(0, 240 - camera.position.y * 1.5, -600); // Offset vector (x, y, z)
+    const offset = new THREE.Vector3(0, 240 - camera.position.y * 1.5, -200); // Offset vector (x, y, z)
     // Add the offset vector to the camera's position
     const lightPosition = cameraPosition.add(offset);
     pointLight.position.copy(lightPosition);
@@ -360,7 +360,7 @@ var drawStats = function () {
     //TODO don't use getElementById
     //document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
     //document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
-    //document.getElementById('paneLevel').innerHTML = "Level: " + Player.list[selfId].score + "(" + Player.list[selfId].exp + "/" + Math.round(2500 + Math.pow(Player.list[selfId].score * 750, 1.1)) + ")";
+    document.getElementById('paneLevel').innerHTML = "Lv: " + (1 + Math.round(Math.pow(techCR / 200, 0.75) * 10) / 100).toLocaleString();
     if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
     document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
     document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();

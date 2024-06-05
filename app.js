@@ -163,7 +163,7 @@ function gameTick() {
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('stockpile', Base.stockpile);
-			sucket.emit('gameState',{morale:Base.morale, tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
+			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
 		}
 	}
 	var packs = Entity.getFrameUpdateData();

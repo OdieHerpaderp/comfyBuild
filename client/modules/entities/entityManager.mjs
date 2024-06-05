@@ -49,6 +49,7 @@ class EntityManager extends EventTarget {
                 var that = this;
                 player.addEventListener("propertyChanged", (event) => { that.localPlayerPropertyChanged(event); });
             }
+            this.dispatchEvent(new CustomEvent("playerConnected", { detail: { "player": player } }));
         }
         for (var i = 0; i < data.tower.length; i++) {
             if (this.buildings[data.tower[i].id]) {
@@ -97,6 +98,7 @@ class EntityManager extends EventTarget {
             if (!player) { continue; }
             if (player.mesh) { this.scene.remove(player.mesh); }
             delete this.players[id];
+            this.dispatchEvent(new CustomEvent("playerDisconnected", { detail: { "player": player } }));
         }
 
         for (var i = 0; i < data.tower.length; i++) {

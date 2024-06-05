@@ -8,7 +8,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
-import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
+import BuildingsFrame from "buildingsFrame";
+import { PlayerList } from "playerList";
 
 // Loading screen
 let loadingScreen = new LoadingScreen();
@@ -38,8 +39,15 @@ loginScreen.addEventListener("loginSuccessful", () => {
     loginScreen.closeFrame();
     stockpile.showFrame();
     buildingsFrame.showFrame();
+    buildingsFrame.setFramePosition(window.innerWidth, window.innerHeight, 'RIGHT_BOTTOM');
     chat.showFrame();
+    chat.setFramePosition(0, window.innerHeight, "LEFT_BOTTOM");
+    playerList.showFrame();
+    playerList.setFramePosition(window.innerWidth, 44, "RIGHT_TOP");
 });
+
+// Player list
+var playerList = new PlayerList();
 
 //ThreeJS
 var scene = new THREE.Scene();
@@ -48,6 +56,12 @@ var scene = new THREE.Scene();
 var entityManager = new EntityManager(scene);
 entityManager.addEventListener("selectedBuildingChanged", (event) => {
     buildingsFrame.updateDisplay(event.detail.building);
+});
+entityManager.addEventListener("playerConnected", (event) => {
+    playerList.addPlayer(event.detail.player);
+});
+entityManager.addEventListener("playerDisconnected", (event) => {
+    playerList.removePlayer(event.detail.player);
 });
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
@@ -329,41 +343,11 @@ socket.on('gameState', function (data) {
 });
 
 //UI
-var Player = function (initPack) {
-    var self = {};
-    self.id = initPack.id;
-    self.color = initPack.color;
-    self.number = initPack.number;
-    self.username = initPack.username;
-    self.x = initPack.x;
-    self.y = initPack.y;
-    self.scoreBoard = [];
-
-    Player.list[self.id] = self;
-    return self;
-}
-Player.list = {};
 
 var selfId = null;
 socket.on('init', function (data) {
     if (data.selfId) selfId = data.selfId;
-
-    for (var i = 0; i < data.player.length; i++) {
-        // TODO: top bar still uses this...
-        new Player(data.player[i]);
-    }
 });
-
-socket.on('remove', function (data) {
-    //{player:[12323],bullet:[12323,123123]}
-    for (var i = 0; i < data.player.length; i++) {
-        delete Player.list[data.player[i]];
-    }
-});
-
-setInterval(function () {
-    drawScoreboard();
-}, 100);
 
 var drawStats = function () {
     if (!selfId)
@@ -378,19 +362,6 @@ var drawStats = function () {
     document.getElementById('paneWave').innerHTML = "Morale: " + morale / 100;
 
     stockpile.updateResourceDisplays();
-}
-
-var drawScoreboard = function () {
-    var text = "";
-
-    text = "<table style='width:100%;'><tr><td style='width:18% !important;' id='scoreBoardtd'>Name</td><td style='width:6% !important;' id='scoreBoardtd'>Kills</td><td id='scoreBoardtd'>Physical</td><td id='scoreBoardtd'>Siege</td><td id='scoreBoardtd'>Arcane</td><td id='scoreBoardtd'>Heroic</td><td id='scoreBoardtd'>Elemental</td></tr>";
-    for (var i in Player.list) {
-        //console.log(Player.list[i].username + ": " + Player.list[i].scoreBoard);
-        text += "<tr><td style='width:18% !important; color:" + Player.list[i].color + ";' id='scoreBoardtd'>" + Player.list[i].username + "</td><td style='width:6% !important;' id='scoreBoardtd'>" + Player.list[i].kills + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[0]) + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[1]) + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[2]) + "</td>" + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[3]) + "</td>" + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[4]) + "</td></tr>";
-    }
-
-    text += "</table>";
-    document.getElementById('scoreBoard').innerHTML = text;
 }
 
 gameElement.onkeydown = function (event) {

@@ -1,10 +1,9 @@
 <template>
     <div id="chat">
-        <div data-property="chat" id="chat-text" class="flex-column overflow-auto">
-        </div>
+        <div data-list="chatMessages" id="chat-text" class="flex-column overflow-auto"></div>
         <div id="chat-input-bar">
-            <input data-input="chat" id="chat-input" type="text" disabled></input>
-            <button data-action="send" disabled>Send</button>
+            <input data-content="inputText" id="chat-input" type="text" disabled></input>
+            <button data-events="click:sendChat" disabled>Send</button>
         </div>
     </div>
 </template>

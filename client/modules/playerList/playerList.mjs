@@ -8,8 +8,20 @@ class PlayerListEntry {
     number;
     username;
     isLocal;
-    x;
-    y;
+    _x;
+    get x() { return this._x; }
+    set x(value) {
+        this._x = value;
+        this.displayX = value / 48;
+    }
+    _y;
+    get y() { return this._y; }
+    set y(value) {
+        this._y = value;
+        this.displayY = value / 48;
+    }
+    displayX;
+    displayY;
 
     constructor(player) {
         useTemplate.bind(this)(playerListEntryTemplate);
@@ -20,7 +32,9 @@ class PlayerListEntry {
         this.username = player.username;
         this.isLocal = player.isLocal;
         this.x = player.x;
+        this.displayX = this.x / 48;
         this.y = player.y;
+        this.displayY = this.y / 48;
 
         var userNameElement = this.domElement.querySelector("[data-content=username]");
         if (userNameElement) { userNameElement.style.color = this.color; }

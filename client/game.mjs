@@ -9,6 +9,25 @@ import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
 import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
 
+let loadProgressBar = document.getElementById("loadProgressBar");
+let loadProgressText = document.getElementById("loadProgressText");
+THREE.DefaultLoadingManager.onProgress = function(url, itemsLoaded, itemsTotal) {
+    let percentage = Math.round((itemsLoaded/itemsTotal) * 100);
+    loadProgressBar.setAttribute("value", percentage);
+    loadProgressText.textContent = `${itemsLoaded}/${itemsTotal} (${percentage}%)`;
+}
+
+THREE.DefaultLoadingManager.onLoad = function () {
+    loginScreen.showFrame();
+    loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+
+    loadDiv.style.display = 'none';
+    settingsDiv.style.display = 'none';
+    gameDiv.style.display = 'inline-block';
+    THREE.DefaultLoadingManager.onLoad = undefined;
+    THREE.DefaultLoadingManager.onProgress = undefined;
+}
+
 // Buildings
 var buildingsFrame = new BuildingsFrame();
 
@@ -99,10 +118,10 @@ gridTexture.anisotropy = Math.min(maxAnisotropy, 16);
 
 // Create the material
 var gridMaterial = new THREE.MeshStandardMaterial({
-  color: '#EEEEEE',
-  map: gridTexture,
-  transparent: true,
-  roughness: 0.99,
+    color: '#EEEEEE',
+    map: gridTexture,
+    transparent: true,
+    roughness: 0.99,
 });
 
 // Create the geometry and mesh
@@ -254,7 +273,7 @@ var animate = function () {
     document.getElementById('fpsCounter').innerHTML = "Fps: " + Math.round(1000 / (deltaAvg / deltaCount));
     if (deltaCount >= 20) {
         deltaCount /= 2;
-        deltaAvg /= 2; 
+        deltaAvg /= 2;
     }
 
     const cameraPosition = camera.position.clone();
@@ -409,10 +428,5 @@ document.oncontextmenu = function (event) {
 }
 
 console.log("*Main Loaded");
-loginScreen.showFrame();
-loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
 
-loadDiv.style.display = 'none';
-settingsDiv.style.display = 'none';
-gameDiv.style.display = 'inline-block';
 socket.emit('sendInit');

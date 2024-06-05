@@ -145,7 +145,7 @@ loader.load('client/models/terrain.glb', function (gltf) {
 });
 
 // Global plane geom
-var directionalLight = new THREE.DirectionalLight(0xfffefa, 0.9);
+var directionalLight = new THREE.DirectionalLight(0xfffefa, 1.1);
 directionalLight.position.x = -11;
 directionalLight.position.y = 1700;
 directionalLight.position.z = 11;
@@ -154,13 +154,13 @@ directionalLight.target.position.set(0, 0, 0); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.3);
+const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.6);
 scene.add(light);
 
 // Create a point light
 const pointLight = new THREE.PointLight(0xeeeeee);
-pointLight.position.set(0, 40, 10);
-pointLight.intensity = 1.8;
+pointLight.position.set(0, 0, 0);
+pointLight.intensity = 0.8;
 
 // Add the point light to the scene
 scene.add(pointLight);
@@ -258,8 +258,7 @@ var animate = function () {
     }
 
     const cameraPosition = camera.position.clone();
-    const offset = new THREE.Vector3(0, 5, 5); // Offset vector (x, y, z)
-
+    const offset = new THREE.Vector3(0, 240 - camera.position.y * 1.5, -600); // Offset vector (x, y, z)
     // Add the offset vector to the camera's position
     const lightPosition = cameraPosition.add(offset);
     pointLight.position.copy(lightPosition);

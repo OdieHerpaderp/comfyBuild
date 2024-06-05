@@ -4,8 +4,6 @@ import { socket } from "singletons";
 
 let template = await getHTMLTemplate("client/modules/chat/chat.html");
 class Chat {
-    static loginSuccessfulEvent = new Event("loginSuccessful");
-
     jsFrameSettings = {
         name: `frameChat`,
         title: `Chat`,

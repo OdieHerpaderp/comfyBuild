@@ -1,10 +1,10 @@
-import { getHtmlTemplate, templateMixin } from "templateHelpers";
+import { getHTMLTemplate, useTemplate } from "templateHelper";
 import { jsFrameMixin } from "JSFrame";
 import { socket } from "singletons"
 
-class LoginScreen {
+let template = await getHTMLTemplate("client/modules/loginScreen/loginScreen.html");
+class LoginScreen extends EventTarget {
     static loginSuccessfulEvent = new Event("loginSuccessful");
-    static template;
 
     jsFrameSettings = {
         name: `frameLogin`,
@@ -18,57 +18,36 @@ class LoginScreen {
         }
     }
 
+    username = "";
+    password = "";
+
     constructor() {
-        var that = this;
-        this.loadTemplate();
+        super();
+        useTemplate.bind(this)(template);
 
-        this.registerInput("username");
-        this.registerInput("password");
-
-        this.registerAction("signIn", () => { that.signIn(); });
-        this.registerAction("signUp", () => { that.signUp(); });
-
-        socket.on('signInResponse', function (data) {
-            if (data.success) {
-                that.dispatchEvent(LoginScreen.loginSuccessfulEvent);
-            }
-            else {
-                alert("Sign in unsuccessul.");
-            }
+        socket.on('signInResponse', (data) => {
+            if (data.success) { this.dispatchEvent(LoginScreen.loginSuccessfulEvent); }
+            else { alert("Sign in unsuccessful."); }
         });
 
-        socket.on('signUpResponse', function (data) {
-            if (data.success) {
-                alert("Sign up successul.");
-            }
-            else {
-                alert("Sign up unsuccessul.");
-            }
+        socket.on('signUpResponse', (data) => {
+            if (data.success) { alert("Sign up successful."); }
+            else { alert("Sign up unsuccessful."); }
         });
     }
 
     signIn() {
-        var hashed = blowfish.encrypt(this.getInput("password"), 'sukkeltje', { cipherMode: 0, outputType: 1 });
-        socket.emit('signIn', { username: this.getInput("username"), password: hashed });
+        var hashed = blowfish.encrypt(this.password, 'sukkeltje', { cipherMode: 0, outputType: 1 });
+        socket.emit('signIn', { username: this.username, password: hashed });
     }
 
     signUp() {
-        var hashed = blowfish.encrypt(this.getInput("password"), 'sukkeltje', { cipherMode: 0, outputType: 1 });
-        socket.emit('signUp', { username: this.getInput("username"), password: hashed });
-    }
-
-    addEventListener(name, callback) {
-        this.HTML.addEventListener(name, callback);
-    }
-
-    dispatchEvent(event) {
-        this.HTML.dispatchEvent(event);
+        var hashed = blowfish.encrypt(this.password, 'sukkeltje', { cipherMode: 0, outputType: 1 });
+        socket.emit('signUp', { username: this.username, password: hashed });
     }
 }
 
 Object.assign(LoginScreen.prototype, jsFrameMixin);
-Object.assign(LoginScreen.prototype, templateMixin);
-LoginScreen.template = await getHtmlTemplate("client/modules/loginScreen/loginScreen.html");
 
 export { LoginScreen };
 export default LoginScreen;

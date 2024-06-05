@@ -46,11 +46,9 @@ class BaseEntity extends EventTarget {
             positionChanged = true;
         }
         if (positionChanged) {
-            console.log("setPosition", x, y)
             if (this.mesh) {
                 this.mesh.position.x = this.worldX;
                 this.mesh.position.z = this.worldY;
-                console.log("mesh position", this.mesh.position);
             }
             this.propertyChanged("position", { x: this.x, y: this.y });
         }

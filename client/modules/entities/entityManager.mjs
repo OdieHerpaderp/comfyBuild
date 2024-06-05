@@ -123,7 +123,6 @@ class EntityManager extends EventTarget {
 
     getBuildingAtCoordinates(x, y) {
         // Do we need something more efficient for this?
-        console.log(`getBuildingAtCoordinates(${x}, ${y});`);
         for (let buildingId in this.buildings) {
             let building = this.buildings[buildingId];
             if (building.x === x && building.y === y) {

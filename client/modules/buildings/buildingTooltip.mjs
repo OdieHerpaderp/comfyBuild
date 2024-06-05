@@ -73,8 +73,6 @@ class BuildingTooltip {
         this.selectedBuilding = building;
         this.selectedBuilding.addEventListener("propertyChanged", this);
 
-        console.log(building);
-
         this.setProperty("buildingType", building.buildingType);
         this.setProperty("upgradeLevel", building.upgradeLevel);
         this.setProperty("targetLevel", building.targetLevel);

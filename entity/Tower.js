@@ -47,7 +47,7 @@ Tower = function(param){
 				for (let i = 0; i < Math.round(self.upgradeLevel / 10 + 1); i++) { 
 					if(self.checkBuildingConsumptionAndBuild(self.towerType,self.upgradeLevel)){
 						self.status = "build";
-						self.buildTimer -= 2 / ((self.upgradeLevel / 10 + 1) * 1.35) * Base.constructionMultiplier;
+						self.buildTimer -= 2 / ((self.upgradeLevel / 10 + 1) * 1.34) * Base.constructionMultiplier;
 						//Base.Tech += self.upgradeLevel;
 					}
 					else self.status = "buildStop";
@@ -78,7 +78,7 @@ Tower = function(param){
 				}
 				self.status = "produceStop";
 			}
-			if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 50);
+			if(active) Base.morale -= Math.ceil(25 - self.upgradeLevel / 25);
 		}
 	};
 

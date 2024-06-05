@@ -360,7 +360,7 @@ var drawStats = function () {
     //TODO don't use getElementById
     //document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
     //document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
-    document.getElementById('paneLevel').innerHTML = "Lv: " + (1 + Math.round(Math.pow(techCR / 200, 0.75) * 10) / 100).toLocaleString();
+    document.getElementById('paneLevel').innerHTML = "Lv: " + (1 + Math.round(Math.pow(techCR / 200, 0.45) * 10) / 100).toLocaleString();
     if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
     document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
     document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();

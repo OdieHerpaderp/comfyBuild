@@ -145,22 +145,22 @@ loader.load('client/models/terrain.glb', function (gltf) {
 });
 
 // Global plane geom
-var directionalLight = new THREE.DirectionalLight(0xfffefa, 1.4);
-directionalLight.position.x = -1100;
+var directionalLight = new THREE.DirectionalLight(0xfffefa, 0.9);
+directionalLight.position.x = -11;
 directionalLight.position.y = 1700;
-directionalLight.position.z = -1100;
+directionalLight.position.z = 11;
 directionalLight.name = "Direc";
 directionalLight.target.position.set(0, 0, 0); // (x, y, z)
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xffffff, 0xeeffee, 0.8);
+const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.3);
 scene.add(light);
 
 // Create a point light
 const pointLight = new THREE.PointLight(0xeeeeee);
-pointLight.position.set(0, 20, 20);
-pointLight.intensity = 0.8;
+pointLight.position.set(0, 40, 10);
+pointLight.intensity = 1.8;
 
 // Add the point light to the scene
 scene.add(pointLight);
@@ -258,7 +258,7 @@ var animate = function () {
     }
 
     const cameraPosition = camera.position.clone();
-    const offset = new THREE.Vector3(0, 250, -500); // Offset vector (x, y, z)
+    const offset = new THREE.Vector3(0, 5, 5); // Offset vector (x, y, z)
 
     // Add the offset vector to the camera's position
     const lightPosition = cameraPosition.add(offset);
@@ -359,7 +359,7 @@ var drawStats = function () {
     if (!selfId)
         return;
     //TODO don't use getElementById
-    document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
+    //document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
     //document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
     //document.getElementById('paneLevel').innerHTML = "Level: " + Player.list[selfId].score + "(" + Player.list[selfId].exp + "/" + Math.round(2500 + Math.pow(Player.list[selfId].score * 750, 1.1)) + ")";
     if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
@@ -416,3 +416,4 @@ loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CEN
 loadDiv.style.display = 'none';
 settingsDiv.style.display = 'none';
 gameDiv.style.display = 'inline-block';
+socket.emit('sendInit');

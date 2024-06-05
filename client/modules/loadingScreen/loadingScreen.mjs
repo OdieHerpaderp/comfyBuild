@@ -22,7 +22,7 @@ class LoadingScreen extends EventTarget {
     onProgress(_url, itemsLoaded, itemsTotal) {
         this.itemsLoaded = itemsLoaded;
         this.itemsTotal = itemsTotal;
-        this.percentage = Math.round((itemsLoaded / itemsTotal) * 100);
+        this.percentage = Math.floor((itemsLoaded / itemsTotal) * 100);
         this.loadProgressBar.setAttribute("value", this.percentage);
     }
 

@@ -78,6 +78,8 @@ var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
 var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true; // Enables Shadows
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 // Camera controls
 const gameElement = document.getElementById("game");
@@ -146,13 +148,23 @@ grid.position.z = size / 2 - 2.4;
 grid.rotation.x = Math.PI * 1.5;
 
 // Add the mesh to the scene
+//grid.receiveShadow = true;
 scene.add(grid);
 
 const loader = new GLTFLoader();
 var terrain;
 
 loader.load('client/models/terrain.glb', function (gltf) {
+    gltf.scene.traverse ( function ( child )
+{
+    if ( child.isMesh )
+    {
+        //child.castShadow = true;
+        child.receiveShadow = true;
+    }
+});
     terrain = gltf.scene;
+    terrain.receiveShadow = true;
     terrain.position.x = size / 2 - 2.4;
     terrain.position.y = -0.16;
     terrain.position.z = size / 2 - 2.4;
@@ -160,6 +172,7 @@ loader.load('client/models/terrain.glb', function (gltf) {
     // Traverse the scene and apply anisotropic filtering to all textures
     gltf.scene.traverse(function (child) {
         if (child.isMesh) {
+            child.receiveShadow = true;
             child.material.map && (child.material.map.anisotropy = Math.min(maxAnisotropy, 16));
             child.material.emissiveMap && (child.material.emissiveMap.anisotropy = Math.min(maxAnisotropy, 16));
             child.material.roughnessMap && (child.material.roughnessMap.anisotropy = Math.min(maxAnisotropy, 16));
@@ -175,25 +188,42 @@ loader.load('client/models/terrain.glb', function (gltf) {
 });
 
 // Global plane geom
-var directionalLight = new THREE.DirectionalLight(0xfffefa, 0.8);
-directionalLight.position.x = -11;
-directionalLight.position.y = 1700;
-directionalLight.position.z = 2500;
+var directionalLight = new THREE.DirectionalLight(0xfffefa, 2.2);
 directionalLight.name = "Direc";
-directionalLight.target.position.set(0, 0, 0); // (x, y, z)
+directionalLight.position.set(222, 222, 222); // (x, y, z)
+directionalLight.target.position.set(110, 0, 110); // (x, y, z)
+directionalLight.castShadow = true;
+directionalLight.shadow.camera.left = -40;
+directionalLight.shadow.camera.right = 40;
+directionalLight.shadow.camera.top = 40;
+directionalLight.shadow.camera.bottom = -40;
+directionalLight.shadow.zoom = 5.1;
+directionalLight.shadow.mapSize.width = 2048; // default 512
+directionalLight.shadow.mapSize.height = 2048; // default 512
+directionalLight.shadow.camera.near = 0.5; // default
+directionalLight.shadow.camera.far = 400; // default 500
+
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 
-const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.6);
-scene.add(light);
+//Create a helper for the shadow camera (optional)
+const helper = new THREE.CameraHelper( directionalLight.shadow.camera );
+scene.add( helper );
+
+
+
+
+const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.1);
+//scene.add(light);
 
 // Create a point light
 const pointLight = new THREE.PointLight(0xeeeeee);
 pointLight.position.set(0, 0, 0);
-pointLight.intensity = 1.4;
+pointLight.intensity = 0.8;
+//pointLight.castShadow = true;
 
 // Add the point light to the scene
-scene.add(pointLight);
+//scene.add(pointLight);
 var textureSB = {};
 //cubemap HDR
 new RGBELoader()
@@ -384,6 +414,10 @@ var animate = function () {
         updateEnvironmentMap(hour)
     }
 
+    directionalLight.position.set(controls.target.x - 111 + hour * 11, 122, controls.target.z + 188); // (x, y, z)
+    directionalLight.target.position.set(controls.target.x, 0, controls.target.z); // (x, y, z)
+    pointLight.position.set(controls.target.x, (20 + camera.position.y) / 2, controls.target.z + 10);
+
     if (delta > 45 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
     if (delta > 30 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";
     else if (delta > 15 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
@@ -393,13 +427,7 @@ var animate = function () {
     if (deltaCount >= 20) {
         deltaCount /= 2;
         deltaAvg /= 2;
-    }
-
-    const cameraPosition = camera.position.clone();
-    const offset = new THREE.Vector3(0, 240 - camera.position.y * 1.5, -200); // Offset vector (x, y, z)
-    // Add the offset vector to the camera's position
-    const lightPosition = cameraPosition.add(offset);
-    pointLight.position.copy(lightPosition);
+    }  
 
     //cube.rotation.x += 0.01;
     if (oldWidth != window.innerWidth || oldHeight != window.innerHeight) {

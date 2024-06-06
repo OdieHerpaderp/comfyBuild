@@ -82,6 +82,16 @@ class Building extends BaseEntity {
                 this.mesh = spriteMesh;
             }
         }
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+        this.mesh.traverse ( function ( child )
+        {
+            if ( child.isMesh )
+            {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
         this.mesh.position.set(this.worldX, 0, this.worldY - 0.01);
 
         // Bottom plane

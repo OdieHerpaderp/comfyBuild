@@ -57,15 +57,33 @@ class Building extends BaseEntity {
         if (model) {
             // Use model if available
             this.mesh = model.clone();
+            this.mesh.traverse ( function ( child )
+            {
+                if ( child.isMesh )
+                {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
         }
         else {
             model = modelCache.getModel('fallback');
             if (model) {
                 // Use model if available
                 this.mesh = model.clone();
+                this.mesh.castShadow = true;
+                this.mesh.receiveShadow = true;
             }
+            this.mesh.traverse ( function ( child )
+            {
+                if ( child.isMesh )
+                {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
             // Sprite fallback
-            let geometry = new THREE.PlaneGeometry(1.8, 1.8, 1.8);
+            let geometry = new THREE.PlaneGeometry(1.4, 1.4, 1.4);
 
             let texture = new THREE.TextureLoader().load('/client/img/towers/' + this.buildingType + '.png');
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -73,7 +91,7 @@ class Building extends BaseEntity {
 
             let material = new THREE.MeshLambertMaterial({ color: '#EEEEEE', map: texture, side: THREE.DoubleSide, transparent: true });
             let spriteMesh = new THREE.Mesh(geometry, material);
-            spriteMesh.position.set(0, 1.5, 1.8);
+            spriteMesh.position.set(0, 1.3, 1.8);
 
             if (this.mesh) {
                 this.mesh.add(spriteMesh);
@@ -82,16 +100,8 @@ class Building extends BaseEntity {
                 this.mesh = spriteMesh;
             }
         }
-        this.mesh.castShadow = true;
-        this.mesh.receiveShadow = true;
-        this.mesh.traverse ( function ( child )
-        {
-            if ( child.isMesh )
-            {
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
+        //this.mesh.castShadow = true;
+        //this.mesh.receiveShadow = true;
         this.mesh.position.set(this.worldX, 0, this.worldY - 0.01);
 
         // Bottom plane

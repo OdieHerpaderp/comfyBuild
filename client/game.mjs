@@ -334,7 +334,7 @@ function updateEnvironmentMap(hour) {
             scene.environment = textureSB["night"];
         }
     } 
-    else { console.warn("Textures are still loading..."); }
+    //else { console.warn("Textures are still loading..."); }
 }
 
 var targetFrameTime = 20;
@@ -408,7 +408,7 @@ var animate = function () {
             if(hour >= 23) hour = 0;
             else hour++;
             minute = 0;
-            console.log("Time is " + hour + ":" + minute);
+            //console.log("Time is " + hour + ":" + minute);
         }
         else minute++;
         updateEnvironmentMap(hour)

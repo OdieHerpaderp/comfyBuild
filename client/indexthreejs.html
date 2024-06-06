@@ -4,7 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="./client/style.css">
+	<!--<link rel="stylesheet" href="./client/style.css">-->
+	<link rel="stylesheet" href="./client/generated/style.css">
 	<script type="importmap">
 		{
 			"imports": {
@@ -47,19 +48,19 @@
 		<div id="game" style="overflow:hidden; position:absolute;width:100%;height:100%;top:0px; left:0px;">
 			<canvas id="threejs" style="z-index: -1; position: absolute; left:0; top:0;"></canvas>
 
-			<a class="button" href="javascript:zoomOut()"
+			<a class="button comfyButton" href="javascript:zoomOut()"
 				style="position:absolute;height:24px;top:4px;left:4px;width:31px">
 				-
 			</a>
-			<a class="button" href="javascript:zoomDefault()"
+			<a class="button comfyButton" href="javascript:zoomDefault()"
 				style="position:absolute;height:24px;top:4px;left:39px;width:31px">
 				R
 			</a>
-			<a class="button" href="javascript:zoomIn()"
+			<a class="button comfyButton" href="javascript:zoomIn()"
 				style="position:absolute;height:24px;top:4px;left:74px;width:31px">
 				+
 			</a>
-			<a class="button" href="javascript:openSettings()"
+			<a class="button comfyButton" href="javascript:openSettings()"
 				style="position:absolute;height:24px;top:4px;left:109px;width:31px">
 				S
 			</a>
@@ -71,14 +72,14 @@
 		<div id="settingsDiv" style="position:absolute; width:100%; height:100%; display:none;">
 			<div
 				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:40px; margin: auto auto;text-align: center; border-style: solid; line-height: 40px;">
-				Settings <a class="button" href="javascript:closeSettings()"
+				Settings <a class="button comfyButton" href="javascript:closeSettings()"
 					style="position:absolute;height:24px;top:4px;right:4px;width:31px">X</a>
 			</div>
 			<div
 				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:300px; margin: auto auto; border-style: solid;">
-				<a class="button" id="buttonDisplayHP" href="javascript:hpDisplay()"
+				<a class="button comfyButton" id="buttonDisplayHP" href="javascript:hpDisplay()"
 					style="position:absolute;height:24px;top:4px;right:20px;width:260px">HP Display ON</a>
-				<a class="button" id="buttonDisplayDAM" href="javascript:damageDisplay()"
+				<a class="button comfyButton" id="buttonDisplayDAM" href="javascript:damageDisplay()"
 					style="position:absolute;height:24px;top:36px;right:20px;width:260px">Damage Display ALL</a>
 				<br><br><br><br>
 				<div class="slidecontainer">
@@ -90,10 +91,10 @@
 					<input type="range" min="50" max="200" value="100" class="slider" id="renderScaleSlider">
 				</div>
 				<br>
-				<a id="testA">load 2k 4mb envmap</a><br>
-				<a id="testB">load 8k 56mb envmap</a><br>
-				<a id="testC">load original 57mb envmap</a><br>
-				<a id="testD">load old 25mb envmap</a>
+				<button id="testA" class="comfyButton">load 2k 4mb envmap</button><br>
+				<button id="testB" class="comfyButton">load 8k 56mb envmap</button><br>
+				<button id="testC" class="comfyButton">load original 57mb envmap</button><br>
+				<button id="testD" class="comfyButton">load old 25mb envmap</button>
 			</div>
 		</div>
 	</div>

@@ -8,7 +8,7 @@ class ResourceList {
     jsFrameSettings = {
         name: "frameStockpile",
         title: "Stockpile",
-        left: 30, top: 360, width: 320, height: 420, minWidth: 200, minHeight: 110
+        left: 4, top: 180, width: 250, height: 420, minWidth: 200, minHeight: 110
     };
 
     constructor() {

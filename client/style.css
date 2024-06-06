@@ -460,3 +460,8 @@ td {
     bottom: 0;
     z-index: 999;
 }
+
+#playerList, #worldInfo {
+    font-size: 16px;
+    padding: 4px;
+}

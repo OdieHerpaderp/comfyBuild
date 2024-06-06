@@ -10,9 +10,10 @@ class Player extends BaseEntity {
     constructor(initData, isLocal) {
         super(initData);
 
+        if (!initData.username) { initData.username = "Anonymous"; }
         this.color = initData.color ?? "#fff";
         this.number = initData.number ?? -1;
-        this.username = initData.username ?? "anonymous";
+        this.username = initData.username;
         this.isLocal = isLocal;
 
         let geometry = new THREE.PlaneGeometry(5, 5, 1, 1);

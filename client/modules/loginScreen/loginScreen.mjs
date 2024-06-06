@@ -1,6 +1,6 @@
 import { getHTMLTemplate, useTemplate } from "templateHelper";
 import { jsFrameMixin } from "JSFrame";
-import { socket } from "singletons"
+import { socket } from "singletons";
 
 let template = await getHTMLTemplate("client/modules/loginScreen/loginScreen.html");
 class LoginScreen extends EventTarget {

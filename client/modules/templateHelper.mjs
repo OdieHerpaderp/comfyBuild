@@ -102,6 +102,9 @@ class ListBinding {
 class ContentBinding {
     set value(newValue) {
         newValue ??= "";
+        if (typeof newValue === "number") {
+            newValue = newValue.toLocaleString();
+        }
         if (newValue instanceof Element) { this.element.replaceChildren(newValue); }
         else if (newValue.domElement instanceof Element) { this.element.replaceChildren(newValue.domElement); }
         else { this.element.textContent = newValue; }

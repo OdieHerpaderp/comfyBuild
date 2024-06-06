@@ -2,13 +2,15 @@ import { EntityManager } from "entityManager";
 import { ResourceList } from "resourceList";
 import { LoadingScreen } from "loadingScreen";
 import { LoginScreen } from "loginScreen";
+import { WorldInfo } from "worldInfo";
 import { Chat } from "chat";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
-import BuildingsFrame from "./modules/buildings/buildingsFrame.mjs";
+import BuildingsFrame from "buildingsFrame";
+import { PlayerList } from "playerList";
 
 // Loading screen
 let loadingScreen = new LoadingScreen();
@@ -19,6 +21,9 @@ loadingScreen.addEventListener("loadComplete", () => {
     loadingScreen = undefined;
 });
 document.body.appendChild(loadingScreen.domElement);
+
+// World information
+var worldInfo = new WorldInfo();
 
 // Buildings
 var buildingsFrame = new BuildingsFrame();
@@ -38,8 +43,16 @@ loginScreen.addEventListener("loginSuccessful", () => {
     loginScreen.closeFrame();
     stockpile.showFrame();
     buildingsFrame.showFrame();
+    buildingsFrame.setFramePosition(window.innerWidth - 4, window.innerHeight - 4, 'RIGHT_BOTTOM');
     chat.showFrame();
+    chat.setFramePosition(4, window.innerHeight - 4, "LEFT_BOTTOM");
+    playerList.showFrame();
+    playerList.setFramePosition(window.innerWidth - 4, 4, "RIGHT_TOP");
+    worldInfo.showFrame();
 });
+
+// Player list
+var playerList = new PlayerList();
 
 //ThreeJS
 var scene = new THREE.Scene();
@@ -49,8 +62,14 @@ var entityManager = new EntityManager(scene);
 entityManager.addEventListener("selectedBuildingChanged", (event) => {
     buildingsFrame.updateDisplay(event.detail.building);
 });
+entityManager.addEventListener("playerConnected", (event) => {
+    playerList.addPlayer(event.detail.player);
+});
+entityManager.addEventListener("playerDisconnected", (event) => {
+    playerList.removePlayer(event.detail.player);
+});
 
-var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight - 44) * 1.15, 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight) * 1.15, 0.1, 1000);
 camera.position.set(260, 100, 460);
 
 var fakePlayer = { left: false, right: false, up: false, down: false };
@@ -58,7 +77,7 @@ var fakePlayer = { left: false, right: false, up: false, down: false };
 var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
 var oldHeight = 0;
-renderer.setSize(window.innerWidth, window.innerHeight - 44);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Camera controls
 const gameElement = document.getElementById("game");
@@ -189,11 +208,9 @@ new RGBELoader()
         scene.environment = texture;
     });
 
-var frameTime = 10;
 var targetFrameTime = 20;
 var renderScale = 100;
 var previousTime = 10;
-var avgDelta = 30;
 var displayHealth = true;
 var displayDamage = 2;
 
@@ -253,7 +270,8 @@ var animate = function () {
     controls.update();
 
     if (currentTime - 30 > lastEmit) {
-        drawStats();
+        worldInfo.tick();
+        stockpile.updateResourceDisplays();
         lastEmit = currentTime;
     }
 
@@ -279,10 +297,9 @@ var animate = function () {
         console.log("WE GON RESIZE");
         oldWidth = window.innerWidth;
         oldHeight = window.innerHeight;
-        renderer.setSize(window.innerWidth, window.innerHeight - 44);
+        renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio * renderScale / 100);
-        const canvas = renderer.domElement;
-        camera.aspect = window.innerWidth / (window.innerHeight - 44) * 1.06;
+        camera.aspect = (window.innerWidth / window.innerHeight) * 1.06;
         camera.updateProjectionMatrix();
     }
     renderer.render(scene, camera);
@@ -290,109 +307,15 @@ var animate = function () {
 
 animate();
 
+var settingsDiv = document.getElementById('settingsDiv');
 window.openSettings = function (e) {
     settingsDiv.style.display = 'initial';
 }
-
 window.closeSettings = function (e) {
     settingsDiv.style.display = 'none';
 }
 
-var morale = 0;
-var health = 0;
-var maxHealth = 0;
-var tech = 0;
-var techCR = 0;
-
-var loadDiv = document.getElementById('loadDiv');
-var settingsDiv = document.getElementById('settingsDiv');
-var hudButtons = document.getElementById('buttenz');
-
-socket.on('evalAnswer', function (data) {
-    console.log(data);
-});
-
-socket.on('gameState', function (data) {
-    // TODO: move to a module and rename to the actual values
-    if (data.health !== undefined) {
-        health = data.health;
-    }
-    if (data.maxHealth !== undefined) {
-        maxHealth = data.maxHealth;
-    }
-    if (data.tech !== undefined) {
-        tech = data.tech;
-    }
-    if (data.morale !== undefined) {
-        morale = data.morale;
-    }
-});
-
 //UI
-var Player = function (initPack) {
-    var self = {};
-    self.id = initPack.id;
-    self.color = initPack.color;
-    self.number = initPack.number;
-    self.username = initPack.username;
-    self.x = initPack.x;
-    self.y = initPack.y;
-    self.scoreBoard = [];
-
-    Player.list[self.id] = self;
-    return self;
-}
-Player.list = {};
-
-var selfId = null;
-socket.on('init', function (data) {
-    if (data.selfId) selfId = data.selfId;
-
-    for (var i = 0; i < data.player.length; i++) {
-        // TODO: top bar still uses this...
-        new Player(data.player[i]);
-    }
-});
-
-socket.on('remove', function (data) {
-    //{player:[12323],bullet:[12323,123123]}
-    for (var i = 0; i < data.player.length; i++) {
-        delete Player.list[data.player[i]];
-    }
-});
-
-setInterval(function () {
-    drawScoreboard();
-}, 100);
-
-var drawStats = function () {
-    if (!selfId)
-        return;
-    //TODO don't use getElementById
-    //document.getElementById('panePos').innerHTML = "X: " + Math.round(Player.list[selfId].x) + "(" + Math.round(Player.list[selfId].x / 48) + ")" + " Y: " + Math.round(Player.list[selfId].y) + "(" + Math.round(Player.list[selfId].y / 48) + ")";
-    //document.getElementById('paneGold').innerHTML = "Gold: " + Player.list[selfId].gold + " RP: " + Player.list[selfId].research;
-    document.getElementById('paneLevel').innerHTML = "Lv: " + (1 + Math.round(Math.pow(techCR / 200, 0.45) * 10) / 100).toLocaleString();
-    if (tech > techCR) techCR += Math.floor(1 + (tech - techCR) / 10);
-    document.getElementById('paneTech').innerHTML = "Tech: " + techCR.toLocaleString();
-    document.getElementById('paneHealth').innerHTML = "Pop: " + health.toLocaleString() + " / " + maxHealth.toLocaleString();
-    document.getElementById('paneWave').innerHTML = "Morale: " + morale / 100;
-
-    stockpile.updateResourceDisplays();
-}
-
-var drawScoreboard = function () {
-    var text = "";
-
-    text = "<table style='width:100%;'><tr><td style='width:18% !important;' id='scoreBoardtd'>Name</td><td style='width:6% !important;' id='scoreBoardtd'>Kills</td><td id='scoreBoardtd'>Physical</td><td id='scoreBoardtd'>Siege</td><td id='scoreBoardtd'>Arcane</td><td id='scoreBoardtd'>Heroic</td><td id='scoreBoardtd'>Elemental</td></tr>";
-    for (var i in Player.list) {
-        //console.log(Player.list[i].username + ": " + Player.list[i].scoreBoard);
-        text += "<tr><td style='width:18% !important; color:" + Player.list[i].color + ";' id='scoreBoardtd'>" + Player.list[i].username + "</td><td style='width:6% !important;' id='scoreBoardtd'>" + Player.list[i].kills + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[0]) + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[1]) + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[2]) + "</td>" + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[3]) + "</td>" + "</td><td id='scoreBoardtd'>" + Math.round(Player.list[i].scoreBoard[4]) + "</td></tr>";
-    }
-
-    text += "</table>";
-    document.getElementById('scoreBoard').innerHTML = text;
-}
-
 gameElement.onkeydown = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = true;

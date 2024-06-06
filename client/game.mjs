@@ -193,13 +193,13 @@ directionalLight.name = "Direc";
 directionalLight.position.set(222, 222, 222); // (x, y, z)
 directionalLight.target.position.set(110, 0, 110); // (x, y, z)
 directionalLight.castShadow = true;
-directionalLight.shadow.camera.left = -40;
-directionalLight.shadow.camera.right = 40;
-directionalLight.shadow.camera.top = 40;
-directionalLight.shadow.camera.bottom = -40;
+directionalLight.shadow.camera.left = -50;
+directionalLight.shadow.camera.right = 50;
+directionalLight.shadow.camera.top = 50;
+directionalLight.shadow.camera.bottom = -50;
 directionalLight.shadow.zoom = 5.1;
-directionalLight.shadow.mapSize.width = 2048; // default 512
-directionalLight.shadow.mapSize.height = 2048; // default 512
+directionalLight.shadow.mapSize.width = 4096; // default 512
+directionalLight.shadow.mapSize.height = 4096; // default 512
 directionalLight.shadow.camera.near = 0.5; // default
 directionalLight.shadow.camera.far = 400; // default 500
 
@@ -414,7 +414,7 @@ var animate = function () {
         updateEnvironmentMap(hour)
     }
 
-    directionalLight.position.set(controls.target.x - 111 + hour * 11, 122, controls.target.z + 188); // (x, y, z)
+    directionalLight.position.set(controls.target.x - 133 + hour * 10 + minute / 6, 122, controls.target.z + 188); // (x, y, z)
     directionalLight.target.position.set(controls.target.x, 0, controls.target.z); // (x, y, z)
     pointLight.position.set(controls.target.x, (20 + camera.position.y) / 2, controls.target.z + 10);
 

@@ -194,8 +194,34 @@ pointLight.intensity = 1.4;
 
 // Add the point light to the scene
 scene.add(pointLight);
-
+var textureSB = {};
 //cubemap HDR
+new RGBELoader()
+    .setPath('/client/img/')
+    .load('industrial_sunset_puresky_2k.hdr', function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearFilter;
+        //texture.generateMipmaps = true;
+        //scene.background = texture;
+        //scene.backgroundBlurriness = 2;
+        //scene.environment = texture;
+        textureSB["2k"] = texture;
+});
+
+new RGBELoader()
+    .setPath('/client/img/')
+    .load('industrial_sunset_puresky_8k.hdr', function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearFilter;
+        //texture.generateMipmaps = true;
+        //scene.background = texture;
+        //scene.backgroundBlurriness = 2;
+        //scene.environment = texture;
+        textureSB["8k"] = texture;
+});
+
 new RGBELoader()
     .setPath('/client/img/')
     .load('skybox.hdr', function (texture) {
@@ -203,10 +229,53 @@ new RGBELoader()
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
         //texture.generateMipmaps = true;
-        scene.background = texture;
-        scene.backgroundBlurriness = 2;
-        scene.environment = texture;
-    });
+        //scene.background = texture;
+        //scene.backgroundBlurriness = 2;
+        //scene.environment = texture;
+        textureSB["original"] = texture;
+});
+
+new RGBELoader()
+    .setPath('/client/img/')
+    .load('skyboxOld.hdr', function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearFilter;
+        //texture.generateMipmaps = true;
+        //scene.background = texture;
+        //scene.backgroundBlurriness = 2;
+        //scene.environment = texture;
+        textureSB["old"] = texture;
+});
+
+
+const buttonSkybox = document.getElementById("testA");
+buttonSkybox.addEventListener('click', (event) => {
+    console.log("2k");
+    scene.background = textureSB["2k"];
+    scene.environment = textureSB["2k"];
+});
+
+const buttonSkyboxB = document.getElementById("testB");
+buttonSkyboxB.addEventListener('click', (event) => {
+    console.log("8k");
+    scene.background = textureSB["8k"];
+    scene.environment = textureSB["8k"];
+});
+
+const buttonSkyboxC = document.getElementById("testC");
+buttonSkyboxC.addEventListener('click', (event) => {
+    console.log("original");
+    scene.background = textureSB["original"];
+    scene.environment = textureSB["original"];
+});
+
+const buttonSkyboxD = document.getElementById("testD");
+buttonSkyboxD.addEventListener('click', (event) => {
+    console.log("old");
+    scene.background = textureSB["old"];
+    scene.environment = textureSB["old"];
+});
 
 var targetFrameTime = 20;
 var renderScale = 100;

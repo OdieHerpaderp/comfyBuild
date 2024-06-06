@@ -198,7 +198,7 @@ var textureSB = {};
 //cubemap HDR
 new RGBELoader()
     .setPath('/client/img/')
-    .load('industrial_sunset_puresky_2k.hdr', function (texture) {
+    .load('morning.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
@@ -206,12 +206,12 @@ new RGBELoader()
         //scene.background = texture;
         //scene.backgroundBlurriness = 2;
         //scene.environment = texture;
-        textureSB["2k"] = texture;
+        textureSB["morning"] = texture;
 });
 
 new RGBELoader()
     .setPath('/client/img/')
-    .load('industrial_sunset_puresky_8k.hdr', function (texture) {
+    .load('noon.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
@@ -219,12 +219,12 @@ new RGBELoader()
         //scene.background = texture;
         //scene.backgroundBlurriness = 2;
         //scene.environment = texture;
-        textureSB["8k"] = texture;
+        textureSB["noon"] = texture;
 });
 
 new RGBELoader()
     .setPath('/client/img/')
-    .load('skybox.hdr', function (texture) {
+    .load('evening.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
@@ -232,12 +232,12 @@ new RGBELoader()
         //scene.background = texture;
         //scene.backgroundBlurriness = 2;
         //scene.environment = texture;
-        textureSB["original"] = texture;
+        textureSB["evening"] = texture;
 });
 
 new RGBELoader()
     .setPath('/client/img/')
-    .load('skyboxOld.hdr', function (texture) {
+    .load('night.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
@@ -245,7 +245,7 @@ new RGBELoader()
         //scene.background = texture;
         //scene.backgroundBlurriness = 2;
         //scene.environment = texture;
-        textureSB["old"] = texture;
+        textureSB["night"] = texture;
 });
 
 
@@ -276,6 +276,36 @@ buttonSkyboxD.addEventListener('click', (event) => {
     scene.background = textureSB["old"];
     scene.environment = textureSB["old"];
 });
+
+// Call this function to change the environmentmap based on time of day.
+function updateEnvironmentMap(hour) {
+    // Validate the input hour
+    if (hour < 0 || hour > 23) {
+      console.error("Invalid hour value. Please provide a value between 0 and 23.");
+      return;
+    }
+  
+    // Check if all textures have been loaded
+    if (textureSB.morning && textureSB.noon && textureSB.evening && textureSB.night) {
+        if (hour > 18) {
+            scene.background = textureSB["evening"];
+            scene.environment = textureSB["evening"];
+        }
+        else if (hour > 12) {
+            scene.background = textureSB["noon"];
+            scene.environment = textureSB["noon"];
+        }
+        else if (hour > 6) {
+            scene.background = textureSB["morning"];
+            scene.environment = textureSB["morning"];
+        }
+        else {
+            scene.background = textureSB["night"];
+            scene.environment = textureSB["night"];
+        }
+    } 
+    else { console.warn("Textures are still loading..."); }
+}
 
 var targetFrameTime = 20;
 var renderScale = 100;
@@ -327,6 +357,8 @@ var pollInputs = function (delta) {
 var lastEmit = new Date().getTime();
 var deltaAvg = 0;
 var deltaCount = 0;
+var minute = 0;
+var hour = 6;
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
@@ -342,6 +374,14 @@ var animate = function () {
         worldInfo.tick();
         stockpile.updateResourceDisplays();
         lastEmit = currentTime;
+        if(minute >= 59) { 
+            if(hour >= 23) hour = 0;
+            else hour++;
+            minute = 0;
+            console.log("Time is " + hour + ":" + minute);
+        }
+        else minute++;
+        updateEnvironmentMap(hour)
     }
 
     if (delta > 45 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";

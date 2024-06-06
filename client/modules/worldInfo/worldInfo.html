@@ -1,8 +1,22 @@
 <template>
-    <div id="worldInfo" class="flex-right">
-        <div class="paneOuter"><div class="paneHeader">Tech: </div><div class="paneInner"><span data-content="techDisplay"></span></div></div>
-        <div class="paneOuter"><div class="paneHeader">Level: </div><div class="paneInner"><span data-content="level"></span></div></div>
-        <div class="paneOuter"><div class="paneHeader">Population: </div><div class="paneInner"><span data-content="currentPopulation"></span>/<span data-content="maxPopulation"></span></div></div>
-        <div class="paneOuter"><div class="paneHeader">Morale: </div><div class="paneInner"><span data-content="morale"></span></div></div>
+    <div id="worldInfo" class="flex">
+        <div class="pane">
+            <div class="paneHeader">Tech: </div>
+            <div class="paneContent" data-content="techDisplay"></div>
+        </div>
+        <div class="pane">
+            <div class="paneHeader">Level: </div>
+            <div class="paneContent" data-content="level"></div>
+        </div>
+        <div class="pane">
+            <div class="paneHeader">Population: </div>
+            <div class="paneContent">
+                <span data-content="currentPopulation"></span>/<span data-content="maxPopulation"></span>
+            </div>
+        </div>
+        <div class="pane">
+            <div class="paneHeader">Morale: </div>
+            <div class="paneContent" data-content="morale"></div>
+        </div>
     </div>
 </template>

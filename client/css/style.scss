@@ -269,6 +269,7 @@ mark {
         }
 
         th {
+            padding: $defaultPadding;
             position: sticky;
             top: 0;
             background-color: rgba(0, 0, 0, 0.5);
@@ -310,7 +311,8 @@ mark {
     z-index: 999;
 }
 
-#playerList, #worldInfo {
+#playerList,
+#worldInfo {
     font-size: $font-size-normal;
     padding: $defaultPadding;
 }

@@ -6,8 +6,8 @@ let template = await getHTMLTemplate("client/modules/worldInfo/worldInfo.html");
 class WorldInfo {
     jsFrameSettings = {
         name: `frameInfo`,
-        title: `Tech`,
-        left: 4, top: 66, width: 200, height: 110, minWidth: 200, minHeight: 110,
+        title: `Status`,
+        left: 4, top: 66, width: 600, height: 110, minWidth: 600, minHeight: 110,
         style: {
             backgroundColor: '#22222255',
             overflow: 'hidden',

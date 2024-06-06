@@ -318,6 +318,36 @@ td {
     line-height: 27px;
 }
 
+.paneOuter {
+    margin:4px;
+    text-decoration: none;
+    background-color: #66666655;
+    border-style: solid;
+    border-color: #222222;
+    border-width: 1.5px;
+    flex-grow: 1; 
+}
+
+.paneHeader {
+    margin-left:8px;
+    text-align: left;
+    font-family: 'Roboto Slab';
+    font-size: 16px;
+}
+
+.paneInner {
+    margin:4px;
+    text-decoration: none;
+    background-color: #22222255;
+    border-style: solid;
+    border-color: #888888;
+    border-width: 1.5px;
+    text-align: right;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 20px;
+}
+
+
 .comfyButton:hover {
     box-shadow: 0 2px #222222, inset 0 2px #888888;
     color: #FFFFFF;

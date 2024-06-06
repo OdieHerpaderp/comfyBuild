@@ -392,6 +392,8 @@ var deltaAvg = 0;
 var deltaCount = 0;
 var minute = 0;
 var hour = 6;
+var partOfDay = 0;
+
 var animate = function () {
     requestAnimationFrame(animate);
     var currentTime = new Date().getTime();
@@ -414,25 +416,56 @@ var animate = function () {
             //console.log("Time is " + hour + ":" + minute);
         }
         else minute++;
-        updateEnvironmentMap(hour);
+        //updateEnvironmentMap(hour);
 
         let time = (hour + (minute / 60)) / 24; // time as a float between 0 and 1
-        if (time <= 0.25) { time = time * 2; } // Night time
-        else { // day time
-            let timeInv = 1 - time;
-            time = 1 - (timeInv / 3 * 2);
-        }
+
+        // Shift it so midnight happens at the right time
+        time += 0.25;
         time *= Math.PI * 2;
+        let sin = Math.sin(time) * 100;
+        let cos = Math.cos(time) * 100;
 
-        let sin = Math.sin(time) * 300;
-        let cos = Math.cos(time) * 300;
+        // With current math, noon/night last 8 hours each and morning/evening last 4 hours each.
+        // The two lights also perfectly cross-fade during morning/evening.
+        directionalLight.position.set(controls.target.x + cos, 50 - sin, controls.target.z + 100); // (x, y, z)
+        directionalLight2.position.set(controls.target.x - cos, 50 + sin, controls.target.z + 100); // (x, y, z)
 
-        directionalLight.position.set(controls.target.x + cos, 20 - sin, controls.target.z + 100); // (x, y, z)
-        directionalLight2.position.set(controls.target.x - cos, 20 + sin, controls.target.z + 100); // (x, y, z)
+        directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 1), 0);
+        directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 1), 0) * .25;
+
+        if (directionalLight.intensity == 0) {
+            if (partOfDay !== 0) {
+                partOfDay = 0;
+                scene.background = textureSB["night"];
+                scene.environment = textureSB["night"];
+            }
+        }
+        else if (directionalLight.intensity == 1) {
+            if (partOfDay !== 2) {
+                partOfDay = 2;
+                scene.background = textureSB["noon"];
+                scene.environment = textureSB["noon"];
+            }
+        }
+        else if (hour < 12) {
+            if (partOfDay !== 1) {
+                partOfDay = 1;
+                scene.background = textureSB["morning"];
+                scene.environment = textureSB["morning"];
+            }
+        }
+        else {
+            if (partOfDay !== 3) {
+                partOfDay = 3;
+                scene.background = textureSB["evening"];
+                scene.environment = textureSB["evening"];
+            }
+        }
     }
 
-    directionalLight.target.position.set(controls.target.x, 0, controls.target.z); // (x, y, z)
-    directionalLight2.target.position.set(controls.target.x, 0, controls.target.z); // (x, y, z)
+    directionalLight.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
+    directionalLight2.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
     pointLight.position.set(controls.target.x, (20 + camera.position.y) / 2, controls.target.z + 10);
 
     if (delta > 45 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";

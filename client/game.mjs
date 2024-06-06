@@ -207,11 +207,8 @@ scene.add(directionalLight);
 scene.add(directionalLight.target);
 
 //Create a helper for the shadow camera (optional)
-const helper = new THREE.CameraHelper( directionalLight.shadow.camera );
-scene.add( helper );
-
-
-
+//const helper = new THREE.CameraHelper( directionalLight.shadow.camera );
+//scene.add( helper );
 
 const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.1);
 //scene.add(light);
@@ -411,10 +408,15 @@ var animate = function () {
             //console.log("Time is " + hour + ":" + minute);
         }
         else minute++;
-        updateEnvironmentMap(hour)
-    }
+        updateEnvironmentMap(hour);
 
-    directionalLight.position.set(controls.target.x - 133 + hour * 10 + minute / 6, 122, controls.target.z + 188); // (x, y, z)
+        let time = (hour + (minute/60)) / 24;
+        let height = (-Math.cos(time * Math.PI * 2) + 1) * 61 + 20;
+        let xPos = controls.target.x + ((time -0.5) * 400);
+
+        directionalLight.position.set(xPos, height, controls.target.z + 100); // (x, y, z)
+    }
+    
     directionalLight.target.position.set(controls.target.x, 0, controls.target.z); // (x, y, z)
     pointLight.position.set(controls.target.x, (20 + camera.position.y) / 2, controls.target.z + 10);
 

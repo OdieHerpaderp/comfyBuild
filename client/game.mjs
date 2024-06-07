@@ -204,6 +204,9 @@ directionalLight.shadow.camera.far = 400; // default 500
 let directionalLight2 = directionalLight.clone();
 directionalLight2.intensity = 0.33;
 
+let directionalLight3 = directionalLight.clone();
+directionalLight3.intensity = 0.33;
+
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 scene.add(directionalLight2);
@@ -216,17 +219,17 @@ scene.add(directionalLight2.target);
 //const helper2 = new THREE.CameraHelper(directionalLight2.shadow.camera);
 //scene.add(helper2);
 
-const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.1);
-//scene.add(light);
+const light = new THREE.HemisphereLight(0x3399cc, 0xffffff, 0.5);
+scene.add(light);
 
 // Create a point light
-const pointLight = new THREE.PointLight(0xeeeeee);
+const pointLight = new THREE.PointLight(0xeeeeff);
 pointLight.position.set(0, 0, 0);
-pointLight.intensity = 0.4;
+pointLight.intensity = 1.4;
 //pointLight.castShadow = true;
 
 // Add the point light to the scene
-scene.add(pointLight);
+//scene.add(pointLight);
 var textureSB = {};
 //cubemap HDR
 new RGBELoader()
@@ -401,11 +404,11 @@ var animate = function () {
         directionalLight.position.set(controls.target.x + cos, 50 - sin, controls.target.z + 100); // (x, y, z)
         directionalLight2.position.set(controls.target.x - cos, 50 + sin, controls.target.z + 100); // (x, y, z)
 
-        directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 5), 0) * 2;
+        directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 5), 0) * 1.5;
         directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 5), 0) * 1.25;
 
         directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), Math.min(directionalLight.intensity, 1));
-        directionalLight2.color.set(0x0088ff).lerp(new THREE.Color(0x0088ff), Math.min(directionalLight.intensity, 1));
+        directionalLight2.color.set(0x224466).lerp(new THREE.Color(0x99ddff), Math.min(directionalLight.intensity, 1));
 
         if (directionalLight.intensity <= 0) {
             if (partOfDay !== 0) {
@@ -439,7 +442,7 @@ var animate = function () {
 
     directionalLight.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
     directionalLight2.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
-    pointLight.position.set(controls.target.x, (20 + camera.position.y) / 2, controls.target.z + 10);
+    //pointLight.position.set(controls.target.x, (2 + camera.position.y / 2) / 2, controls.target.z + 10);
 
     if (delta > 45 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
     if (delta > 30 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";

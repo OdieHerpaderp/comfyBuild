@@ -27,6 +27,8 @@ Tower = function(param){
 	self.status = "build";
 	self.active = true;
 	self.produceSuccess = 0;
+	self.workCapacity = 0;
+	self.workUsage = 0;
 
 	self.heroic = false;
 
@@ -39,7 +41,12 @@ Tower = function(param){
 			return 0;
 		}
 		else return Player.list[self.parent].team;
-	}
+	};
+
+	self.getMaxWorkers = function(upgradeLevel){
+		return Math.min(1 + Math.round((100 + Base.totalPopProduce - Base.totalPopWorker - Base.totalPopCarrier - Base.totalPopBuilder) / 100) , upgradeLevel);
+	};
+
 
 	self.comfyTick = function(){
 		//console.log("From " + self.phase);
@@ -64,8 +71,9 @@ Tower = function(param){
 			//else console.log("No mats to build");
 		}
 		if (self.phase == 2){
-			var popBuild = 1 + self.upgradeLevel * 3;
-			if (self.workRemaining > popBuild) { self.workRemaining -= popBuild; Base.totalPopBuilder += popBuild; }
+			self.workCapacity = Math.max(1, self.upgradeLevel * 2);
+			self.workUsage = Base.getMaxWorkers(Math.max(1, self.upgradeLevel * 2));
+			if (self.workRemaining > popBuild) { self.workRemaining -= self.workUsage; Base.totalPopBuilder += self.workUsage; }
 			else { self.workRemaining = 0; Base.totalPopBuilder += self.workRemaining; }
 
 			//console.log("Work remaining: " + self.workRemaining);
@@ -84,9 +92,10 @@ Tower = function(param){
 			}
 		}
 		if (self.phase == 4){
-			var popBuild = self.upgradeLevel * 3;
+			self.workCapacity = Math.max(1, self.upgradeLevel * 2);
+			self.workUsage = Base.getMaxWorkers(Math.max(1, self.upgradeLevel * 2));
 			//console.log("Work remaining: " + self.workRemaining);
-			if (self.workRemaining > popBuild) { self.workRemaining -= popBuild; Base.totalPopWorker += popBuild; }
+			if (self.workRemaining > popBuild) { self.workRemaining -= self.workUsage; Base.totalPopWorker += self.workUsage; }
 			else { self.workRemaining = 0; Base.totalPopWorker += self.workRemaining; }
 
 			if(self.workRemaining == 0) { 

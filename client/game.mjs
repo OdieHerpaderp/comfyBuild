@@ -434,6 +434,8 @@ var animate = function () {
         directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 1), 0);
         directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 1), 0) * .25;
 
+        directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), directionalLight.intensity);
+
         if (directionalLight.intensity == 0) {
             if (partOfDay !== 0) {
                 partOfDay = 0;

@@ -222,7 +222,7 @@ const light = new THREE.HemisphereLight(0xddeeff, 0x225522, 0.1);
 // Create a point light
 const pointLight = new THREE.PointLight(0xeeeeee);
 pointLight.position.set(0, 0, 0);
-pointLight.intensity = 0.8;
+pointLight.intensity = 0.4;
 //pointLight.castShadow = true;
 
 // Add the point light to the scene
@@ -393,16 +393,6 @@ var deltaCount = 0;
 var minute = 0;
 var hour = 6;
 var partOfDay = 0;
-var partOfDayPrev = 5;
-var currentEnvMap = "none";
-var targetEnvMap = "none";
-
-var partOfDayToEnvMap = function(tod){
-    if(tod == 0) return "night"
-    else if(tod == 1) return "morning"
-    else if(tod == 2) return "noon"
-    else return "evening"
-}
 
 var animate = function () {
     requestAnimationFrame(animate);
@@ -449,29 +439,31 @@ var animate = function () {
         if (directionalLight.intensity == 0) {
             if (partOfDay !== 0) {
                 partOfDay = 0;
+                scene.background = textureSB["night"];
+                scene.environment = textureSB["night"];
             }
         }
         else if (directionalLight.intensity == 1) {
             if (partOfDay !== 2) {
                 partOfDay = 2;
+                scene.background = textureSB["noon"];
+                scene.environment = textureSB["noon"];
             }
         }
         else if (hour < 12) {
             if (partOfDay !== 1) {
                 partOfDay = 1;
+                scene.background = textureSB["morning"];
+                scene.environment = textureSB["morning"];
             }
         }
         else {
             if (partOfDay !== 3) {
                 partOfDay = 3;
+                scene.background = textureSB["evening"];
+                scene.environment = textureSB["evening"];
             }
         }
-    }
-
-    if (partOfDay !== partOfDayPrev){
-        scene.background = textureSB[partOfDayToEnvMap(partOfDay)];
-        scene.environment = textureSB[partOfDayToEnvMap(partOfDay)];
-        partOfDayPrev = partOfDay;
     }
 
     directionalLight.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)

@@ -18,11 +18,12 @@ Tower = function(param){
 	self.attackTimer = 0;
 	self.upgradeLevel = 0;
 	self.targetLevel = 1;
-	self.buildTimer = 35;
-	self.productionTimer = 5;
+	self.buildTimer = 0;
+	self.workRemaining = 0;
 	self.transforms = 0;
 	self.value = param.value;
 	self.team = self.whatTeam; // none, west, east
+	self.phase = 0; // 0 idle, 1 buildGather, 2 build, 3 consume, 4 produce
 	self.status = "build";
 	self.active = true;
 	self.produceSuccess = 0;
@@ -41,13 +42,68 @@ Tower = function(param){
 	}
 
 	self.comfyTick = function(){
+		//console.log("From " + self.phase);
+		if (self.phase == 0){
+			if (self.targetLevel > self.upgradeLevel){
+				self.workRemaining = 15 + self.upgradeLevel * 30;
+				self.phase = 1;
+				console.log("To buildGather");
+			}
+			else {
+				self.phase = 3;
+				console.log("To consume");
+			}
+		}
+		if (self.phase == 1){
+			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
+				self.workRemaining = 15 + self.upgradeLevel * 30;
+				Base.totalPopCarrier += 1;
+				self.phase = 2;
+				console.log("To build");
+			}
+			//else console.log("No mats to build");
+		}
+		if (self.phase == 2){
+			var popBuild = 1 + self.upgradeLevel * 3;
+			if (self.workRemaining > popBuild) { self.workRemaining -= popBuild; Base.totalPopBuilder += popBuild; }
+			else { self.workRemaining = 0; Base.totalPopBuilder += self.workRemaining; }
+
+			//console.log("Work remaining: " + self.workRemaining);
+
+			if(self.workRemaining == 0) {
+				self.phase = 0;
+				self.upgradeLevel++;
+				console.log("build complete, to idle");
+			}
+		}
+		if (self.phase == 3){
+			if (self.checkBuildingConsumptionProduce(self.towerType)){
+				self.workRemaining = 75;
+				self.phase = 4;
+				console.log("To produce");
+			}
+		}
+		if (self.phase == 4){
+			var popBuild = self.upgradeLevel * 3;
+			//console.log("Work remaining: " + self.workRemaining);
+			if (self.workRemaining > popBuild) { self.workRemaining -= popBuild; Base.totalPopWorker += popBuild; }
+			else { self.workRemaining = 0; Base.totalPopWorker += self.workRemaining; }
+
+			if(self.workRemaining == 0) { 
+				self.outputBuildingProduce(self.towerType);
+				self.phase = 0; 
+				Base.totalPopCarrier += 1;
+				console.log("produce complete, to idle"); 
+			}
+		}
+		return;
 		if(self.targetLevel > self.upgradeLevel && Base.populationCurrent > 8 + Base.populationAvg / 200){
 			// TODO implement smarter way to make buildings (especially houses) prefer producing when population is low.
-			if(self.buildTimer > 0) {
+			if(self.workRemaining > 0) {
 				for (let i = 0; i < Math.round(self.upgradeLevel / 10 + 1); i++) { 
 					if(self.checkBuildingConsumptionAndBuild(self.towerType,self.upgradeLevel)){
 						self.status = "build";
-						self.buildTimer -= 2 / ((self.upgradeLevel / 10 + 1) * 1.34) * Base.constructionMultiplier;
+						self.workRemaining -= 2 / ((self.upgradeLevel / 10 + 1) * 1.34) * Base.constructionMultiplier;
 						//Base.Tech += self.upgradeLevel;
 					}
 					else self.status = "buildStop";
@@ -55,7 +111,7 @@ Tower = function(param){
 			}
 			else { 
 				self.upgradeLevel++;
-				self.buildTimer = Math.round(35 + self.upgradeLevel * 2.5);
+				self.workRemaining = Math.round(35 + self.upgradeLevel * 2.5);
 			}
 			return;
 		}
@@ -129,9 +185,9 @@ Tower = function(param){
 			towerType:self.towerType,
 			upgradeLevel:self.upgradeLevel,
 			targetLevel:self.targetLevel,
-			buildTimer:self.buildTimer,
+			workRemaining:self.workRemaining,
 		};
-		else if (tick % 2 == 1 && self.buildTimer > 0)
+		else if (tick % 2 == 1 && self.workRemaining > 0)
 		return {
 			id:self.id,
 			x:self.x,
@@ -139,7 +195,7 @@ Tower = function(param){
 			towerType:self.towerType,
 			upgradeLevel:self.upgradeLevel,
 			targetLevel:self.targetLevel,
-			buildTimer:self.buildTimer,
+			workRemaining:self.workRemaining,
 		};
 
 		return;
@@ -172,7 +228,7 @@ Tower = function(param){
 		}
 	}
 
-	self.checkBuildingConsumptionAndProduce = function(buildingName) {
+	self.checkBuildingConsumptionProduce = function(buildingName) {
 		const building = buildings[buildingName];
 	  
 		if (building && building.consume && building.produce) {
@@ -184,40 +240,14 @@ Tower = function(param){
 			  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource];
 			}
 		  });
-	  
-		  if (hasAllResources) {
-			//console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
-	  
-			for (const resource of resources) {
-			  if (resource === 'population') {
-				Base.populationCurrent -= building.consume[resource];
-			  } else {
-					Base.stockpile[resource] -= building.consume[resource];
-			  }
-			}
-	  
-			const producedItems = Object.entries(building.produce);
-			for (const [item, quantity] of producedItems) {
-			  if (item === 'population') {
-				Base.population += quantity;
-				//console.log(`The ${buildingName} building produced ${quantity} population.`);
-			  } else {
-					Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity;
-				//console.log(`The ${buildingName} building produced ${quantity} ${item}(s).`);
-			  }
-			}
-			return true;
-		  } else {
-				//console.log(`The ${buildingName} building does not have enough resources to produce: ${resources.join(', ')}.`);
-			return false;
-		  }
+			  return hasAllResources;
 		} else {
 			  console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
 		  return false;
 		}
 	};
 
-	self.checkBuildingProduce = function(buildingName) {
+	self.outputBuildingProduce = function(buildingName) {
 		const building = buildings[buildingName];
 	  
 		if (building && building.consume && building.produce) {
@@ -246,29 +276,22 @@ Tower = function(param){
 		  return false;
 		}
 	};
-	
-	self.checkBuildingConsumptionAndBuild = function(buildingName,upgradeLevel) {
+
+	self.checkBuildingConsumptionBuild = function(buildingName,upgradeLevel) {
 		const building = buildings[buildingName];
 	  
 		if (building && building.build) {
 		  const resources = Object.keys(building.build);
+		  console.log(resources);
 		  const hasAllResources = resources.every(resource => {
-			if (resource === 'population') {
-			  return building.build[resource] <= Base.populationCurrent;
-			} else {
-			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (0.5 + upgradeLevel / 25));
-			}
+			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (upgradeLevel + 1));
 		  });
 	  
 		  if (hasAllResources) {
 			//console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
 	  
 			for (const resource of resources) {
-			  if (resource === 'population') {
-				Base.populationCurrent -= building.build[resource];
-			  } else {
-				Base.stockpile[resource] -= Math.round(building.build[resource] * (1 + upgradeLevel / 10));
-			  }
+				Base.stockpile[resource] -= Math.round(building.build[resource] * (upgradeLevel + 1));
 			}
 			return true;
 		  } else {

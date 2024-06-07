@@ -40,6 +40,15 @@ Base.lastTick = 0;
 Base.skippedTicks = 0;
 Base.resourcePrice = 10000;
 
+//new counting variables
+Base.totalPopProduce = 0;
+Base.totalPopBuilder = 0;
+Base.totalPopWorker = 0;
+Base.totalPopCarrier = 0;
+Base.totalPopRemaining = function(){
+	return Base.totalPopProduce - Base.totalPopWorker - Base.totalPopCarrier - Base.totalPopBuilder;
+};
+
 var previousTime = 0;
 Base.announce = function(announcement){
 	for(var i in SOCKET_LIST){
@@ -165,6 +174,14 @@ function gameTick() {
 			sucket.emit('stockpile', Base.stockpile);
 			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
 		}
+	}
+	if(tick % 100 === 0){
+		Base.announce("Population: " + Base.totalPopProduce + " Builders: " + Base.totalPopBuilder + " Workers: " + Base.totalPopWorker + " Carriers: " + Base.totalPopCarrier + " Idle: " + Base.totalPopRemaining());
+		console.log("Population: " + Base.totalPopProduce + " Builders: " + Base.totalPopBuilder + " Workers: " + Base.totalPopWorker + " Carriers: " + Base.totalPopCarrier + " Idle: " + Base.totalPopRemaining());
+		Base.totalPopProduce = 0;
+		Base.totalPopBuilder = 0;
+		Base.totalPopWorker = 0;
+		Base.totalPopCarrier = 0;
 	}
 	var packs = Entity.getFrameUpdateData();
 	//TODO: updatePacks on the client assume that the updatePack contains every entity.

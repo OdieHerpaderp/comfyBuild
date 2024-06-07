@@ -63,7 +63,8 @@ Tower = function(param){
 		}
 		if (self.phase == 1){
 			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
-				self.workRemaining = 15 + self.upgradeLevel * 30;
+				if (buildings[self.towerType].category == "housing" ) self.workRemaining = 35 + self.upgradeLevel * 5;
+				else self.workRemaining = 15 + self.upgradeLevel * 30;
 				Base.totalPopCarrier += 1;
 				self.phase = 2;
 				console.log("To build");
@@ -94,6 +95,7 @@ Tower = function(param){
 		if (self.phase == 4){
 			self.workCapacity = Math.max(1, self.upgradeLevel * 2);
 			self.workUsage = self.getMaxWorkers(Math.max(1, self.upgradeLevel * 2));
+			if (buildings[self.towerType].category == "housing" ) { self.workCapacity = 1; self.workUsage = 1; }
 			//console.log("Work remaining: " + self.workRemaining);
 			if (self.workRemaining > self.workUsage) { self.workRemaining -= self.workUsage; Base.totalPopWorker += self.workUsage; }
 			else { self.workRemaining = 0; Base.totalPopWorker += self.workRemaining; }

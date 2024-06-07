@@ -401,19 +401,20 @@ var animate = function () {
         directionalLight.position.set(controls.target.x + cos, 50 - sin, controls.target.z + 100); // (x, y, z)
         directionalLight2.position.set(controls.target.x - cos, 50 + sin, controls.target.z + 100); // (x, y, z)
 
-        directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 1), 0);
-        directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 1), 0) * .25;
+        directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 5), 0) * 2;
+        directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 5), 0) * 1.25;
 
-        directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), directionalLight.intensity);
+        directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), Math.min(directionalLight.intensity, 1));
+        directionalLight2.color.set(0x0088ff).lerp(new THREE.Color(0x0088ff), Math.min(directionalLight.intensity, 1));
 
-        if (directionalLight.intensity == 0) {
+        if (directionalLight.intensity <= 0.1) {
             if (partOfDay !== 0) {
                 partOfDay = 0;
                 scene.background = textureSB["night"];
                 scene.environment = textureSB["night"];
             }
         }
-        else if (directionalLight.intensity == 1) {
+        else if (directionalLight.intensity > 0.1) {
             if (partOfDay !== 2) {
                 partOfDay = 2;
                 scene.background = textureSB["noon"];

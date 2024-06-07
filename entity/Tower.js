@@ -52,7 +52,6 @@ Tower = function(param){
 		//console.log("From " + self.buildingPhase);
 		if (self.buildingPhase == 0){
 			if (self.targetLevel > self.upgradeLevel){
-				self.workRemaining = 15 + self.upgradeLevel * 30;
 				self.buildingPhase = 1;
 				console.log("To buildGather");
 			}
@@ -63,8 +62,8 @@ Tower = function(param){
 		}
 		else if (self.buildingPhase == 1){
 			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
-				self.workRemaining = 15 + self.upgradeLevel * 30;
-				Base.totalPopCarrier += 1;
+				self.workRemaining = 20 + self.upgradeLevel * 24;
+				Base.totalPopCarrier += self.upgradeLevel;
 				self.buildingPhase = 2;
 				//console.log("To build");
 			}
@@ -86,8 +85,8 @@ Tower = function(param){
 		}
 		else if (self.buildingPhase == 3){
 			if (self.checkBuildingConsumptionProduce(self.towerType)){
-				if (buildings[self.towerType].category == "housing" ) self.workRemaining = 256;
-				else self.workRemaining = 128;
+				if (buildings[self.towerType].category == "housing" ) self.workRemaining = 64 + self.upgradeLevel;
+				else self.workRemaining = 48 + self.upgradeLevel;
 				self.buildingPhase = 4;
 				//console.log("To produce");
 			}
@@ -101,12 +100,12 @@ Tower = function(param){
 				self.workRemaining -= self.workUsage; 
 				if (buildings[self.towerType].category !== "housing") Base.totalPopWorker += self.workUsage; 
 			}
-			else { self.workRemaining = 0; Base.totalPopWorker += self.workRemaining; }
+			else { Base.totalPopWorker += self.workRemaining; self.workRemaining = 0; }
 
 			if(self.workRemaining == 0) { 
 				self.outputBuildingProduce(self.towerType,1);
 				self.buildingPhase = 0; 
-				Base.totalPopCarrier += 1;
+				Base.totalPopCarrier += self.upgradeLevel;
 				Base.Tech++;
 				//console.log("produce complete, to idle"); 
 			}

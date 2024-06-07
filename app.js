@@ -180,9 +180,9 @@ function gameTick() {
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, popRemain:Math.round(Base.totalPopRemaining()),popTotalProduce:Math.max(Base.totalPopProduce),popTotalBuilder:Math.max(Base.totalPopBuilder),popTotalWorker:Math.max(Base.totalPopWorker),popTotalCarrier:Math.max(Base.totalPopCarrier)});
 		}
-		var flatMorale = Math.min((256000) * ((250 + Base.totalPopRemaining()) / Base.totalPopProduce / 275), 99999);
+		var flatMorale = Math.min((256000) * ((250 + Base.totalPopRemaining()) / Base.totalPopProduce / 32), 99999);
 		console.log("flatMorale:" + Math.round(flatMorale));
-		Base.morale = Math.round(Math.pow(2500 + flatMorale * 10, 0.9));
+		Base.morale = Math.round(2500 + Math.pow(flatMorale * 3 - 500, 0.8));
 		Base.totalPopProduce = 256;
 		Base.totalPopBuilder = 0;
 		Base.totalPopWorker = 0;

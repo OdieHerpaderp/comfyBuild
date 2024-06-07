@@ -1,9 +1,11 @@
 Base = {};
 require('./Database');
-require('./lib/lib');
+lib = {};
 buildings = {};
 (async () => {
 	buildings = (await import("./lib/buildings.mjs")).buildings;
+	lib = await import("./lib/lib.mjs");
+	console.log("lib.lerp(0,42,0.75)", lib.lerp(0,42,0.75));
 })();
 require('./lib/comfyBuild');
 require('./lib/stockpile');

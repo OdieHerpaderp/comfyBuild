@@ -407,14 +407,14 @@ var animate = function () {
         directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), Math.min(directionalLight.intensity, 1));
         directionalLight2.color.set(0x0088ff).lerp(new THREE.Color(0x0088ff), Math.min(directionalLight.intensity, 1));
 
-        if (directionalLight.intensity <= 0.1) {
+        if (directionalLight.intensity <= 0) {
             if (partOfDay !== 0) {
                 partOfDay = 0;
                 scene.background = textureSB["night"];
                 scene.environment = textureSB["night"];
             }
         }
-        else if (directionalLight.intensity > 0.1) {
+        else if (directionalLight.intensity > 0) {
             if (partOfDay !== 2) {
                 partOfDay = 2;
                 scene.background = textureSB["noon"];

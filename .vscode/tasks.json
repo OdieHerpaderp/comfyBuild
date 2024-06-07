@@ -14,6 +14,17 @@
         "runOptions": {
             "runOn": "folderOpen"
         }
-      }
+      },
+      {
+        "label": "Sass but Node",
+        "type": "shell",
+        "command": "node",
+        "args": ["./node_modules/sass/sass", "--watch", "client/css/style.scss", "client/generated/style.css"],
+        "group": "build",
+        "isBackground": true,
+        "runOptions": {
+            "runOn": "folderOpen"
+        }
+      },
     ]
   }

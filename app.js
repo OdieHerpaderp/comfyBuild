@@ -38,6 +38,7 @@ Base.populationAvg = 32;
 Base.populationCurrent = 32;
 Base.constructionMultiplier = 1;
 Base.morale = 10000;
+Base.moraleCR = 10000;
 Base.lastTick = 0;
 Base.skippedTicks = 0;
 Base.resourcePrice = 10000;
@@ -164,26 +165,30 @@ io.sockets.on('connection', function(socket){
 //TODO: Merge comfyBuild tick into main tick once movement is clientside
 function gameTick() {
 	comfyBuild.tick();
+	if (Base.moraleCR < 5) Base.moraleCR = 5;
+	if (Base.morale < 5) Base.morale = 5;
+
+	if (Base.moraleCR > Base.morale) Base.moraleCR -= 15;
+	else if (Base.moraleCR < Base.morale) Base.moraleCR += 15;
+
 	if(tick === 5){
 		Gamemode.prepare();
 	}
 	if(tick % 15 === 0){
 		//console.log(Base.stockpile);
+		var oldMorale = Math.max(Base.morale + Base.moraleCR, 50) / 2.5;
+		var flatMorale = Math.max(Math.min((7500 + oldMorale / 2.5) * ((20 + Math.max(Base.totalPopRemaining(), -15)) / Base.totalPopProduce * 1.5), 99999), 1500);
+		Base.morale = Math.round(Math.max(250 + Math.pow(flatMorale / 4.8, 0.94) * 7.2, 75));
+		Base.moraleCR += Base.totalPopRemaining();
+		console.log("flatMorale:" + Math.round(flatMorale) + " Morale: " + Base.morale + " MoraleCR: " + Base.moraleCR);
+
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('stockpile', Base.stockpile);
-			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech});
+			sucket.emit('gameState',{morale:Math.round(Base.moraleCR), tech:Base.Tech, popRemain:Math.round(Base.totalPopRemaining()),popTotalProduce:Math.max(Base.totalPopProduce),popTotalBuilder:Math.max(Base.totalPopBuilder),popTotalWorker:Math.max(Base.totalPopWorker),popTotalCarrier:Math.max(Base.totalPopCarrier)});
 		}
-	}
-	if(tick % 30 === 0){
-		for(var i in SOCKET_LIST){
-			var sucket = SOCKET_LIST[i];
-			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, popRemain:Math.round(Base.totalPopRemaining()),popTotalProduce:Math.max(Base.totalPopProduce),popTotalBuilder:Math.max(Base.totalPopBuilder),popTotalWorker:Math.max(Base.totalPopWorker),popTotalCarrier:Math.max(Base.totalPopCarrier)});
-		}
-		var flatMorale = Math.min((256000) * ((250 + Base.totalPopRemaining()) / Base.totalPopProduce / 32), 99999);
-		console.log("flatMorale:" + Math.round(flatMorale));
-		Base.morale = Math.round(2500 + Math.pow(flatMorale * 3 - 500, 0.8));
-		Base.totalPopProduce = 256;
+
+		Base.totalPopProduce = Math.floor((Base.totalPopProduce + 128) / 2);
 		Base.totalPopBuilder = 0;
 		Base.totalPopWorker = 0;
 		Base.totalPopCarrier = 0;

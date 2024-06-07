@@ -44,7 +44,7 @@ Tower = function(param){
 	};
 
 	self.getMaxWorkers = function(upgradeLevel){
-		return Math.min(Math.max(Math.floor(Base.morale / 10000 * upgradeLevel), 1) , upgradeLevel);
+		return Math.min(Math.max(Math.floor(Base.moraleCR / 10000 * upgradeLevel + 0.25), 1) , upgradeLevel);
 	};
 
 
@@ -208,9 +208,6 @@ Tower = function(param){
 			id:self.id,
 			x:self.x,
 			y:self.y,
-			towerType:self.towerType,
-			upgradeLevel:self.upgradeLevel,
-			targetLevel:self.targetLevel,
 			workRemaining:self.workRemaining,
 			buildingPhase:self.buildingPhase,
 		};
@@ -299,7 +296,7 @@ Tower = function(param){
 	  
 		if (building && building.build) {
 		  const resources = Object.keys(building.build);
-		  console.log(resources);
+		  //console.log(resources);
 		  const hasAllResources = resources.every(resource => {
 			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (upgradeLevel + 1));
 		  });

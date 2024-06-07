@@ -8,7 +8,7 @@ class BuildingsFrame {
     jsFrameSettings = {
         name: "frameBuildingTooltip",
         title: "Buildings",
-        left: 380, top: 360, width: 560, height: 420, minWidth: 560, minHeight: 110,
+        left: 380, top: 360, width: 560, height: 820, minWidth: 560, minHeight: 110,
         style: {
             backgroundColor: '#22222255',
             overflow: 'hidden',

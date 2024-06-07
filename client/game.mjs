@@ -204,9 +204,6 @@ directionalLight.shadow.camera.far = 400; // default 500
 let directionalLight2 = directionalLight.clone();
 directionalLight2.intensity = 0.33;
 
-let directionalLight3 = directionalLight.clone();
-directionalLight3.intensity = 0.33;
-
 scene.add(directionalLight);
 scene.add(directionalLight.target);
 scene.add(directionalLight2);
@@ -405,10 +402,10 @@ var animate = function () {
         directionalLight2.position.set(controls.target.x - cos, 50 + sin, controls.target.z + 100); // (x, y, z)
 
         directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 5), 0) * 1.5;
-        directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 5), 0) * 1.25;
+        directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 5), 0) * 1.75;
 
         directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), Math.min(directionalLight.intensity, 1));
-        directionalLight2.color.set(0x224466).lerp(new THREE.Color(0x99ddff), Math.min(directionalLight.intensity, 1));
+        directionalLight2.color.set(0x77ccee).lerp(new THREE.Color(0x99ddff), Math.min(directionalLight.intensity, 1));
 
         if (directionalLight.intensity <= 0) {
             if (partOfDay !== 0) {

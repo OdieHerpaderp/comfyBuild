@@ -39,7 +39,7 @@ class WorldInfo {
         this.popTotalBuilder = data.popTotalBuilder ?? this.popTotalBuilder;
         this.popTotalCarrier = data.popTotalCarrier ?? this.popTotalCarrier;
         if (data.morale !== undefined) {
-            this.morale = data.morale / 100;
+            this.morale = Math.round(data.morale / 100);
         }
         this.level = (1 + Math.round(Math.pow(this.techDisplay / 200, 0.45) * 10) / 100).toLocaleString();
     }

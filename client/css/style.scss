@@ -1,0 +1,318 @@
+@use 'sass:color';
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
+
+$defaultPadding: 4px;
+
+$font-color: #FAFAFA;
+$font-size-xsmall: 12px;
+$font-size-small: 15px;
+$font-size-normal: 18px;
+$font-size-large: 21px;
+$font-size-xlarge: 24px;
+
+$button-background-color: #444444;
+
+html,
+body,
+#buildingsFrame,
+.building-data-list {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    background-color: #224400;
+    color: $font-color;
+    font-family: 'Roboto Slab';
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: $font-size-normal;
+    line-height: 1;
+    text-shadow: 0.5px 0.5px 1px #000000;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+
+    tr {
+        border-bottom: 1px solid $font-color;
+
+        td {
+            padding-right: 0px;
+            margin-right: 0px;
+            text-align: center;
+            align-content: center;
+            font-size: $font-size-small;
+        }
+    }
+}
+
+mark {
+    background-color: rgba(255, 255, 0, 0.75);
+    color: white;
+}
+
+.monospace {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.text-xsmall {
+    font-size: $font-size-xsmall;
+}
+
+.text-small {
+    font-size: $font-size-small;
+}
+
+.text-normal {
+    font-size: $font-size-normal;
+}
+
+.text-large {
+    font-size: $font-size-large;
+}
+
+.text-xlarge {
+    font-size: $font-size-xlarge;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-right {
+    display: flex;
+    justify-content: right;
+}
+
+.flex-grow {
+    display: flex;
+    flex-grow: 1;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+}
+
+.comfyButton {
+    margin: 2px;
+    box-shadow: 0 2px #222222, inset 0 2px #666666;
+    color: color.scale($color: $font-color, $lightness: -10%);
+    text-decoration: none;
+    background-color: $button-background-color;
+    display: block;
+    border-style: solid;
+    border-color: #222222;
+    border-width: 1.5px;
+    border-radius: 3px;
+    text-align: center;
+    font-size: $font-size-large;
+
+    &:hover {
+        box-shadow: 0 2px #222222, inset 0 2px #888888;
+        color: $font-color;
+        background-color: color.scale($color: $button-background-color, $lightness: 20%);
+    }
+
+    &:active {
+        margin-top: 4px;
+        margin-bottom: 0px;
+        box-shadow: 0 0 #333333;
+        color: $font-color;
+        background-color: color.scale($color: $button-background-color, $lightness: -50%);
+    }
+}
+
+.pane {
+    padding: $defaultPadding;
+    margin: 4px;
+    text-decoration: none;
+    background-color: #66666655;
+    border-style: solid;
+    border-color: #222222;
+    border-width: 1.5px;
+    flex-grow: 1;
+
+    .paneHeader {
+        padding: $defaultPadding;
+        font-size: $font-size-small;
+    }
+
+    .paneContent {
+        padding: $defaultPadding;
+        font-size: $font-size-large;
+        background-color: #22222255;
+        border: 1.5px solid #888888;
+        text-align: right;
+        font-family: 'Roboto Mono', monospace;
+    }
+}
+
+#chat {
+    padding: $defaultPadding;
+    font-size: $font-size-small;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    #chat-text {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        line-height: initial;
+        flex-grow: 1;
+    }
+
+    #chat-input-bar {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #chat-input {
+        flex-grow: 1;
+    }
+}
+
+.resourceList {
+    padding: $defaultPadding;
+
+    .resource {
+        display: flex;
+        font-size: $font-size-small;
+        font-variant-numeric: tabular-nums lining-nums;
+
+        .resourceName {
+            flex-grow: 1;
+
+            &::after {
+                content: ':';
+            }
+        }
+
+        .resourceAmount {
+            text-align: right;
+        }
+
+        .resourceChange {
+            font-size: $font-size-xsmall;
+            min-width: 38px;
+            text-align: right;
+            line-height: 14px;
+            font-weight: 700;
+
+            &.red {
+                color: red;
+            }
+
+            &.green {
+                color: rgb(0, 192, 0);
+            }
+        }
+    }
+}
+
+.building-data-list {
+    thead {
+        tr {
+            border-bottom: none;
+        }
+
+        th {
+            padding: $defaultPadding;
+            position: sticky;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-bottom: none;
+            box-shadow: inset 0 -1px 0 white;
+        }
+    }
+
+    #infoField {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: $defaultPadding;
+        text-align: center;
+        min-height: 42px;
+    }
+}
+
+#buildingTooltip {
+    padding: $defaultPadding;
+    font-size: $font-size-normal;
+}
+
+.loginScreen {
+    padding: $defaultPadding;
+    font-size: $font-size-normal;
+    display: flex;
+
+    span {
+        text-align: right;
+        min-width: 100px;
+    }
+}
+
+#loadingScreen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+}
+
+#playerList,
+#worldInfo {
+    font-size: $font-size-normal;
+    padding: $defaultPadding;
+}

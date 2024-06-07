@@ -102,7 +102,7 @@ class Building extends BaseEntity {
         }
         //this.mesh.castShadow = true;
         //this.mesh.receiveShadow = true;
-        this.mesh.position.set(this.worldX, 0, this.worldY - 0.01);
+        this.mesh.position.set(this.worldX, -0.16, this.worldY - 0.01);
 
         // Bottom plane
         {

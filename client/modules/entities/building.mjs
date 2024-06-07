@@ -33,14 +33,14 @@ class Building extends BaseEntity {
         this.propertyChanged("targetLevel", value);
     }
 
-    _buildTimer;
-    get buildTimer() {
-        return this._buildTimer;
+    _workRemaining;
+    get workRemaining() {
+        return this._workRemaining;
     }
-    set buildTimer(value) {
-        if (this._buildTimer == value) { return; }
-        this._buildTimer = value;
-        this.propertyChanged("buildTimer", value);
+    set workRemaining(value) {
+        if (this._workRemaining == value) { return; }
+        this._workRemaining = value;
+        this.propertyChanged("workRemaining", value);
     }
 
     textSprite;
@@ -51,7 +51,7 @@ class Building extends BaseEntity {
         this.buildingType = initData.towerType ?? "unknown";
         this.upgradeLevel = initData.upgradeLevel ?? 0;
         this.targetLevel = initData.targetLevel ?? this.upgradeLevel;
-        this.buildTimer = initData.buildTimer ?? 0;
+        this.workRemaining = initData.workRemaining ?? 0;
 
         let model = modelCache.getModel(this.buildingType);
         if (model) {
@@ -145,8 +145,8 @@ class Building extends BaseEntity {
             this.targetLevel = data.targetLevel;
             textNeedsUpdate = true;
         }
-        if (data.buildTimer && data.buildTimer !== this.buildTimer) {
-            this.buildTimer = Math.round(Math.max(data.buildTimer * 0.65, 0)) / 10;
+        if (data.workRemaining && data.workRemaining !== this.workRemaining) {
+            this.workRemaining = data.workRemaining;
             textNeedsUpdate = true;
         }
         if (textNeedsUpdate) {
@@ -161,7 +161,7 @@ class Building extends BaseEntity {
         var statusText = "";
         if (this.targetLevel > this.upgradeLevel) {
             levelText += " > " + Math.round(this.targetLevel);
-            statusText = "Build: " + this.buildTimer;
+            statusText = "Build: " + this.workRemaining;
         }
 
         this.textSprite.text = ` \n${levelText}\n${this.buildingType}\n${statusText}`;

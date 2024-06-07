@@ -176,21 +176,23 @@ mark {
 
 .pane {
     padding: $defaultPadding;
-    margin: 4px;
+    line-height:16px;
+    margin: 2px;
     text-decoration: none;
     background-color: #66666655;
     border-style: solid;
     border-color: #222222;
     border-width: 1.5px;
-    flex-grow: 1;
+    flex-grow:1;flex-shrink:1;flex-basis:0px;
 
     .paneHeader {
-        padding: $defaultPadding;
+        padding-left: $defaultPadding;
+        line-height:12px;
         font-size: $font-size-small;
     }
 
     .paneContent {
-        padding: $defaultPadding;
+        padding: $defaultPadding / 2;
         font-size: $font-size-large;
         background-color: #22222255;
         border: 1.5px solid #888888;

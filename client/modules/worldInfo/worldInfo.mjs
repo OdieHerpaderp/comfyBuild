@@ -33,8 +33,11 @@ class WorldInfo {
 
     updateData(data) {
         this.tech = data.tech ?? this.tech;
-        this.currentPopulation = data.health ?? this.currentPopulation;
-        this.maxPopulation = data.maxHealth ?? this.maxPopulation;
+        this.popRemain = data.popRemain ?? this.popRemain;
+        this.popTotalProduce = data.popTotalProduce ?? this.popTotalProduce;
+        this.popTotalWorker = data.popTotalWorker ?? this.popTotalWorker;
+        this.popTotalBuilder = data.popTotalBuilder ?? this.popTotalBuilder;
+        this.popTotalCarrier = data.popTotalCarrier ?? this.popTotalCarrier;
         if (data.morale !== undefined) {
             this.morale = data.morale / 100;
         }

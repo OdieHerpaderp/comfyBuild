@@ -161,24 +161,24 @@ io.sockets.on('connection', function(socket){
 
 //TODO: Merge comfyBuild tick into main tick once movement is clientside
 function gameTick() {
+	comfyBuild.tick();
 	if(tick === 5){
 		Gamemode.prepare();
 	}
-	if(tick % 2 === 0){
-		comfyBuild.tick();
-	}
-	if(tick % 10 === 0){
+	if(tick % 20 === 0){
 		//console.log(Base.stockpile);
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('stockpile', Base.stockpile);
-			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, health:Math.round(Base.populationCurrent),maxHealth:Math.max(Base.population , Math.round(Base.populationAvg))});
+			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech});
 		}
 	}
 	if(tick % 100 === 0){
-		Base.announce("Population: " + Base.totalPopProduce + " Builders: " + Base.totalPopBuilder + " Workers: " + Base.totalPopWorker + " Carriers: " + Base.totalPopCarrier + " Idle: " + Base.totalPopRemaining());
-		console.log("Population: " + Base.totalPopProduce + " Builders: " + Base.totalPopBuilder + " Workers: " + Base.totalPopWorker + " Carriers: " + Base.totalPopCarrier + " Idle: " + Base.totalPopRemaining());
-		Base.totalPopProduce = 0;
+		for(var i in SOCKET_LIST){
+			var sucket = SOCKET_LIST[i];
+			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, popRemain:Math.round(Base.totalPopRemaining()),popTotalProduce:Math.max(Base.totalPopProduce),popTotalBuilder:Math.max(Base.totalPopBuilder),popTotalWorker:Math.max(Base.totalPopWorker),popTotalCarrier:Math.max(Base.totalPopCarrier)});
+		}
+		Base.totalPopProduce = 100;
 		Base.totalPopBuilder = 0;
 		Base.totalPopWorker = 0;
 		Base.totalPopCarrier = 0;

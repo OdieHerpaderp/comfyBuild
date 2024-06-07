@@ -104,6 +104,7 @@ Tower = function(param){
 				self.outputBuildingProduce(self.towerType);
 				self.phase = 0; 
 				Base.totalPopCarrier += 1;
+				Base.Tech++;
 				console.log("produce complete, to idle"); 
 			}
 		}
@@ -185,6 +186,7 @@ Tower = function(param){
 			towerType:self.towerType,
 			upgradeLevel:self.upgradeLevel,
 			targetLevel:self.targetLevel,
+			workRemaining:self.workRemaining,
 		};
 	}
 	self.getUpdatePack = function(){

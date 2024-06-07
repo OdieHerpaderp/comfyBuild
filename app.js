@@ -167,7 +167,7 @@ function gameTick() {
 	if(tick === 5){
 		Gamemode.prepare();
 	}
-	if(tick % 20 === 0){
+	if(tick % 15 === 0){
 		//console.log(Base.stockpile);
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
@@ -175,12 +175,14 @@ function gameTick() {
 			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech});
 		}
 	}
-	if(tick % 40 === 0){
+	if(tick % 30 === 0){
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, popRemain:Math.round(Base.totalPopRemaining()),popTotalProduce:Math.max(Base.totalPopProduce),popTotalBuilder:Math.max(Base.totalPopBuilder),popTotalWorker:Math.max(Base.totalPopWorker),popTotalCarrier:Math.max(Base.totalPopCarrier)});
 		}
-		Base.morale = Math.round(Math.min(7500 * (225 + Base.totalPopRemaining()) / 275, 12500));
+		var flatMorale = Math.min((256000) * ((250 + Base.totalPopRemaining()) / Base.totalPopProduce / 275), 99999);
+		console.log("flatMorale:" + Math.round(flatMorale));
+		Base.morale = Math.round(Math.pow(2500 + flatMorale * 10, 0.9));
 		Base.totalPopProduce = 256;
 		Base.totalPopBuilder = 0;
 		Base.totalPopWorker = 0;

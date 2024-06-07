@@ -43,6 +43,16 @@ class Building extends BaseEntity {
         this.propertyChanged("workRemaining", value);
     }
 
+    _buildingPhase;
+    get buildingPhase() {
+        return this._buildingPhase;
+    }
+    set buildingPhase(value) {
+        if (this._buildingPhase == value) { return; }
+        this._buildingPhase = value;
+        this.propertyChanged("buildingPhase", value);
+    }
+
     textSprite;
 
     constructor(initData) {
@@ -52,6 +62,7 @@ class Building extends BaseEntity {
         this.upgradeLevel = initData.upgradeLevel ?? 0;
         this.targetLevel = initData.targetLevel ?? this.upgradeLevel;
         this.workRemaining = initData.workRemaining ?? 0;
+        this.buildingPhase = initData.buildingPhase ?? 0;
 
         let model = modelCache.getModel(this.buildingType);
         if (model) {
@@ -149,6 +160,10 @@ class Building extends BaseEntity {
             this.workRemaining = data.workRemaining;
             textNeedsUpdate = true;
         }
+        if (data.buildingPhase && data.buildingPhase !== this.buildingPhase) {
+            this.buildingPhase = data.buildingPhase;
+            textNeedsUpdate = true;
+        }
         if (textNeedsUpdate) {
             this.updateText();
         };
@@ -161,10 +176,19 @@ class Building extends BaseEntity {
         var statusText = "";
         if (this.targetLevel > this.upgradeLevel) {
             levelText += " > " + Math.round(this.targetLevel);
-            statusText = "Build: " + this.workRemaining;
         }
+        statusText = this.getPhaseString(this.buildingPhase) + ": " + this.workRemaining;
 
         this.textSprite.text = ` \n${levelText}\n${this.buildingType}\n${statusText}`;
+    }
+
+    getPhaseString(num) {
+        if(num == 0) return "wait...";
+        else if(num == 1) return "buildCon";
+        else if(num == 2) return "build";
+        else if(num == 3) return "consume";
+        else if(num == 4) return "produce";
+        else return "i dunno lol";
     }
 }
 

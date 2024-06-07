@@ -1,6 +1,5 @@
 Base = {};
 require('./Database');
-require('./lib/lib');
 buildings = {};
 (async () => {
 	buildings = (await import("./lib/buildings.mjs")).buildings;
@@ -173,12 +172,13 @@ function gameTick() {
 			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech});
 		}
 	}
-	if(tick % 100 === 0){
+	if(tick % 40 === 0){
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];
 			sucket.emit('gameState',{morale:Math.round(Base.morale), tech:Base.Tech, popRemain:Math.round(Base.totalPopRemaining()),popTotalProduce:Math.max(Base.totalPopProduce),popTotalBuilder:Math.max(Base.totalPopBuilder),popTotalWorker:Math.max(Base.totalPopWorker),popTotalCarrier:Math.max(Base.totalPopCarrier)});
 		}
-		Base.totalPopProduce = 100;
+		Base.morale = Math.round(Math.min(7500 * (225 + Base.totalPopRemaining()) / 275, 12500));
+		Base.totalPopProduce = 256;
 		Base.totalPopBuilder = 0;
 		Base.totalPopWorker = 0;
 		Base.totalPopCarrier = 0;

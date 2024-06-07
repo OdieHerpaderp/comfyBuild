@@ -310,36 +310,6 @@ buttonSkyboxD.addEventListener('click', (event) => {
     scene.environment = textureSB["old"];
 });
 
-// Call this function to change the environmentmap based on time of day.
-function updateEnvironmentMap(hour) {
-    // Validate the input hour
-    if (hour < 0 || hour > 23) {
-        console.error("Invalid hour value. Please provide a value between 0 and 23.");
-        return;
-    }
-
-    // Check if all textures have been loaded
-    if (textureSB.morning && textureSB.noon && textureSB.evening && textureSB.night) {
-        if (hour >= 18) {
-            scene.background = textureSB["evening"];
-            scene.environment = textureSB["evening"];
-        }
-        else if (hour >= 12) {
-            scene.background = textureSB["noon"];
-            scene.environment = textureSB["noon"];
-        }
-        else if (hour >= 6) {
-            scene.background = textureSB["morning"];
-            scene.environment = textureSB["morning"];
-        }
-        else {
-            scene.background = textureSB["night"];
-            scene.environment = textureSB["night"];
-        }
-    }
-    //else { console.warn("Textures are still loading..."); }
-}
-
 var targetFrameTime = 20;
 var renderScale = 100;
 var previousTime = 10;

@@ -73,7 +73,7 @@ Tower = function(param){
 		if (self.phase == 2){
 			self.workCapacity = Math.max(1, self.upgradeLevel * 2);
 			self.workUsage = self.getMaxWorkers(Math.max(1, self.upgradeLevel * 2));
-			if (self.workRemaining > popBuild) { self.workRemaining -= self.workUsage; Base.totalPopBuilder += self.workUsage; }
+			if (self.workRemaining > self.workUsage) { self.workRemaining -= self.workUsage; Base.totalPopBuilder += self.workUsage; }
 			else { self.workRemaining = 0; Base.totalPopBuilder += self.workRemaining; }
 
 			//console.log("Work remaining: " + self.workRemaining);
@@ -95,7 +95,7 @@ Tower = function(param){
 			self.workCapacity = Math.max(1, self.upgradeLevel * 2);
 			self.workUsage = self.getMaxWorkers(Math.max(1, self.upgradeLevel * 2));
 			//console.log("Work remaining: " + self.workRemaining);
-			if (self.workRemaining > popBuild) { self.workRemaining -= self.workUsage; Base.totalPopWorker += self.workUsage; }
+			if (self.workRemaining > self.workUsage) { self.workRemaining -= self.workUsage; Base.totalPopWorker += self.workUsage; }
 			else { self.workRemaining = 0; Base.totalPopWorker += self.workRemaining; }
 
 			if(self.workRemaining == 0) { 

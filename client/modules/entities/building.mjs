@@ -156,8 +156,8 @@ class Building extends BaseEntity {
             this.targetLevel = data.targetLevel;
             textNeedsUpdate = true;
         }
-        if (data.workRemaining > -1 && Math.round(data.workRemaining / 5) !== Math.round(this.workRemaining / 5)) {
-            this.workRemaining = Math.round(data.workRemaining / 5);
+        if (data.workRemaining > -1 && Math.floor(data.workRemaining / 2) !== Math.floor(this.workRemaining / 2)) {
+            this.workRemaining = Math.floor(data.workRemaining / 2);
             textNeedsUpdate = true;
         }
         if (data.buildingPhase && data.buildingPhase !== this.buildingPhase) {

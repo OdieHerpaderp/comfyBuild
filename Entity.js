@@ -2,7 +2,6 @@ initPack = {player:[],bullet:[],npc:[],tower:[]};
 removePack = {player:[],bullet:[],npc:[],tower:[]};
 
 require('./entity/Player');
-require('./entity/NPC');
 require('./entity/Bullet');
 require('./entity/Tower');
 
@@ -52,19 +51,16 @@ Entity.getFrameUpdateData = function(){
 		initPack:{
 			player:initPack.player,
 			bullet:initPack.bullet,
-			npc:initPack.npc,
 			tower:initPack.tower,
 		},
 		removePack:{
 			player:removePack.player,
 			bullet:removePack.bullet,
-			npc:removePack.npc,
 			tower:removePack.tower,
 		},
 		updatePack:{
 			player:Player.update(),
 			bullet:Bullet.update(),
-			npc:NPC.update(),
 			tower:Tower.update(),
 		}
 	};

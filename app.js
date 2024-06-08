@@ -174,7 +174,7 @@ function gameTick() {
 	if(tick === 5){
 		Gamemode.prepare();
 	}
-	if(tick % 15 === 0){
+	if(tick % 10 === 0){
 		//console.log(Base.stockpile);
 		var oldMorale = Math.max(Base.morale + Base.moraleCR, 50) / 2.5;
 		var flatMorale = Math.max(Math.min((7500 + oldMorale / 2.5) * ((20 + Math.max(Base.totalPopRemaining(), -15)) / Base.totalPopProduce * 1.5), 99999), 1500);
@@ -205,7 +205,7 @@ function gameTick() {
 };
 
 // New implementation that doesn't rely on raf
-const targetFrameRate = 20;
+const targetFrameRate = 15;
 const targetFrameTime = 1000 / targetFrameRate; // Target frame time in milliseconds
 
 let lastFrameTime = Date.now();

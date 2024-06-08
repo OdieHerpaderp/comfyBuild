@@ -52,28 +52,8 @@ Player = function(param){
 
 	var super_update = self.update;
 	self.update = function(){
-
-		//collision against NPCs
-		
-
 		self.updateSpd();
-
 		super_update();
-
-		if(self.pressingAttack){
-			self.shootBullet(self.mouseAngle);
-		}
-	}
-	self.shootBullet = function(angle){
-		self.calcDamage = Math.pow(self.STR , 0.95);
-		Bullet({
-			parent:self.parent,
-			angle:angle,
-			x:self.x,
-			y:self.y,
-			map:self.map,
-			damage:self.calcDamage,
-		});
 	}
 
 	self.updateSpd = function(){

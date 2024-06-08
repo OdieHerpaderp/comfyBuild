@@ -11,6 +11,7 @@ import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
 import BuildingsFrame from "buildingsFrame";
 import { PlayerList } from "playerList";
+import Stats from 'three/addons/libs/stats.module.js';
 
 // Loading screen
 let loadingScreen = new LoadingScreen();
@@ -441,17 +442,6 @@ var animate = function () {
     directionalLight2.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
     //pointLight.position.set(controls.target.x, (2 + camera.position.y / 2) / 2, controls.target.z + 10);
 
-    if (delta > 45 + targetFrameTime) document.getElementById('fpsCounter').style.color = "red";
-    if (delta > 30 + targetFrameTime) document.getElementById('fpsCounter').style.color = "orange";
-    else if (delta > 15 + targetFrameTime) document.getElementById('fpsCounter').style.color = "yellow";
-    else document.getElementById('fpsCounter').style.color = "white";
-
-    document.getElementById('fpsCounter').innerHTML = "Fps: " + Math.round(1000 / (deltaAvg / deltaCount));
-    if (deltaCount >= 20) {
-        deltaCount /= 2;
-        deltaAvg /= 2;
-    }
-
     //cube.rotation.x += 0.01;
     if (oldWidth != window.innerWidth || oldHeight != window.innerHeight) {
         console.log("WE GON RESIZE");
@@ -464,6 +454,39 @@ var animate = function () {
     }
     renderer.render(scene, camera);
 };
+
+// Create a new Stats instance
+const stats = new Stats();
+
+// Align the stats panel to the top-left corner
+stats.dom.style.position = 'absolute';
+stats.dom.style.left = '0px';
+stats.dom.style.top = '0px';
+
+// Add the stats panel to the document body
+document.body.appendChild(stats.dom);
+
+// Create a function to update the stats panel
+function updateStats() {
+  stats.begin();
+  // Render your Three.js scene here
+  renderer.render(scene, camera);
+  stats.end();
+
+  // Get renderer information
+  const renderInfo = renderer.info;
+  //console.log(`
+  //  Render calls: ${renderInfo.render.calls}
+  //  Triangles rendered: ${renderInfo.render.triangles}
+  //  Geometry memory: ${renderInfo.memory.geometries / (1024 * 1024)}MB
+  //`);
+
+  // Request the next frame
+  requestAnimationFrame(updateStats);
+}
+
+// Start the animation loop and stats update
+updateStats();
 
 animate();
 

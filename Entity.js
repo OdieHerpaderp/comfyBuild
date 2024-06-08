@@ -1,5 +1,5 @@
-initPack = {player:[],bullet:[],npc:[],tower:[]};
-removePack = {player:[],bullet:[],npc:[],tower:[]};
+initPack = {player:[],bullet:[],tower:[]};
+removePack = {player:[],bullet:[],tower:[]};
 
 require('./entity/Player');
 require('./entity/Bullet');
@@ -66,11 +66,9 @@ Entity.getFrameUpdateData = function(){
 	};
 	initPack.player = [];
 	initPack.bullet = [];
-	initPack.npc = [];
 	initPack.tower = [];
 	removePack.player = [];
 	removePack.bullet = [];
-	removePack.npc = [];
 	removePack.tower = [];
 	return pack;
 }

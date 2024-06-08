@@ -66,7 +66,7 @@ Tower = function(param){
 		else if (self.buildingPhase == 1){ //buildCon
 			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
 				Base.totalPopCarrier += self.upgradeLevel;
-				self.workRemaining = 48 + self.productionLevel * 48;
+				self.workRemaining = 32 + self.productionLevel * 24;
 				self.buildingPhase = 2;
 			}
 			//else console.log("No mats to build");
@@ -144,7 +144,7 @@ Tower = function(param){
 		};
 	}
 	self.getUpdatePack = function(){
-		if (tick % 12 == 1)
+		if (tick % 3 == 1)
 		return {
 			id:self.id,
 			x:self.x,
@@ -155,42 +155,7 @@ Tower = function(param){
 			workRemaining:self.workRemaining,
 			buildingPhase:self.buildingPhase,
 		};
-		else return {
-			id:self.id,
-			x:self.x,
-			y:self.y,
-			workRemaining:self.workRemaining,
-			buildingPhase:self.buildingPhase,
-		};
-
-		return;
-	}
-	self.getArmor = function(range){
-		var nextTarget;
-		var nextArmor = 0;
-		var theta = 0;
-		for(var Bni in NPC.list){
-			var Bnp = NPC.list[Bni];
-			if(self.getDistance(Bnp) < range && self.lastTarget !== Bnp.id && Bnp.armor > 0){
-				if (Bnp.armor > nextArmor){
-					nextTarget = Bnp.id;
-					nextArmor = Bnp.armor;
-					var dx = Bnp.x - self.x;
-					var dy = Bnp.y - self.y;
-					theta = Math.atan2(dy, dx); // range (-PI, PI]
-					theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-					if (theta < 0) theta = 360 + theta; // range [0, 360)
-				}
-			}
-		}
-		if (nextTarget){
-			//console.log("shooting target at " + theta + " with " + nextArmor + " armor.");
-			return [nextTarget, theta];
-		}
-		else{
-			//console.log("no eligible target found.");
-			return [420, 420];
-		}
+		else return;
 	}
 
 	self.checkBuildingConsumptionProduce = function(buildingName) {

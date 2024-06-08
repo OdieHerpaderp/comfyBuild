@@ -24,11 +24,6 @@ Bullet = function(param){
 	self.toRemove = false;
 	var super_update = self.update;
 
-	if(self.towerType == "laser"){
-		self.x = NPC.list[self.target].x;
-		self.y = NPC.list[self.target].y;
-	}
-
 	self.damageCalc = function(damage,bulletType,armor,armorType){
 		var calcDamage = damage;
 
@@ -126,26 +121,6 @@ Bullet = function(param){
 			angle:self.angle,
 			timer:self.timer,
 		};
-	}
-
-	Tower.getclosest = function(){
-		var nextTarget;
-		var nextDist = 100;
-		for(var Bni in NPC.list){
-			var Bnp = NPC.list[Bni];
-			if(self.getDistance(Bnp) < 64 && self.lastTarget !== Bnp.id){
-				if (nextDist > self.getDistance(Bnp)){
-					nextTarget = Bnp.id;
-					nextDist = self.getDistance(Bnp);
-					var dx = Bnp.x - self.x;
-					var dy = Bnp.y - self.y;
-					var theta = Math.atan2(dy, dx); // range (-PI, PI]
-					  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-					if (theta < 0) theta = 360 + theta; // range [0, 360)
-				}
-			}
-		}
-		return theta;
 	}
 
 	Bullet.list[self.id] = self;

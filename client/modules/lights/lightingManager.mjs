@@ -57,9 +57,7 @@ class LightingManager {
 
     tick(deltaTimeMs, targetPosition) {
         this.currentAngle += anglePerMs * deltaTimeMs;
-        if (this.currentAngle > tau) {
-            this.currentAngle -= tau;
-        }
+        this.currentAngle = this.currentAngle % tau;
 
         this.orbitingLights.forEach(light => {
             light.update(this.currentAngle, targetPosition);

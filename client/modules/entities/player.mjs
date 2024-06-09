@@ -18,7 +18,7 @@ class Player extends BaseEntity {
 
         let geometry = new THREE.PlaneGeometry(5, 5, 1, 1);
         let texture = new THREE.TextureLoader().load('/client/img/player.png');
-        let material = new THREE.MeshLambertMaterial({ map: texture, transparent: true, depthWrite: false, depthTest: false, color: this.color, });
+        let material = new THREE.MeshLambertMaterial({ map: texture, emissive: this.color, transparent: true, depthWrite: false, depthTest: false, color: this.color, });
         this.mesh = new THREE.Mesh(geometry, material);
 
         this.mesh.position.set(this.worldX, 0, this.worldY);

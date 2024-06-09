@@ -3,12 +3,12 @@ import * as THREE from 'three';
 const textureLoader = new THREE.TextureLoader();
 
 // Load terrain textures
-const texGrassdiff = textureLoader.load('client/textures/grass.jpg'); texGrassdiff.wrapS = texGrassdiff.wrapT = THREE.RepeatWrapping; texGrassdiff.repeat.set(16, 16);
-const texGrassNor = textureLoader.load('client/textures/grassNor.jpg'); texGrassNor.wrapS = texGrassNor.wrapT = THREE.RepeatWrapping; texGrassNor.repeat.set(16, 16);
-const texGrassDisp = textureLoader.load('client/textures/grassDis.jpg'); texGrassDisp.wrapS = texGrassDisp.wrapT = THREE.RepeatWrapping; texGrassDisp.repeat.set(16, 16);
-const texSanddiff = textureLoader.load('client/textures/sand.jpg'); texSanddiff.wrapS = texSanddiff.wrapT = THREE.RepeatWrapping; texSanddiff.repeat.set(16, 16);
-const texSandNor = textureLoader.load('client/textures/sandNor.jpg'); texSandNor.wrapS = texSandNor.wrapT = THREE.RepeatWrapping; texSandNor.repeat.set(16, 16);
-const texSandDisp = textureLoader.load('client/textures/sandDis.jpg'); texSandDisp.wrapS = texSandDisp.wrapT = THREE.RepeatWrapping; texSandDisp.repeat.set(16, 16);
+const texGrassdiff = textureLoader.load('client/textures/grass.jpg'); texGrassdiff.wrapS = texGrassdiff.wrapT = THREE.RepeatWrapping; texGrassdiff.repeat.set(32, 32);
+const texGrassNor = textureLoader.load('client/textures/grassNor.jpg'); texGrassNor.wrapS = texGrassNor.wrapT = THREE.RepeatWrapping; texGrassNor.repeat.set(32, 32);
+const texGrassDisp = textureLoader.load('client/textures/grassDis.jpg'); texGrassDisp.wrapS = texGrassDisp.wrapT = THREE.RepeatWrapping; texGrassDisp.repeat.set(32, 32);
+const texSanddiff = textureLoader.load('client/textures/sand.jpg'); texSanddiff.wrapS = texSanddiff.wrapT = THREE.RepeatWrapping; texSanddiff.repeat.set(32, 32);
+const texSandNor = textureLoader.load('client/textures/sandNor.jpg'); texSandNor.wrapS = texSandNor.wrapT = THREE.RepeatWrapping; texSandNor.repeat.set(32, 32);
+const texSandDisp = textureLoader.load('client/textures/sandDis.jpg'); texSandDisp.wrapS = texSandDisp.wrapT = THREE.RepeatWrapping; texSandDisp.repeat.set(32, 32);
 const texRockdiff = textureLoader.load('client/textures/rock.png'); texRockdiff.wrapS = texRockdiff.wrapT = THREE.RepeatWrapping; texRockdiff.repeat.set(32, 32);
 const texRockNor = textureLoader.load('client/textures/rockNor.png'); texRockNor.wrapS = texRockNor.wrapT = THREE.RepeatWrapping; texRockNor.repeat.set(32, 32);
 const texRockDisp = textureLoader.load('client/textures/rockDis.png'); texRockDisp.wrapS = texRockDisp.wrapT = THREE.RepeatWrapping; texRockDisp.repeat.set(32, 32);

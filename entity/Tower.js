@@ -224,7 +224,7 @@ Tower = function(param){
 				Base.totalPopProduce += quantity * upgradeLevel;
 				//console.log(`The ${buildingName} building produced ${quantity} population.`);
 			  } else {
-					Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity;
+					Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity * upgradeLevel;
 				//console.log(`The ${buildingName} building produced ${quantity} ${item}(s).`);
 			  }
 			}

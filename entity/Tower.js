@@ -70,6 +70,7 @@ Tower = function(param){
 			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
 				Base.totalPopCarrier += self.upgradeLevel;
 				self.workRemaining = lib.progressPerBuild(self.towerType, self.upgradeLevel);
+				//console.log("lib: " + lib.progressPerBuild(self.towerType, self.upgradeLevel));
 				self.buildingPhase = 2;
 			}
 			else self.buildingPhase = 0;
@@ -198,9 +199,10 @@ Tower = function(param){
 			}
 		  });
 		  if(hasAllResources) {
-			for (const resource of resources) { Base.stockpile[resource] -= Math.round(building.build[resource] * (upgradeLevel * 5 + 1)); }
+			for (const resource of resources) { Base.stockpile[resource] -= building.consume[resource]; }
+			return true;
 		  }
-		  else return false;
+		  else { return false; }
 		} else {
 			  console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
 		  return false;

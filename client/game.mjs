@@ -1,4 +1,5 @@
 import { EntityManager } from "entityManager";
+import { LightingManager } from "lightingManager";
 import { ResourceList } from "resourceList";
 import { LoadingScreen } from "loadingScreen";
 import { LoginScreen } from "loginScreen";
@@ -69,6 +70,8 @@ entityManager.addEventListener("playerConnected", (event) => {
 entityManager.addEventListener("playerDisconnected", (event) => {
     playerList.removePlayer(event.detail.player);
 });
+
+var lightingManager = new LightingManager(scene);
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight) * 1.15, 0.1, 1000);
 camera.position.set(260, 100, 460);
@@ -187,61 +190,20 @@ loader.load('client/models/terrain.glb', function (gltf) {
 });
 
 // Global plane geom
-var directionalLight = new THREE.DirectionalLight(0xfffefa, 2.2);
-directionalLight.name = "Direc";
-directionalLight.position.set(222, 222, 222); // (x, y, z)
-directionalLight.target.position.set(110, 0, 110); // (x, y, z)
-directionalLight.castShadow = true;
-directionalLight.shadow.camera.left = -50;
-directionalLight.shadow.camera.right = 50;
-directionalLight.shadow.camera.top = 50;
-directionalLight.shadow.camera.bottom = -50;
-directionalLight.shadow.zoom = 5.1;
-directionalLight.shadow.mapSize.width = 4096; // default 512
-directionalLight.shadow.mapSize.height = 4096; // default 512
-directionalLight.shadow.camera.near = 0.5; // default
-directionalLight.shadow.camera.far = 400; // default 500
-
-let directionalLight2 = directionalLight.clone();
-directionalLight2.intensity = 0.33;
-
-scene.add(directionalLight);
-scene.add(directionalLight.target);
-scene.add(directionalLight2);
-scene.add(directionalLight2.target);
-
-//Create a helper for the shadow camera (optional)
-//const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-//scene.add(helper);
-
-//const helper2 = new THREE.CameraHelper(directionalLight2.shadow.camera);
-//scene.add(helper2);
-
-const light = new THREE.HemisphereLight(0x3399cc, 0xffffff, 0.5);
-scene.add(light);
-
-// Create a point light
-const pointLight = new THREE.PointLight(0xeeeeff);
-pointLight.position.set(0, 0, 0);
-pointLight.intensity = 1.4;
-//pointLight.castShadow = true;
-
-// Add the point light to the scene
-//scene.add(pointLight);
-var textureSB = {};
-//cubemap HDR
-new RGBELoader()
-    .setPath('/client/img/')
-    .load('morning.hdr', function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
-        //texture.generateMipmaps = true;
-        //scene.background = texture;
-        //scene.backgroundBlurriness = 2;
-        //scene.environment = texture;
-        textureSB["morning"] = texture;
-    });
+//var textureSB = {};
+////cubemap HDR
+//new RGBELoader()
+//    .setPath('/client/img/')
+//    .load('morning.hdr', function (texture) {
+//        texture.mapping = THREE.EquirectangularReflectionMapping;
+//        texture.magFilter = THREE.LinearFilter;
+//        texture.minFilter = THREE.LinearFilter;
+//        //texture.generateMipmaps = true;
+//        //scene.background = texture;
+//        //scene.backgroundBlurriness = 2;
+//        //scene.environment = texture;
+//        textureSB["morning"] = texture;
+//    });
 
 new RGBELoader()
     .setPath('/client/img/')
@@ -250,37 +212,37 @@ new RGBELoader()
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
         //texture.generateMipmaps = true;
-        //scene.background = texture;
+        scene.background = texture;
         //scene.backgroundBlurriness = 2;
-        //scene.environment = texture;
-        textureSB["noon"] = texture;
+        scene.environment = texture;
+        //textureSB["noon"] = texture;
     });
 
-new RGBELoader()
-    .setPath('/client/img/')
-    .load('evening.hdr', function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
-        //texture.generateMipmaps = true;
-        //scene.background = texture;
-        //scene.backgroundBlurriness = 2;
-        //scene.environment = texture;
-        textureSB["evening"] = texture;
-    });
-
-new RGBELoader()
-    .setPath('/client/img/')
-    .load('night.hdr', function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
-        //texture.generateMipmaps = true;
-        //scene.background = texture;
-        //scene.backgroundBlurriness = 2;
-        //scene.environment = texture;
-        textureSB["night"] = texture;
-    });
+//new RGBELoader()
+//    .setPath('/client/img/')
+//    .load('evening.hdr', function (texture) {
+//        texture.mapping = THREE.EquirectangularReflectionMapping;
+//        texture.magFilter = THREE.LinearFilter;
+//        texture.minFilter = THREE.LinearFilter;
+//        //texture.generateMipmaps = true;
+//        //scene.background = texture;
+//        //scene.backgroundBlurriness = 2;
+//        //scene.environment = texture;
+//        textureSB["evening"] = texture;
+//    });
+//
+//new RGBELoader()
+//    .setPath('/client/img/')
+//    .load('night.hdr', function (texture) {
+//        texture.mapping = THREE.EquirectangularReflectionMapping;
+//        texture.magFilter = THREE.LinearFilter;
+//        texture.minFilter = THREE.LinearFilter;
+//        //texture.generateMipmaps = true;
+//        //scene.background = texture;
+//        //scene.backgroundBlurriness = 2;
+//        //scene.environment = texture;
+//        textureSB["night"] = texture;
+//    });
 
 
 const buttonSkybox = document.getElementById("testA");
@@ -361,9 +323,6 @@ var pollInputs = function (delta) {
 var lastEmit = new Date().getTime();
 var deltaAvg = 0;
 var deltaCount = 0;
-var minute = 0;
-var hour = 6;
-var partOfDay = 0;
 
 var animate = function () {
     requestAnimationFrame(animate);
@@ -375,74 +334,14 @@ var animate = function () {
     pollInputs(delta);
 
     controls.update();
-
+    lightingManager.animationFrame(camera.position, controls.target);
     if (currentTime - 30 > lastEmit) {
         worldInfo.tick();
         stockpile.updateResourceDisplays();
+        lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
-        if (minute >= 59) {
-            if (hour >= 23) hour = 0;
-            else hour++;
-            minute = 0;
-            //console.log("Time is " + hour + ":" + minute);
-        }
-        else minute++;
-        //updateEnvironmentMap(hour);
-
-        let time = (hour + (minute / 60)) / 24; // time as a float between 0 and 1
-
-        // Shift it so midnight happens at the right time
-        time += 0.25;
-        time *= Math.PI * 2;
-        let sin = Math.sin(time) * 100;
-        let cos = Math.cos(time) * 100;
-
-        // With current math, noon/night last 8 hours each and morning/evening last 4 hours each.
-        // The two lights also perfectly cross-fade during morning/evening.
-        directionalLight.position.set(controls.target.x + cos, 50 - sin, controls.target.z + 100); // (x, y, z)
-        directionalLight2.position.set(controls.target.x - cos, 50 + sin, controls.target.z + 100); // (x, y, z)
-
-        directionalLight.intensity = Math.max(Math.min(directionalLight.position.y / 100, 5), 0) * 1.5;
-        directionalLight2.intensity = Math.max(Math.min(directionalLight2.position.y / 100, 5), 0) * 1.75;
-
-        directionalLight.color.set(0xff0000).lerp(new THREE.Color(0xffffff), Math.min(directionalLight.intensity, 1));
-        directionalLight2.color.set(0x77ccee).lerp(new THREE.Color(0x99ddff), Math.min(directionalLight.intensity, 1));
-
-        if (directionalLight.intensity <= 0) {
-            if (partOfDay !== 0) {
-                partOfDay = 0;
-                scene.background = textureSB["night"];
-                scene.environment = textureSB["night"];
-            }
-        }
-        else if (directionalLight.intensity > 0) {
-            if (partOfDay !== 2) {
-                partOfDay = 2;
-                scene.background = textureSB["noon"];
-                scene.environment = textureSB["noon"];
-            }
-        }
-        else if (hour < 12) {
-            if (partOfDay !== 1) {
-                partOfDay = 1;
-                scene.background = textureSB["morning"];
-                scene.environment = textureSB["morning"];
-            }
-        }
-        else {
-            if (partOfDay !== 3) {
-                partOfDay = 3;
-                scene.background = textureSB["evening"];
-                scene.environment = textureSB["evening"];
-            }
-        }
     }
 
-    directionalLight.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
-    directionalLight2.target.position.set(controls.target.x, -0.16, controls.target.z); // (x, y, z)
-    //pointLight.position.set(controls.target.x, (2 + camera.position.y / 2) / 2, controls.target.z + 10);
-
-    //cube.rotation.x += 0.01;
     if (oldWidth != window.innerWidth || oldHeight != window.innerHeight) {
         console.log("WE GON RESIZE");
         oldWidth = window.innerWidth;

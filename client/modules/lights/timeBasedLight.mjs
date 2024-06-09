@@ -43,12 +43,16 @@ class TimeBasedLight {
             else {
                 minAngle -= tau;
             }
-            
+
         }
 
         var lerpAmount = lerpInverse(minAngle, maxAngle, angle);
         this.light.intensity = lerp(this.keyFrames[0].intensity, this.keyFrames[1].intensity, lerpAmount);
         this.light.color.set(this.keyFrames[0].color).lerp(new THREE.Color(this.keyFrames[1].color), lerpAmount);
+
+        if (this.keyFrames[0].groundColor !== undefined && this.keyFrames[1].groundColor !== undefined) {
+            this.light.groundColor.set(this.keyFrames[0].groundColor).lerp(new THREE.Color(this.keyFrames[1].groundColor), lerpAmount);
+        }
     }
 
     cycleKeyFrames(angle) {

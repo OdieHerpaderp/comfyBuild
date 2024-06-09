@@ -9,7 +9,7 @@ const tau = Math.PI * 2;
 const anglePerMs = tau / millisPerDayCycle;
 
 class LightingManager {
-    currentAngle = tau*.25;
+    currentAngle = tau * .25;
 
     /**
      * @type {OrbitingLight[]}
@@ -43,16 +43,21 @@ class LightingManager {
 
         this.orbitingLights.push(sun, moon);
 
-        this.globalLight = new THREE.HemisphereLight(0x77bbee, 0xffffff, 0.4);
+        this.globalLight = new TimeBasedLight(new THREE.HemisphereLight(0x77bbee, 0xffffff, 0.4), [
+            { angle: Math.acos(0.5), color: 0xffffff - 0xff3f00, groundcolor: 0xffffff, intensity: 0.4 },
+            { angle: tau * .25, color: 0xffffff - 0xfffefa, groundcolor: 0xffffff, intensity: 0.4 },
+            { angle: tau * .75, color: 0xffffff - 0xfffefa, groundcolor: 0xffffff, intensity: 0.4 },
+            { angle: tau - Math.acos(0.5), color: 0xffffff - 0xff3f00, groundcolor: 0xffffff, intensity: 0.4 }
+        ]);
 
-        this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau/50, 1), [
+        this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau / 50, 1), [
             { angle: Math.acos(0.5), color: 0xeeeeff, intensity: 0.2 },
             { angle: tau * .25, color: 0xeeeeff, intensity: 0 },
             { angle: tau * .75, color: 0xeeeeff, intensity: 0 },
             { angle: tau - Math.acos(0.5), color: 0xeeeeff, intensity: 0.2 }
         ]);
 
-        scene.add(this.globalLight, this.spotLight.light, this.spotLight.light.target);
+        scene.add(this.globalLight.light, this.spotLight.light, this.spotLight.light.target);
     }
 
     tick(deltaTimeMs, targetPosition) {
@@ -63,6 +68,7 @@ class LightingManager {
             light.update(this.currentAngle, targetPosition);
         });
 
+        this.globalLight.update(this.currentAngle);
         this.spotLight.update(this.currentAngle);
     }
 

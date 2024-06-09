@@ -36,6 +36,7 @@ Tower = function(param){
 	self.produceSuccess = 0;
 	self.workCapacity = 0;
 	self.workUsage = 0;
+	self.repeatIdle = 0;
 
 	self.heroic = false;
 
@@ -68,6 +69,10 @@ Tower = function(param){
 				self.productionLevel = 0;
 				console.log("To consume");
 			}
+			else{
+				self.repeatIdle++;
+				if(self.repeatIdle % 50 == 0 && self.repeatIdle > 49) { Base.announce(self.towerType + " has idled for " + self.repeatIdle + " consequtive times!")}
+			}
 		}
 		else if (self.buildingPhase == 1){ //buildCon
 			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
@@ -75,7 +80,7 @@ Tower = function(param){
 				self.workRemaining = lib.progressPerBuild(self.towerType, self.upgradeLevel);
 				self.buildingPhase = 2;
 			}
-			//else console.log("No mats to build");
+			else self.buildingPhase = 0;
 		}
 		else if (self.buildingPhase == 2){ //build
 			self.workCapacity = Math.max(1, self.upgradeLevel);
@@ -105,6 +110,7 @@ Tower = function(param){
 					self.workRemaining = lib.progressPerProduction(self.towerType, self.productionLevel);
 					self.buildingPhase = 4;
 				}
+				else self.buildingPhase = 0;
 			}
 		}
 		else if (self.buildingPhase == 4){ //produce

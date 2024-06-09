@@ -26,18 +26,18 @@ class LightingManager {
         // Size = 100, Y offset = 50 => ground is at acos(50/100) = acos(0.5)
         let sun = new OrbitingLight(scene, 0, new THREE.Vector3(0, 50, 100), 100, [
             { angle: Math.acos(0.5), color: 0xff3f00, intensity: 0 },
-            { angle: tau * .25, color: 0xfffefa, intensity: 0.6 },
-            { angle: tau * .4, color: 0xfffefa, intensity: 1.2 },
-            { angle: tau * .6, color: 0xfffefa, intensity: 1.2 },
-            { angle: tau * .75, color: 0xfffefa, intensity: 0.6 },
+            { angle: tau * .25, color: 0xfffefa, intensity: 0.9 },
+            { angle: tau * .4, color: 0xfffefa, intensity: 1.8 },
+            { angle: tau * .6, color: 0xfffefa, intensity: 1.8 },
+            { angle: tau * .75, color: 0xfffefa, intensity: 0.9 },
             { angle: tau - Math.acos(0.5), color: 0xff3f00, intensity: 0 }
         ]);
         let moon = new OrbitingLight(scene, tau * 0.5, new THREE.Vector3(0, 50, 100), 100, [
             { angle: Math.acos(0.5), color: 0x224466, intensity: 0 },
-            { angle: tau * .25, color: 0x99ddff, intensity: 0.4 },
-            { angle: tau * .4, color: 0x99ddff, intensity: 0.8 },
-            { angle: tau * .6, color: 0x99ddff, intensity: 0.8 },
-            { angle: tau * .75, color: 0x99ddff, intensity: 0.4 },
+            { angle: tau * .25, color: 0x99ddff, intensity: 0.3 },
+            { angle: tau * .4, color: 0x99ddff, intensity: 0.5 },
+            { angle: tau * .6, color: 0x99ddff, intensity: 0.5 },
+            { angle: tau * .75, color: 0x99ddff, intensity: 0.3 },
             { angle: tau - Math.acos(0.5), color: 0x224466, intensity: 0 }
         ]);
 

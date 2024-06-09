@@ -169,7 +169,6 @@ class Building extends BaseEntity {
         }
         if (data.workRemaining > -1 && data.workRemaining !== this.workRemaining) {
             this.workRemaining = data.workRemaining;
-            textNeedsUpdate = true;
         }
         if (data.buildingPhase && data.buildingPhase !== this.buildingPhase) {
             this.buildingPhase = data.buildingPhase;
@@ -188,7 +187,7 @@ class Building extends BaseEntity {
         if (this.targetLevel > this.upgradeLevel) {
             levelText += " > " + Math.round(this.targetLevel);
         }
-        statusText = this.getPhaseString(this.buildingPhase) + ": " + this.workRemaining;
+        statusText = this.getPhaseString(this.buildingPhase);
 
         this.textSprite.text = ` \n${levelText}\n${this.buildingType}\n${statusText}`;
     }

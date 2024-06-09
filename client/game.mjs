@@ -24,7 +24,6 @@ loadingScreen.addEventListener("loadComplete", () => {
     loadingScreen = undefined;
     socket.emit('sendInit');
     
-    updateStats();
     animate();
 });
 document.body.appendChild(loadingScreen.domElement);
@@ -361,7 +360,9 @@ var animate = function () {
         camera.aspect = (window.innerWidth / window.innerHeight) * 1.06;
         camera.updateProjectionMatrix();
     }
+    stats.begin();
     renderer.render(scene, camera);
+    stats.end();
 };
 
 // Create a new Stats instance
@@ -374,25 +375,6 @@ stats.dom.style.top = '0px';
 
 // Add the stats panel to the document body
 document.body.appendChild(stats.dom);
-
-// Create a function to update the stats panel
-function updateStats() {
-  stats.begin();
-  // Render your Three.js scene here
-  renderer.render(scene, camera);
-  stats.end();
-
-  // Get renderer information
-  const renderInfo = renderer.info;
-  //console.log(`
-  //  Render calls: ${renderInfo.render.calls}
-  //  Triangles rendered: ${renderInfo.render.triangles}
-  //  Geometry memory: ${renderInfo.memory.geometries / (1024 * 1024)}MB
-  //`);
-
-  // Request the next frame
-  requestAnimationFrame(updateStats);
-}
 
 var settingsDiv = document.getElementById('settingsDiv');
 window.openSettings = function (e) {

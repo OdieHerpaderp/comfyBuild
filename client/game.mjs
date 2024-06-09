@@ -22,6 +22,9 @@ loadingScreen.addEventListener("loadComplete", () => {
     loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
     loadingScreen = undefined;
     socket.emit('sendInit');
+    
+    updateStats();
+    animate();
 });
 document.body.appendChild(loadingScreen.domElement);
 
@@ -384,11 +387,6 @@ function updateStats() {
   // Request the next frame
   requestAnimationFrame(updateStats);
 }
-
-// Start the animation loop and stats update
-updateStats();
-
-animate();
 
 var settingsDiv = document.getElementById('settingsDiv');
 window.openSettings = function (e) {

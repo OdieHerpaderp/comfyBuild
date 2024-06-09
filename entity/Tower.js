@@ -1,3 +1,9 @@
+lib = {};
+(async () => {
+	lib = await import("../lib/lib.mjs");
+	console.log("lib.lerp(0,42,0.75)", lib.lerp(0,42,0.75));
+})();
+
 Tower = function(param){
 	var self = Entity(param);
 	self.id = Math.random();
@@ -66,7 +72,7 @@ Tower = function(param){
 		else if (self.buildingPhase == 1){ //buildCon
 			if (self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
 				Base.totalPopCarrier += self.upgradeLevel;
-				self.workRemaining = 32 + self.productionLevel * 24;
+				self.workRemaining = lib.progressPerBuild(self.towerType, self.upgradeLevel);
 				self.buildingPhase = 2;
 			}
 			//else console.log("No mats to build");
@@ -96,7 +102,7 @@ Tower = function(param){
 			}
 			else{
 				if(self.productionLevel > 0) {
-					self.workRemaining = 24 * self.productionLevel;
+					self.workRemaining = lib.progressPerProduction(self.towerType, self.productionLevel);
 					self.buildingPhase = 4;
 				}
 			}

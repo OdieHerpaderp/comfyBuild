@@ -145,6 +145,7 @@ Tower = function(param){
 			towerType:self.towerType,
 			upgradeLevel:self.upgradeLevel,
 			targetLevel:self.targetLevel,
+			productionLevel:self.productionLevel,
 			workRemaining:self.workRemaining,
 			buildingPhase:self.buildingPhase,
 		};
@@ -158,7 +159,10 @@ Tower = function(param){
 			towerType:self.towerType,
 			upgradeLevel:self.upgradeLevel,
 			targetLevel:self.targetLevel,
+			productionLevel:self.productionLevel,
 			workRemaining:self.workRemaining,
+			workCapacity:self.workCapacity,
+			workUsage:self.workUsage,
 			buildingPhase:self.buildingPhase,
 		};
 		else return;

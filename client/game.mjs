@@ -10,6 +10,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
+import { materialMap } from "constants";
 import BuildingsFrame from "buildingsFrame";
 import { PlayerList } from "playerList";
 import Stats from 'three/addons/libs/stats.module.js';
@@ -158,48 +159,6 @@ grid.rotation.x = Math.PI * 1.5;
 // Add the mesh to the scene
 //grid.receiveShadow = true;
 scene.add(grid);
-
-
-// Load terrain textures
-const textureLoader = new THREE.TextureLoader();
-const texGrassdiff = textureLoader.load('client/textures/grass.jpg'); texGrassdiff.wrapS = texGrassdiff.wrapT = THREE.RepeatWrapping; texGrassdiff.repeat.set(16, 16);
-const texGrassNor = textureLoader.load('client/textures/grassNor.jpg'); texGrassNor.wrapS = texGrassNor.wrapT = THREE.RepeatWrapping; texGrassNor.repeat.set(16, 16);
-const texGrassDisp = textureLoader.load('client/textures/grassDis.jpg'); texGrassDisp.wrapS = texGrassDisp.wrapT = THREE.RepeatWrapping; texGrassDisp.repeat.set(16, 16);
-const texSanddiff = textureLoader.load('client/textures/sand.jpg'); texSanddiff.wrapS = texSanddiff.wrapT = THREE.RepeatWrapping; texSanddiff.repeat.set(16, 16);
-const texSandNor = textureLoader.load('client/textures/sandNor.jpg'); texSandNor.wrapS = texSandNor.wrapT = THREE.RepeatWrapping; texSandNor.repeat.set(16, 16);
-const texSandDisp = textureLoader.load('client/textures/sandDis.jpg'); texSandDisp.wrapS = texSandDisp.wrapT = THREE.RepeatWrapping; texSandDisp.repeat.set(16, 16);
-const texRockdiff = textureLoader.load('client/textures/rock.png'); texRockdiff.wrapS = texRockdiff.wrapT = THREE.RepeatWrapping; texRockdiff.repeat.set(32, 32);
-const texRockNor = textureLoader.load('client/textures/rockNor.png'); texRockNor.wrapS = texRockNor.wrapT = THREE.RepeatWrapping; texRockNor.repeat.set(32, 32);
-const texRockDisp = textureLoader.load('client/textures/rockDis.png'); texRockDisp.wrapS = texRockDisp.wrapT = THREE.RepeatWrapping; texRockDisp.repeat.set(32, 32);
-
-// Create a dictionary to map material names to new materials
-const materialMap = {
-    'sand': new THREE.MeshStandardMaterial({
-        color:"#aaaaaa",
-        map: texSanddiff, // Set diffuse/color map
-        normalMap: texSandNor,
-        displacementMap: texSandDisp,
-        displacementScale: 0.7, // Adjust displacement strength
-        roughness: 0.9
-    }),
-    'grass': new THREE.MeshStandardMaterial({
-        color:"#aaaaaa",
-        map: texGrassdiff,
-        normalMap: texGrassNor,
-        displacementMap: texGrassDisp,
-        displacementScale: 0.7,
-        roughness: 0.9
-    }),
-    'rock': new THREE.MeshStandardMaterial({
-        color:"#aaaaaa",
-        map: texRockdiff,
-        normalMap: texRockNor,
-        displacementMap: texRockDisp,
-        displacementScale: 0.7,
-        roughness: 0.9
-    })
-  };
-
 
 const loader = new GLTFLoader();
 var terrain;

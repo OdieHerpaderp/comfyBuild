@@ -1,4 +1,5 @@
 import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { buildingPhases } from "buildings";
 import { socket } from "singletons";
 
 let template = await getHTMLTemplate("client/modules/buildings/buildingTooltip.html");
@@ -20,7 +21,8 @@ class BuildingTooltip {
         this.buildingType = this.selectedBuilding.buildingType;
         this.upgradeLevel = this.selectedBuilding.upgradeLevel;
         this.targetLevel = this.selectedBuilding.targetLevel;
-        this.buildTimer = this.selectedBuilding.buildTimer;
+        this.workRemaining = this.selectedBuilding.workRemaining;
+        this.buildingPhase = buildingPhases[this.selectedBuilding.buildingPhase];
     }
 
     constructor() {
@@ -53,7 +55,12 @@ class BuildingTooltip {
 
     handleEvent(event) {
         if (event.type === "propertyChanged") {
-            this[event.detail.propertyName] = event.detail.newValue;
+            if (event.detail.propertyName == "buildingPhase") {
+                this[event.detail.propertyName] = buildingPhases[event.detail.newValue];
+            }
+            else {
+                this[event.detail.propertyName] = event.detail.newValue;
+            }
         }
     }
 }

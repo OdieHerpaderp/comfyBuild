@@ -29,7 +29,6 @@ Tower = function(param){
 	self.productionLevel = 0;
 	self.transforms = 0;
 	self.value = param.value;
-	self.team = self.whatTeam; // none, west, east
 	self.buildingPhase = 0; // 0 idle, 1 buildGather, 2 build, 3 consume, 4 produce
 	self.status = "build";
 	self.active = true;
@@ -43,13 +42,6 @@ Tower = function(param){
 	self.timer = 0;
 	self.toRemove = false;
 	var super_update = self.update;
-
-	self.whatTeam = function(){
-		if(self.parent == 0){
-			return 0;
-		}
-		else return Player.list[self.parent].team;
-	};
 
 	self.getMaxWorkers = function(upgradeLevel){
 		return Math.min(Math.max(Math.floor(Base.moraleCR / 10000 * upgradeLevel + 0.25), 1) , upgradeLevel);
@@ -97,7 +89,7 @@ Tower = function(param){
 			}
 		}
 		else if (self.buildingPhase == 3){ //consume
-			if (self.checkBuildingConsumptionProduce(self.towerType) && self.productionLevel < self.upgradeLevel){
+			if (self.checkApplyBuildingConsumptionProduce(self.towerType) && self.productionLevel < self.upgradeLevel){
 				if (buildings[self.towerType].category == "housing" ) {
 					// housing skips directly to build after one consumption.
 					self.workRemaining = 24 + self.productionLevel;
@@ -187,6 +179,28 @@ Tower = function(param){
 			}
 		  });
 			  return hasAllResources;
+		} else {
+			  console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
+		  return false;
+		}
+	};
+
+	self.checkApplyBuildingConsumptionProduce = function(buildingName) {
+		const building = buildings[buildingName];
+	  
+		if (building && building.consume && building.produce) {
+		  const resources = Object.keys(building.consume);
+		  const hasAllResources = resources.every(resource => {
+			if (resource === 'population') {
+			  return building.consume[resource] <= Base.populationCurrent;
+			} else {
+			  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource];
+			}
+		  });
+		  if(hasAllResources) {
+			for (const resource of resources) { Base.stockpile[resource] -= Math.round(building.build[resource] * (upgradeLevel * 5 + 1)); }
+		  }
+		  else return false;
 		} else {
 			  console.log(`The ${buildingName} building does not exist or does not have 'consume' and 'produce' properties.`);
 		  return false;

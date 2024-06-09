@@ -33,7 +33,7 @@ class BuildingsFrame {
         this.replacePropertyWithChild("content", this.buildingList.HTML);
     }
 
-    updateDisplay(building) {
+    selectedBuildingChanged(building) {
         if (building === this.currentBuilding) { return; }
         this.currentBuilding = building;
         if (building) {
@@ -42,6 +42,12 @@ class BuildingsFrame {
         }
         else {
             this.replacePropertyWithChild("content", this.buildingList.HTML);
+        }
+    }
+
+    updateDisplay() {
+        if (this.currentBuilding) {
+            this.buildingTooltip.updateDisplay();
         }
     }
 }

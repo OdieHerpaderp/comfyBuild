@@ -175,25 +175,28 @@ const texRockDisp = textureLoader.load('client/textures/rockDisp.png'); texRockD
 // Create a dictionary to map material names to new materials
 const materialMap2 = {
     'sand': new THREE.MeshStandardMaterial({
+        color:"#aaaaaa",
         map: texSanddiff, // Set diffuse/color map
         normalMap: texSandNor,
         displacementMap: texSandDisp,
         displacementScale: 0.7, // Adjust displacement strength
-        roughness: 0.1
+        roughness: 0.9
     }),
     'grass': new THREE.MeshStandardMaterial({
+        color:"#aaaaaa",
         map: texGrassdiff, // Set diffuse/color map
         normalMap: texGrassNor,
         displacementMap: texGrassDisp,
         displacementScale: 0.7, // Adjust displacement strength
-        roughness: 0.1
+        roughness: 0.9
     }),
     'rock': new THREE.MeshStandardMaterial({
+        color:"#aaaaaa",
         map: texRockdiff, // Set diffuse/color map
         normalMap: texRockNor,
         displacementMap: texRockDisp,
         displacementScale: 0.7, // Adjust displacement strength
-        roughness: 0.1
+        roughness: 0.9
     }),
     // Add more material mappings as needed
   };
@@ -255,8 +258,8 @@ loader.load('client/models/terrain.glb', function (gltf) {
 //    });
 
 new RGBELoader()
-    .setPath('/client/img/')
-    .load('noon.hdr', function (texture) {
+    .setPath('/client/textures/')
+    .load('envMap.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;

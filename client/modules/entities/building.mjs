@@ -3,6 +3,14 @@ import { modelCache } from "singletons";
 import * as THREE from 'three';
 import TextSprite from '@seregpie/three.text-sprite';
 
+// Create a dictionary to map material names to new materials
+const materialMap = {
+    'wood': new THREE.MeshStandardMaterial({ color: 0xff0000 }),
+    'stone': new THREE.MeshStandardMaterial({ color: 0x00ff00 }),
+    'grass': new THREE.MeshStandardMaterial({ color: 0x0000ff }),
+    // Add more material mappings as needed
+  };
+
 class Building extends BaseEntity {
     _buildingType;
     get buildingType() {
@@ -72,6 +80,10 @@ class Building extends BaseEntity {
             {
                 if ( child.isMesh )
                 {
+                    const materialName = child.material.name;
+                    if (materialMap[materialName]) {
+                        child.material = materialMap[materialName];
+                    }
                     child.castShadow = true;
                     child.receiveShadow = true;
                 }

@@ -34,6 +34,16 @@ class Building extends BaseEntity {
         this.propertyChanged("targetLevel", value);
     }
 
+    _productionLevel;
+    get productionLevel() {
+        return this._productionLevel;
+    }
+    set productionLevel(value) {
+        if (this._productionLevel == value) { return; }
+        this._productionLevel = value;
+        this.propertyChanged("productionLevel", value);
+    }
+
     _workRemaining;
     get workRemaining() {
         return this._workRemaining;
@@ -42,6 +52,26 @@ class Building extends BaseEntity {
         if (this._workRemaining == value) { return; }
         this._workRemaining = value;
         this.propertyChanged("workRemaining", value);
+    }
+
+    _workCapacity;
+    get workCapacity() {
+        return this._workCapacity;
+    }
+    set workCapacity(value) {
+        if (this._workCapacity == value) { return; }
+        this._workCapacity = value;
+        this.propertyChanged("workCapacity", value);
+    }
+
+    _workUsage;
+    get workUsage() {
+        return this._workUsage;
+    }
+    set workUsage(value) {
+        if (this._workUsage == value) { return; }
+        this._workUsage = value;
+        this.propertyChanged("workUsage", value);
     }
 
     _buildingPhase;
@@ -62,7 +92,10 @@ class Building extends BaseEntity {
         this.buildingType = initData.towerType ?? "unknown";
         this.upgradeLevel = initData.upgradeLevel ?? 0;
         this.targetLevel = initData.targetLevel ?? this.upgradeLevel;
+        this.productionLevel = initData.productionLevel ?? 1;
         this.workRemaining = initData.workRemaining ?? 0;
+        this.workCapacity = initData.workCapacity ?? 0;
+        this.workUsage = initData.workUsage ?? 0;
         this.buildingPhase = initData.buildingPhase ?? 0;
 
         let model = modelCache.getModel(this.buildingType);
@@ -158,6 +191,11 @@ class Building extends BaseEntity {
     update(data) {
         super.update(data);
 
+        this.workRemaining = data.workRemaining ?? this.workRemaining;
+        this.productionLevel = data.productionLevel ?? this.productionLevel;
+        this.workCapacity = data.workCapacity ?? this.workCapacity;
+        this.workUsage = data.workUsage ?? this.workUsage;
+
         var textNeedsUpdate = false;
         if (data.upgradeLevel && data.upgradeLevel !== this.upgradeLevel) {
             this.upgradeLevel = data.upgradeLevel;
@@ -166,9 +204,6 @@ class Building extends BaseEntity {
         if (data.targetLevel && data.targetLevel !== this.targetLevel) {
             this.targetLevel = data.targetLevel;
             textNeedsUpdate = true;
-        }
-        if (data.workRemaining > -1 && data.workRemaining !== this.workRemaining) {
-            this.workRemaining = data.workRemaining;
         }
         if (data.buildingPhase && data.buildingPhase !== this.buildingPhase) {
             this.buildingPhase = data.buildingPhase;

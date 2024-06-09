@@ -290,6 +290,9 @@ mark {
 #buildingTooltip {
     padding: $defaultPadding;
     font-size: $font-size-normal;
+    progress {
+        width: 100%;
+    }
 }
 
 .loginScreen {

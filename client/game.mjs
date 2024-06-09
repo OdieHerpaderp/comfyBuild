@@ -66,7 +66,7 @@ var scene = new THREE.Scene();
 // Don't mind me, I just need the scene...
 var entityManager = new EntityManager(scene);
 entityManager.addEventListener("selectedBuildingChanged", (event) => {
-    buildingsFrame.updateDisplay(event.detail.building);
+    buildingsFrame.selectedBuildingChanged(event.detail.building);
 });
 entityManager.addEventListener("playerConnected", (event) => {
     playerList.addPlayer(event.detail.player);
@@ -347,6 +347,7 @@ var animate = function () {
     if (currentTime - 30 > lastEmit) {
         worldInfo.tick();
         stockpile.updateResourceDisplays();
+        buildingsFrame.updateDisplay();
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
     }

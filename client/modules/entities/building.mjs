@@ -3,12 +3,34 @@ import { modelCache } from "singletons";
 import * as THREE from 'three';
 import TextSprite from '@seregpie/three.text-sprite';
 
-// Create a dictionary to map material names to new materials
+// Load building textures
+const textureLoader = new THREE.TextureLoader();
+const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
+const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
+const texStone = textureLoader.load('client/textures/buildings/stone.png');
+const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.png');
+const texWood = textureLoader.load('client/textures/buildings/wood.png');
+const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.png');
+
 const materialMap = {
-    'wood': new THREE.MeshStandardMaterial({ color: 0xff0000 }),
-    'stone': new THREE.MeshStandardMaterial({ color: 0x00ff00 }),
-    'grass': new THREE.MeshStandardMaterial({ color: 0x0000ff }),
-    // Add more material mappings as needed
+    'stone': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texStone,
+        normalMap: texStoneNor,
+        roughness: 0.9
+    }),
+    'wood': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texWood,
+        normalMap: texWoodNor,
+        roughness: 0.9
+    }),
+    'dirt': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texDirt,
+        normalMap: texDirtNor,
+        roughness: 0.9
+    }),
   };
 
 class Building extends BaseEntity {
@@ -82,6 +104,7 @@ class Building extends BaseEntity {
                 {
                     const materialName = child.material.name;
                     if (materialMap[materialName]) {
+                        console.log("building mapping material: " + materialName);
                         child.material = materialMap[materialName];
                     }
                     child.castShadow = true;
@@ -101,6 +124,11 @@ class Building extends BaseEntity {
             {
                 if ( child.isMesh )
                 {
+                    const materialName = child.material.name;
+                    if (materialMap[materialName]) {
+                        console.log("building mapping material: " + materialName);
+                        child.material = materialMap[materialName];
+                    }
                     child.castShadow = true;
                     child.receiveShadow = true;
                 }

@@ -176,26 +176,25 @@ mark {
 
 .pane {
     padding: $defaultPadding;
-    line-height:16px;
+    line-height:18px;
     margin: 2px;
     text-decoration: none;
-    background-color: #66666655;
-    border-style: solid;
-    border-color: #222222;
-    border-width: 1.5px;
     flex-grow:1;flex-shrink:1;flex-basis:0px;
 
     .paneHeader {
         padding-left: $defaultPadding;
         line-height:12px;
         font-size: $font-size-small;
+        background-color: #44444455;
+        border: 1.5px solid #44444455;
     }
 
     .paneContent {
-        padding: $defaultPadding / 2;
+        padding: $defaultPadding;
+        line-height:14px;
         font-size: $font-size-large;
-        background-color: #22222255;
-        border: 1.5px solid #888888;
+        background-color: #11111155;
+        border: 1.5px solid #44444455;
         text-align: right;
         font-family: 'Roboto Mono', monospace;
     }

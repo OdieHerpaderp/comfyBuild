@@ -160,20 +160,20 @@ grid.rotation.x = Math.PI * 1.5;
 scene.add(grid);
 
 
-// Load textures
+// Load terrain textures
 const textureLoader = new THREE.TextureLoader();
-const texGrassdiff = textureLoader.load('client/textures/grassDiff.jpg'); texGrassdiff.wrapS = texGrassdiff.wrapT = THREE.RepeatWrapping; texGrassdiff.repeat.set(16, 16);
+const texGrassdiff = textureLoader.load('client/textures/grass.jpg'); texGrassdiff.wrapS = texGrassdiff.wrapT = THREE.RepeatWrapping; texGrassdiff.repeat.set(16, 16);
 const texGrassNor = textureLoader.load('client/textures/grassNor.jpg'); texGrassNor.wrapS = texGrassNor.wrapT = THREE.RepeatWrapping; texGrassNor.repeat.set(16, 16);
-const texGrassDisp = textureLoader.load('client/textures/grassDisp.jpg'); texGrassDisp.wrapS = texGrassDisp.wrapT = THREE.RepeatWrapping; texGrassDisp.repeat.set(16, 16);
-const texSanddiff = textureLoader.load('client/textures/sandDiff.jpg'); texSanddiff.wrapS = texSanddiff.wrapT = THREE.RepeatWrapping; texSanddiff.repeat.set(16, 16);
+const texGrassDisp = textureLoader.load('client/textures/grassDis.jpg'); texGrassDisp.wrapS = texGrassDisp.wrapT = THREE.RepeatWrapping; texGrassDisp.repeat.set(16, 16);
+const texSanddiff = textureLoader.load('client/textures/sand.jpg'); texSanddiff.wrapS = texSanddiff.wrapT = THREE.RepeatWrapping; texSanddiff.repeat.set(16, 16);
 const texSandNor = textureLoader.load('client/textures/sandNor.jpg'); texSandNor.wrapS = texSandNor.wrapT = THREE.RepeatWrapping; texSandNor.repeat.set(16, 16);
-const texSandDisp = textureLoader.load('client/textures/sandDisp.jpg'); texSandDisp.wrapS = texSandDisp.wrapT = THREE.RepeatWrapping; texSandDisp.repeat.set(16, 16);
-const texRockdiff = textureLoader.load('client/textures/rockDiff.png'); texRockdiff.wrapS = texRockdiff.wrapT = THREE.RepeatWrapping; texRockdiff.repeat.set(32, 32);
+const texSandDisp = textureLoader.load('client/textures/sandDis.jpg'); texSandDisp.wrapS = texSandDisp.wrapT = THREE.RepeatWrapping; texSandDisp.repeat.set(16, 16);
+const texRockdiff = textureLoader.load('client/textures/rock.png'); texRockdiff.wrapS = texRockdiff.wrapT = THREE.RepeatWrapping; texRockdiff.repeat.set(32, 32);
 const texRockNor = textureLoader.load('client/textures/rockNor.png'); texRockNor.wrapS = texRockNor.wrapT = THREE.RepeatWrapping; texRockNor.repeat.set(32, 32);
-const texRockDisp = textureLoader.load('client/textures/rockDisp.png'); texRockDisp.wrapS = texRockDisp.wrapT = THREE.RepeatWrapping; texRockDisp.repeat.set(32, 32);
+const texRockDisp = textureLoader.load('client/textures/rockDis.png'); texRockDisp.wrapS = texRockDisp.wrapT = THREE.RepeatWrapping; texRockDisp.repeat.set(32, 32);
 
 // Create a dictionary to map material names to new materials
-const materialMap2 = {
+const materialMap = {
     'sand': new THREE.MeshStandardMaterial({
         color:"#aaaaaa",
         map: texSanddiff, // Set diffuse/color map
@@ -184,21 +184,20 @@ const materialMap2 = {
     }),
     'grass': new THREE.MeshStandardMaterial({
         color:"#aaaaaa",
-        map: texGrassdiff, // Set diffuse/color map
+        map: texGrassdiff,
         normalMap: texGrassNor,
         displacementMap: texGrassDisp,
-        displacementScale: 0.7, // Adjust displacement strength
+        displacementScale: 0.7,
         roughness: 0.9
     }),
     'rock': new THREE.MeshStandardMaterial({
         color:"#aaaaaa",
-        map: texRockdiff, // Set diffuse/color map
+        map: texRockdiff,
         normalMap: texRockNor,
         displacementMap: texRockDisp,
-        displacementScale: 0.7, // Adjust displacement strength
+        displacementScale: 0.7,
         roughness: 0.9
-    }),
-    // Add more material mappings as needed
+    })
   };
 
 
@@ -222,9 +221,9 @@ loader.load('client/models/terrain.glb', function (gltf) {
     gltf.scene.traverse(function (child) {
         if (child.isMesh) {
             const materialName = child.material.name;
-            if (materialMap2[materialName]) {
+            if (materialMap[materialName]) {
                 console.log("mapping material: " + materialName);
-                child.material = materialMap2[materialName];
+                child.material = materialMap[materialName];
             }
             child.receiveShadow = true;
             child.material.map && (child.material.map.anisotropy = Math.min(maxAnisotropy, 16));

@@ -20,6 +20,10 @@ const texStone = textureLoader.load('client/textures/buildings/stone.png');
 const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.png');
 const texWood = textureLoader.load('client/textures/buildings/wood.png');
 const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.png');
+const texIron = textureLoader.load('client/textures/buildings/iron.jpg');
+const texIronNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
+const texCopper = textureLoader.load('client/textures/buildings/copper.jpg');
+const texCopperNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
 
 const materialMap = {
     'sand': new THREE.MeshStandardMaterial({
@@ -65,6 +69,30 @@ const materialMap = {
         normalMap: texDirtNor,
         roughness: 0.9
     }),
+    'iron': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.4,
+        metalness: 0.4
+    }),
+    'copper': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texCopper,
+        normalMap: texCopperNor,
+        roughness: 0.4,
+        metalness: 0.4
+    }),
+    'glass': new THREE.MeshPhysicalMaterial({
+        color: 0xffffff, // Set the base color
+        metalness: 0, // Non-metallic
+        roughness: 0, // Smooth surface
+        transmission: 0.9, // High transmission for glass
+        transparent: true, // Enable transparency
+        envMapIntensity: 1, // Reflect environment
+        clearcoat: 1, // Add a clear coat layer
+        clearcoatRoughness: 0 // Smooth clear coat
+      })
 };
 
 export { materialMap };

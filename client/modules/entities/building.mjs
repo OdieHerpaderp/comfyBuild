@@ -77,8 +77,9 @@ class Building extends BaseEntity {
                     if (materialMap[materialName]) {
                         console.log("building mapping material: " + materialName);
                         child.material = materialMap[materialName];
+                        if(materialName == "glass") { console.log("wejo glass"); child.castShadow = false; }
+                            else child.castShadow = true;
                     }
-                    child.castShadow = true;
                     child.receiveShadow = true;
                 }
             });
@@ -88,8 +89,6 @@ class Building extends BaseEntity {
             if (model) {
                 // Use model if available
                 this.mesh = model.clone();
-                this.mesh.castShadow = true;
-                this.mesh.receiveShadow = true;
             }
             this.mesh.traverse ( function ( child )
             {
@@ -99,8 +98,9 @@ class Building extends BaseEntity {
                     if (materialMap[materialName]) {
                         console.log("building mapping material: " + materialName);
                         child.material = materialMap[materialName];
+                        if(materialName == "glass") child.castShadow = false;
+                            else child.castShadow = true;
                     }
-                    child.castShadow = true;
                     child.receiveShadow = true;
                 }
             });
@@ -144,7 +144,7 @@ class Building extends BaseEntity {
             alignment: 'center',
             color: '#fff',
             fontFamily: 'Roboto Slab',
-            fontSize: 0.60,
+            fontSize: 0.50,
             lineGap: 0.02,
             strokeColor: '#000',
             strokeWidth: 0.15,

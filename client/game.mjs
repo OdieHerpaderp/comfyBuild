@@ -21,6 +21,7 @@ loadingScreen.addEventListener("loadComplete", () => {
     loginScreen.showFrame();
     loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
     loadingScreen = undefined;
+    socket.emit('sendInit');
 });
 document.body.appendChild(loadingScreen.domElement);
 
@@ -213,7 +214,7 @@ new RGBELoader()
         texture.minFilter = THREE.LinearFilter;
         //texture.generateMipmaps = true;
         scene.background = texture;
-        //scene.backgroundBlurriness = 2;
+        scene.backgroundBlurriness = 0.9;
         scene.environment = texture;
         //textureSB["noon"] = texture;
     });
@@ -425,5 +426,3 @@ document.oncontextmenu = function (event) {
 }
 
 console.log("*Main Loaded");
-
-socket.emit('sendInit');

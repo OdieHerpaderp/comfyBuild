@@ -179,7 +179,7 @@ function gameTick() {
 		var flatMorale = Math.max(Math.min((7500 + oldMorale / 2.5) * ((20 + Math.max(Base.totalPopRemaining(), -15)) / Base.totalPopProduce * 1.5), 99999), 1500);
 		Base.morale = Math.round(Math.max(250 + Math.pow(flatMorale / 4.8, 0.94) * 7.2, 75));
 		if( Base.totalPopRemaining() < 5 ) { Base.moraleCR -= 50; Base.morale -= 50; }
-		console.log("flatMorale:" + Math.round(flatMorale) + " Morale: " + Base.morale + " MoraleCR: " + Base.moraleCR);
+		//console.log("flatMorale:" + Math.round(flatMorale) + " Morale: " + Base.morale + " MoraleCR: " + Base.moraleCR);
 
 		for(var i in SOCKET_LIST){
 			var sucket = SOCKET_LIST[i];

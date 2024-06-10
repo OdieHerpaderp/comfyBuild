@@ -54,12 +54,12 @@ Tower = function(param){
 			if (self.targetLevel > self.upgradeLevel && self.checkBuildingConsumptionBuild(self.towerType,self.upgradeLevel)){
 				self.buildingPhase = 1;
 				self.productionLevel = 0;
-				console.log("To buildGather");
+				//console.log("To buildGather");
 			}
 			else if(self.checkBuildingConsumptionProduce(self.towerType)) {
 				self.buildingPhase = 3;
 				self.productionLevel = 0;
-				console.log("To consume");
+				//console.log("To consume");
 			}
 			else{
 				self.repeatIdle++;
@@ -122,7 +122,7 @@ Tower = function(param){
 				self.buildingPhase = 0; 
 				Base.totalPopCarrier += self.upgradeLevel;
 				Base.Tech++;
-				console.log("produce (" + self.productionLevel + "/" + self.upgradeLevel + ") complete, to idle"); 
+				//console.log("produce (" + self.productionLevel + "/" + self.upgradeLevel + ") complete, to idle"); 
 			}
 		}
 	};

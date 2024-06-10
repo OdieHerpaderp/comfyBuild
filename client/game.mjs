@@ -180,7 +180,6 @@ loader.load('client/models/terrain.glb', function (gltf) {
         if (child.isMesh) {
             const materialName = child.material.name;
             if (materialMap[materialName]) {
-                console.log("mapping material: " + materialName);
                 child.material = materialMap[materialName];
             }
             child.receiveShadow = true;

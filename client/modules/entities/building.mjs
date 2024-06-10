@@ -108,7 +108,6 @@ class Building extends BaseEntity {
                 {
                     const materialName = child.material.name;
                     if (materialMap[materialName]) {
-                        console.log("building mapping material: " + materialName);
                         child.material = materialMap[materialName];
                         if(materialName == "glass") { console.log("wejo glass"); child.castShadow = false; }
                             else child.castShadow = true;
@@ -129,7 +128,6 @@ class Building extends BaseEntity {
                 {
                     const materialName = child.material.name;
                     if (materialMap[materialName]) {
-                        console.log("building mapping material: " + materialName);
                         child.material = materialMap[materialName];
                         if(materialName == "glass") child.castShadow = false;
                             else child.castShadow = true;

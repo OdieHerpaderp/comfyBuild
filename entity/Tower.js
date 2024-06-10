@@ -54,11 +54,13 @@ Tower = function (param) {
 			if (self.targetLevel > self.upgradeLevel && self.checkBuildingConsumptionBuild(self.towerType, self.upgradeLevel, false)) {
 				self.buildingPhase = 1;
 				self.productionLevel = 0;
+				self.repeatIdle = 0;
 				//console.log("To buildGather");
 			}
 			else if (self.checkBuildingConsumptionProduce(self.towerType, false)) {
 				self.buildingPhase = 3;
 				self.productionLevel = 0;
+				self.repeatIdle = 0;
 				//console.log("To consume");
 			}
 			else {

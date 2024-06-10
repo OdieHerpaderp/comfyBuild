@@ -1,12 +1,11 @@
 import { getHTMLTemplate, useTemplate } from "templateHelper";
-import { buildingPhases } from "buildings";
+import { buildings, buildingPhases } from "buildings";
 import { socket } from "singletons";
-import { progressPerBuild, progressPerProduction } from "lib";
+import { ShortResourceDisplayList } from "shortResourceDisplay";
+import { progressPerBuild, progressPerProduction, buildCostMultiplier, consumeMultiplier, produceMultiplier } from "lib";
 
 let template = await getHTMLTemplate("client/modules/buildings/buildingTooltip.html");
 class BuildingTooltip {
-    static template;
-
     upgradeAmount = 1;
 
     _selectedBuilding;
@@ -30,12 +29,27 @@ class BuildingTooltip {
         this.buildingPhaseId = this.selectedBuilding.buildingPhase;
         this.buildingPhase = buildingPhases[this.selectedBuilding.buildingPhase];
         this.updateWorkTotal();
+        this.updateBuildCost();
+        this.updateMaxConsumeProduce();
+        this.updateCurrentConsumeProduce();
     }
+
+    currentConsume;
+    maxConsume;
+    currentProduce;
+    maxProduce;
+    currentBuild;
 
     constructor() {
         useTemplate.bind(this)(template);
 
-        this.workProgressElement = this.domElement.querySelector("progress")
+        this.currentConsume = new ShortResourceDisplayList();
+        this.maxConsume = new ShortResourceDisplayList();
+        this.currentProduce = new ShortResourceDisplayList();
+        this.maxProduce = new ShortResourceDisplayList();
+        this.currentBuild = new ShortResourceDisplayList();
+
+        this.workProgressElement = this.domElement.querySelector("progress");
     }
 
     upgrade() {
@@ -93,7 +107,53 @@ class BuildingTooltip {
         else {
             this.workProgressElement.setAttribute("max", this.workTotal);
         }
-        
+
+    }
+
+    updateCurrentConsumeProduce() {
+        let building = buildings[this.buildingType];
+        if (!building) { return; }
+
+        if (building.consume) {
+            this.currentConsume.clearResources();
+            for (const [name, amount] of Object.entries(building.consume)) {
+                this.currentConsume.updateResource(name, amount * consumeMultiplier(this.buildingType, this.productionLevel));
+            }
+        }
+        if (building.produce) {
+            this.currentProduce.clearResources();
+            for (const [name, amount] of Object.entries(building.produce)) {
+                this.currentProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.productionLevel));
+            }
+        }
+    }
+
+    updateMaxConsumeProduce() {
+        let building = buildings[this.buildingType];
+        if (!building) { return; }
+
+        if (building.consume) {
+            this.maxConsume.clearResources();
+            for (const [name, amount] of Object.entries(building.consume)) {
+                this.maxConsume.updateResource(name, amount * consumeMultiplier(this.buildingType, this.upgradeLevel));
+            }
+        }
+        if (building.produce) {
+            this.maxProduce.clearResources();
+            for (const [name, amount] of Object.entries(building.produce)) {
+                this.maxProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.upgradeLevel));
+            }
+        }
+    }
+
+    updateBuildCost() {
+        let building = buildings[this.buildingType];
+        if (!building || !building.build) { return; }
+
+        this.currentBuild.clearResources();
+        for (const [name, amount] of Object.entries(building.build)) {
+            this.currentBuild.updateResource(name, amount * buildCostMultiplier(this.buildingType, this.upgradeLevel));
+        }
     }
 
     handleEvent(event) {
@@ -107,6 +167,28 @@ class BuildingTooltip {
             this[event.detail.propertyName] = event.detail.newValue;
         }
 
+        switch (event.detail.propertyName) {
+            case "upgradeLevel":
+                this.updateWorkTotal();
+                this.updateBuildCost();
+                this.updateMaxConsumeProduce();
+                break;
+            case "productionLevel":
+                this.updateWorkTotal();
+                this.updateCurrentConsumeProduce();
+                break;
+            case "buildingPhase":
+                this.updateWorkTotal();
+                break;
+            case "buildingType":
+                this.updateWorkTotal();
+                this.updateBuildCost();
+                this.updateMaxConsumeProduce();
+                this.updateCurrentConsumeProduce();
+                break;
+            default:
+                break;
+        }
         if (event.detail.propertyName == "buildingPhase" ||
             event.detail.propertyName == "buildingType" ||
             event.detail.propertyName == "upgradeLevel" ||

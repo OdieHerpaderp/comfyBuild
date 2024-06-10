@@ -197,15 +197,15 @@ class Building extends BaseEntity {
         this.workUsage = data.workUsage ?? this.workUsage;
 
         var textNeedsUpdate = false;
-        if (data.upgradeLevel && data.upgradeLevel !== this.upgradeLevel) {
+        if (data.upgradeLevel !== undefined && data.upgradeLevel !== this.upgradeLevel) {
             this.upgradeLevel = data.upgradeLevel;
             textNeedsUpdate = true;
         }
-        if (data.targetLevel && data.targetLevel !== this.targetLevel) {
+        if (data.targetLevel !== undefined && data.targetLevel !== this.targetLevel) {
             this.targetLevel = data.targetLevel;
             textNeedsUpdate = true;
         }
-        if (data.buildingPhase && data.buildingPhase !== this.buildingPhase) {
+        if (data.buildingPhase !== undefined && data.buildingPhase !== this.buildingPhase) {
             this.buildingPhase = data.buildingPhase;
             textNeedsUpdate = true;
         }

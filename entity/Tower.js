@@ -176,7 +176,7 @@ Tower = function(param){
 			if (resource === 'population') {
 			  return building.consume[resource] <= Base.populationCurrent;
 			} else {
-			  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource];
+			  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource] * lib.consumeMultiplier(buildingName, 1);
 			}
 		  });
 			  return hasAllResources;
@@ -195,11 +195,11 @@ Tower = function(param){
 			if (resource === 'population') {
 			  return building.consume[resource] <= Base.populationCurrent;
 			} else {
-			  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource];
+			  return building.consume[resource] && Base.stockpile[resource] >= building.consume[resource] * lib.consumeMultiplier(buildingName, 1);
 			}
 		  });
 		  if(hasAllResources) {
-			for (const resource of resources) { Base.stockpile[resource] -= building.consume[resource]; }
+			for (const resource of resources) { Base.stockpile[resource] -= building.consume[resource] * lib.consumeMultiplier(buildingName, 1); }
 			return true;
 		  }
 		  else { return false; }
@@ -209,7 +209,7 @@ Tower = function(param){
 		}
 	};
 
-	self.outputBuildingProduce = function(buildingName,upgradeLevel) {
+	self.outputBuildingProduce = function(buildingName,productionLevel) {
 		const building = buildings[buildingName];
 	  
 		if (building && building.consume && building.produce) {
@@ -221,10 +221,10 @@ Tower = function(param){
 			const producedItems = Object.entries(building.produce);
 			for (const [item, quantity] of producedItems) {
 			  if (item === 'population') {
-				Base.totalPopProduce += quantity * upgradeLevel;
+				Base.totalPopProduce += quantity * lib.produceMultiplier(buildingName, productionLevel);
 				//console.log(`The ${buildingName} building produced ${quantity} population.`);
 			  } else {
-					Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity * upgradeLevel;
+					Base.stockpile[item] = (Base.stockpile[item] || 0) + quantity * lib.produceMultiplier(buildingName, productionLevel);
 				//console.log(`The ${buildingName} building produced ${quantity} ${item}(s).`);
 			  }
 			}
@@ -246,14 +246,14 @@ Tower = function(param){
 		  const resources = Object.keys(building.build);
 		  //console.log(resources);
 		  const hasAllResources = resources.every(resource => {
-			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * (upgradeLevel * 5 + 1));
+			  return building.build[resource] && Base.stockpile[resource] >= Math.round(building.build[resource] * lib.buildCostMultiplier(buildingName, upgradeLevel));
 		  });
 	  
 		  if (hasAllResources) {
 			//console.log(`The ${buildingName} building wants to consume ${resources.join(', ')}.`);
 	  
 			for (const resource of resources) {
-				Base.stockpile[resource] -= Math.round(building.build[resource] * (upgradeLevel * 5 + 1));
+				Base.stockpile[resource] -= Math.round(building.build[resource] * lib.buildCostMultiplier(buildingName, upgradeLevel));
 			}
 			return true;
 		  } else {

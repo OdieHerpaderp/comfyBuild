@@ -7,7 +7,7 @@ class WorldInfo {
     jsFrameSettings = {
         name: `frameInfo`,
         title: `Status`,
-        left: 4, top: 66, width: 600, height: 110, minWidth: 600, minHeight: 110,
+        left: 4, top: 66, width: 600, height: 110, minWidth: 600, minHeight: 68,
         style: {
             backgroundColor: '#22222255',
             overflow: 'hidden',

@@ -55,6 +55,7 @@ loginScreen.addEventListener("loginSuccessful", () => {
     playerList.showFrame();
     playerList.setFramePosition(window.innerWidth - 4, 4, "RIGHT_TOP");
     worldInfo.showFrame();
+    worldInfo.setFramePosition(window.innerWidth / 2, 4, 'CENTER_TOP');
 });
 
 // Player list

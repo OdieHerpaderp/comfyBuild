@@ -44,7 +44,7 @@ Tower = function(param){
 	var super_update = self.update;
 
 	self.getMaxWorkers = function(upgradeLevel){
-		return Math.min(Math.max(Math.floor(Base.moraleCR / 10000 * upgradeLevel + 0.25), 1) , upgradeLevel);
+		return Math.min(Math.max(Math.floor(Base.moraleCR / 9000 * (upgradeLevel + 0.25)), 1) , upgradeLevel + 1);
 	};
 
 
@@ -120,8 +120,8 @@ Tower = function(param){
 			if(self.workRemaining == 0) { 
 				self.outputBuildingProduce(self.towerType,self.productionLevel);
 				self.buildingPhase = 0; 
-				Base.totalPopCarrier += self.upgradeLevel;
-				Base.Tech++;
+				Base.totalPopCarrier += self.productionLevel;
+				Base.Tech += self.productionLevel;
 				console.log("produce (" + self.productionLevel + "/" + self.upgradeLevel + ") complete, to idle"); 
 			}
 		}

@@ -110,7 +110,7 @@ class Building extends BaseEntity {
                     if (materialMap[materialName]) {
                         console.log("building mapping material: " + materialName);
                         child.material = materialMap[materialName];
-                        if(materialName == "glass") { console.log("wejo glass"); child.castShadow = false; }
+                        if(materialName == "glass") { child.castShadow = false; }
                             else child.castShadow = true;
                     }
                     child.receiveShadow = true;

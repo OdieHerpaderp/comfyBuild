@@ -69,6 +69,9 @@ var jsFrameMixin = {
         else if (this.domElement) {
             this.frame.$("#content").replaceWith(this.domElement);
         }
+        else if (this.frameContent?.domElement) {
+            this.frame.$("#content").replaceWith(this.frameContent.domElement);
+        }
     },
     setFramePosition(x, y, anchor) {
         if (!this.frame) {

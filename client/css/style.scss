@@ -57,6 +57,7 @@ mark {
 
 .monospace {
     font-family: 'Roboto Mono', monospace;
+    font-variant-numeric: tabular-nums lining-nums;
 }
 
 .text-xsmall {
@@ -227,32 +228,44 @@ mark {
     }
 }
 
-.resourceList {
+.longResourceList {
+    border: none;
+    border-collapse: collapse;
+    font-size: $font-size-small;
     padding: $defaultPadding;
 
-    .resource {
-        display: flex;
-        font-size: $font-size-small;
-        font-variant-numeric: tabular-nums lining-nums;
+    tr {
+        border: none;
 
-        .resourceName {
-            flex-grow: 1;
+        td {
+            border: none;
+            padding: 0 $defaultPadding 0 0;
+
+            &:first-child {
+                padding-left: $defaultPadding;
+            }
+        }
+
+        &:first-child td {
+            padding-top: $defaultPadding;
+        }
+
+        [data-content=name] {
+            text-align: left;
 
             &::after {
                 content: ':';
             }
         }
 
-        .resourceAmount {
+        [data-content=amount] {
             text-align: right;
         }
 
-        .resourceChange {
-            font-size: $font-size-xsmall;
-            min-width: 38px;
+        #changeColor {
             text-align: right;
-            line-height: 14px;
-            font-weight: 700;
+            font-size: $font-size-xsmall;
+            font-weight: bold;
 
             &.red {
                 color: red;

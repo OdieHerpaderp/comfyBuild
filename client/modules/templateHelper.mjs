@@ -103,13 +103,20 @@ class ContentBinding {
     set value(newValue) {
         newValue ??= "";
         if (typeof newValue === "number") {
-            newValue = newValue.toLocaleString();
+            newValue = newValue.toLocaleString(undefined, {
+                minimumFractionDigits: this.decimals,
+                maximumFractionDigits: this.decimals
+              });
         }
         if (newValue instanceof Element) { this.element.replaceChildren(newValue); }
         else if (newValue.domElement instanceof Element) { this.element.replaceChildren(newValue.domElement); }
         else { this.element.textContent = newValue; }
     }
-    constructor(element) { this.element = element; }
+    constructor(element) 
+    { 
+        this.element = element; 
+        this.decimals = element.dataset.decimals ?? 0;
+    }
 }
 
 class InputBinding {
@@ -122,14 +129,17 @@ class InputBinding {
     addEventListener() { this.element.addEventListener(...arguments); }
 }
 
+const documentFragments = {};
 async function getHTMLTemplate(templatePath, templateId) {
-    let templateHTML = await (await fetch(templatePath)).text();
-    let parser = new DOMParser();
-    let documentFragment = parser.parseFromString(templateHTML, "text/html");
-    if (templateId) {
-        return documentFragment.querySelector("template#"+templateId);    
+    if (!documentFragments[templatePath]) {
+        let templateHTML = await (await fetch(templatePath)).text();
+        let parser = new DOMParser();
+        documentFragments[templatePath] = parser.parseFromString(templateHTML, "text/html");
     }
-    return documentFragment.querySelector("template");
+    if (templateId) {
+        return documentFragments[templatePath].querySelector("template#" + templateId);
+    }
+    return documentFragments[templatePath].querySelector("template");
 }
 
 function parseContentAttributes(targetObject) {
@@ -191,7 +201,7 @@ function parseEvents(element, targetObject) {
     let events = element.dataset.events.split("|");
     events.forEach(event => {
         let eventSplit = event.split(":");
-        if (eventSplit.length !== 2) { return console.warn("invalid event specifier: " + event);  }
+        if (eventSplit.length !== 2) { return console.warn("invalid event specifier: " + event); }
         if (typeof targetObject[eventSplit[1]] !== "function") { return console.warn(targetObject.constructor.name + "." + eventSplit[1] + " is not a function!"); }
         element.addEventListener(eventSplit[0], (...args) => { targetObject[eventSplit[1]](...args); });
     });

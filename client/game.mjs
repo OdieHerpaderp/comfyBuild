@@ -1,6 +1,5 @@
 import { EntityManager } from "entityManager";
 import { LightingManager } from "lightingManager";
-import { ResourceList } from "resourceList";
 import { LoadingScreen } from "loadingScreen";
 import { LoginScreen } from "loginScreen";
 import { WorldInfo } from "worldInfo";
@@ -12,6 +11,7 @@ import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
 import { materialMap } from "constants";
 import BuildingsFrame from "buildingsFrame";
+import StockpileFrame from "stockpileFrame";
 import { PlayerList } from "playerList";
 import Stats from 'three/addons/libs/stats.module.js';
 
@@ -35,7 +35,7 @@ var worldInfo = new WorldInfo();
 var buildingsFrame = new BuildingsFrame();
 
 // Stockpile
-var stockpile = new ResourceList();
+const stockpile = new StockpileFrame();
 socket.on('stockpile', function (data) {
     stockpile.updateResources(data);
 });
@@ -345,7 +345,7 @@ var animate = function () {
     lightingManager.animationFrame(camera.position, controls.target);
     if (currentTime - 30 > lastEmit) {
         worldInfo.tick();
-        stockpile.updateResourceDisplays();
+        stockpile.displayTick();
         buildingsFrame.updateDisplay();
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;

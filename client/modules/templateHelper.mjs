@@ -122,10 +122,14 @@ class InputBinding {
     addEventListener() { this.element.addEventListener(...arguments); }
 }
 
-async function getHTMLTemplate(templatePath) {
+async function getHTMLTemplate(templatePath, templateId) {
     let templateHTML = await (await fetch(templatePath)).text();
     let parser = new DOMParser();
-    return parser.parseFromString(templateHTML, "text/html").querySelector("template");
+    let documentFragment = parser.parseFromString(templateHTML, "text/html");
+    if (templateId) {
+        return documentFragment.querySelector("template#"+templateId);    
+    }
+    return documentFragment.querySelector("template");
 }
 
 function parseContentAttributes(targetObject) {

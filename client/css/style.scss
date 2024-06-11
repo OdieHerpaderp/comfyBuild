@@ -176,14 +176,16 @@ mark {
 
 .pane {
     padding: $defaultPadding;
-    line-height:18px;
+    line-height: 18px;
     margin: 2px;
     text-decoration: none;
-    flex-grow:1;flex-shrink:1;flex-basis:0px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0px;
 
     .paneHeader {
         padding-left: $defaultPadding;
-        line-height:12px;
+        line-height: 12px;
         font-size: $font-size-small;
         background-color: #44444455;
         border: 1.5px solid #44444455;
@@ -191,7 +193,7 @@ mark {
 
     .paneContent {
         padding: $defaultPadding;
-        line-height:14px;
+        line-height: 14px;
         font-size: $font-size-large;
         background-color: #11111155;
         border: 1.5px solid #44444455;
@@ -263,6 +265,14 @@ mark {
     }
 }
 
+.shortResourceList {
+    padding: $defaultPadding;
+}
+
+.shortResource {
+    font-size: $font-size-xsmall;
+}
+
 .building-data-list {
     thead {
         tr {
@@ -290,8 +300,72 @@ mark {
 #buildingTooltip {
     padding: $defaultPadding;
     font-size: $font-size-normal;
+
     progress {
         width: 100%;
+    }
+
+    .resourceParent {
+        padding-left: $defaultPadding/2;
+        padding-right: $defaultPadding/2;
+        display: grid;
+        grid-template-rows: repeat(2, auto);
+        grid-template-columns: repeat(5, 1fr);
+
+        .resourceLabel {
+            grid-row-start: 1;
+            text-align: center;
+            line-height: 12px;
+            font-size: $font-size-small;
+            padding-left: $defaultPadding;
+            background-color: #44444455;
+            border: 1.5px solid #44444455;
+            margin: $defaultPadding $defaultPadding/2 0 $defaultPadding/2;
+            padding: $defaultPadding;
+        }
+
+        .resourceContent {
+            border: 1px solid $font-color;
+            grid-row-start: 2;
+            padding: $defaultPadding;
+            line-height: 14px;
+            background-color: #11111155;
+            border: 1.5px solid #44444455;
+            margin: 0 $defaultPadding/2 $defaultPadding $defaultPadding/2;
+            padding: $defaultPadding;
+
+            .shortResource {
+                text-align: center;
+            }
+        }
+    }
+}
+
+.pane {
+    padding: $defaultPadding;
+    line-height: 18px;
+    margin: 2px;
+    text-decoration: none;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0px;
+
+    .paneHeader {
+        padding-left: $defaultPadding;
+        line-height: 12px;
+        font-size: $font-size-small;
+        background-color: #44444455;
+        border: 1.5px solid #44444455;
+    }
+
+    .paneContent {
+        padding: $defaultPadding;
+        line-height: 14px;
+        font-size: $font-size-large;
+        background-color: #11111155;
+        border: 1.5px solid #44444455;
+        text-align: right;
+        font-family: 'Roboto Mono', monospace;
     }
 }
 

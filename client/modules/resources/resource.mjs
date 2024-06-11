@@ -1,4 +1,5 @@
 import { getHtmlTemplate, templateMixin } from "templateHelpers";
+import RunningAverage from "runningAverage";
 
 class Resource {
     static template;
@@ -36,32 +37,37 @@ class Resource {
         return this._change;
     }
     set change(value) {
-        if (this._change === value) { return; }
+        if (typeof value !== "number" || isNaN(value)) { return; }
+        //if (this._change === value) { return; }
         this._change = value;
-        if (value === 0) {
+        this.changeAverage.addNumber(value);
+        let average = this.changeAverage.value;
+        average = Math.round(average * 10) / 10;
+        if (average === 0) {
             this.setProperty("change", "±0");
             this.removeClassFromProperty("change", "red");
             this.removeClassFromProperty("change", "green");
         }
-        else if (value > 0) {
-            this.setProperty("change", `+${value}`);
+        else if (average > 0) {
+            this.setProperty("change", `+${average}`);
             this.removeClassFromProperty("change", "red");
             this.addClassToProperty("change", "green");
         }
         else {
-            this.setProperty("change", value);
+            this.setProperty("change", average);
             this.addClassToProperty("change", "red");
             this.removeClassFromProperty("change", "green");
         }
     }
     // #endregion
-
     constructor(name, amount) {
         this.loadTemplate();
 
         this.registerProperty("name");
         this.registerProperty("amount");
         this.registerProperty("change");
+
+        this.changeAverage = new RunningAverage(50);
 
         this.name = name;
         this.amount = amount;

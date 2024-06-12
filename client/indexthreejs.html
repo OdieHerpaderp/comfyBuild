@@ -32,6 +32,7 @@
 				"building": "./client/modules/entities/building.mjs",
 				"player": "./client/modules/entities/player.mjs",
 				"resourceNode": "./client/modules/entities/resourceNode.mjs",
+				"settingsFrame": "./client/modules/settings/settingsFrame.mjs",
 				"templateHelper": "./client/modules/templateHelper.mjs",
 				"templateHelpers": "./client/modules/templateHelpers.mjs",
 				"singletons": "./client/modules/singletons.mjs",
@@ -74,33 +75,7 @@
 		</div>
 
 		<div id="settingsDiv" style="position:absolute; width:100%; height:100%; display:none;">
-			<div
-				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:40px; margin: auto auto;text-align: center; border-style: solid; line-height: 40px;">
-				Settings <a class="button comfyButton" href="javascript:closeSettings()"
-					style="position:absolute;height:24px;top:4px;right:4px;width:31px">X</a>
-			</div>
-			<div
-				style="background-color: darkgreen; position:relative;top: 40%;width:300px;height:300px; margin: auto auto; border-style: solid;">
-				<a class="button comfyButton" id="buttonDisplayHP" href="javascript:hpDisplay()"
-					style="position:absolute;height:24px;top:4px;right:20px;width:260px">HP Display ON</a>
-				<a class="button comfyButton" id="buttonDisplayDAM" href="javascript:damageDisplay()"
-					style="position:absolute;height:24px;top:36px;right:20px;width:260px">Damage Display ALL</a>
-				<br><br><br><br>
-				<div class="slidecontainer">
-					<p>Target FrameTime: <span id="targetFrameTime">20</span></p>
-					<input type="range" min="10" max="50" value="20" class="slider" id="frameTimeSlider">
-				</div>
-				<div class="slidecontainer">
-					<p>Render Scale %: <span id="renderScale">100</span></p>
-					<input type="range" min="50" max="200" value="100" class="slider" id="renderScaleSlider">
-				</div>
-				<br>
-				<button id="testA" class="comfyButton">load 2k 4mb envmap</button><br>
-				<button id="testB" class="comfyButton">load 8k 56mb envmap</button><br>
-				<button id="testC" class="comfyButton">load original 57mb envmap</button><br>
-				<button id="testD" class="comfyButton">load old 25mb envmap</button>
-			</div>
-		</div>
+			
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/jsframe.js/lib/jsframe.min.js"></script>

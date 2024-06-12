@@ -12,6 +12,7 @@ import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
 import { materialMap } from "constants";
 import BuildingsFrame from "buildingsFrame";
+import SettingsFrame from "settingsFrame";
 import { PlayerList } from "playerList";
 import Stats from 'three/addons/libs/stats.module.js';
 
@@ -34,6 +35,9 @@ var worldInfo = new WorldInfo();
 // Buildings
 var buildingsFrame = new BuildingsFrame();
 
+// Settings
+var settingsFrame = new SettingsFrame();
+
 // Stockpile
 var stockpile = new ResourceList();
 socket.on('stockpile', function (data) {
@@ -49,6 +53,7 @@ loginScreen.addEventListener("loginSuccessful", () => {
     loginScreen.closeFrame();
     stockpile.showFrame();
     buildingsFrame.showFrame();
+    settingsFrame.showFrame();
     buildingsFrame.setFramePosition(window.innerWidth - 4, window.innerHeight - 4, 'RIGHT_BOTTOM');
     chat.showFrame();
     chat.setFramePosition(4, window.innerHeight - 4, "LEFT_BOTTOM");
@@ -252,50 +257,11 @@ new RGBELoader()
 //        textureSB["night"] = texture;
 //    });
 
-
-const buttonSkybox = document.getElementById("testA");
-buttonSkybox.addEventListener('click', (event) => {
-    console.log("2k");
-    scene.background = textureSB["2k"];
-    scene.environment = textureSB["2k"];
-});
-
-const buttonSkyboxB = document.getElementById("testB");
-buttonSkyboxB.addEventListener('click', (event) => {
-    console.log("8k");
-    scene.background = textureSB["8k"];
-    scene.environment = textureSB["8k"];
-});
-
-const buttonSkyboxC = document.getElementById("testC");
-buttonSkyboxC.addEventListener('click', (event) => {
-    console.log("original");
-    scene.background = textureSB["original"];
-    scene.environment = textureSB["original"];
-});
-
-const buttonSkyboxD = document.getElementById("testD");
-buttonSkyboxD.addEventListener('click', (event) => {
-    console.log("old");
-    scene.background = textureSB["old"];
-    scene.environment = textureSB["old"];
-});
-
 var targetFrameTime = 20;
 var renderScale = 100;
 var previousTime = 10;
 var displayHealth = true;
 var displayDamage = 2;
-
-document.getElementById("frameTimeSlider").oninput = function () {
-    targetFrameTime = this.value;
-    document.getElementById("targetFrameTime").innerHTML = this.value;
-}
-
-document.getElementById("renderScaleSlider").oninput = function () {
-    renderScale = this.value;
-    document.getElementById("renderScale").innerHTML = this.value;
-}
 
 window.hpDisplay = function () {
     if (displayHealth == true) { displayHealth = false; document.getElementById("buttonDisplayHP").innerHTML = "HP Display OFF"; }

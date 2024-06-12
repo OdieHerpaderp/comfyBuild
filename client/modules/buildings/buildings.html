@@ -45,3 +45,28 @@
 
     </div>
 </template>
+
+<template id="buildingDataRow">
+    <tr data-events="mouseover:mouseover|mouseout:mouseout">
+        <td data-content="age"></td>
+        <td>
+            <span data-content="name"></span><br />
+            <span data-content="node" class="text-xsmall"></span>
+        </td>
+        <td style="text-align:right;">
+            <div data-content="consume"></div>
+        </td>
+        <td style="font-size:35px; line-height: 35px; color:lightgray;">></td>
+        <td style="text-align:left;">
+            <div data-content="produce"></div>
+        </td>
+        <td>
+            <button class="comfyButton" data-events="click:buildClick">Build</button>
+        </td>
+        <td>
+            <div class="flex-center">
+                <div data-content="build"></div>
+            </div>
+        </td>
+    </tr>
+</template>

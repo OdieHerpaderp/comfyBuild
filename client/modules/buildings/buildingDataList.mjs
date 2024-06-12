@@ -25,11 +25,11 @@ class BuildingDataList {
             if (a.age !== b.age) {
                 return a.age - b.age;
             }
-            return a.name.localeCompare(b.name);
+            return a.name.value.localeCompare(b.name.value);
         });
 
         this.buildingDatas.forEach((buildingData) => {
-            this.appendChildToProperty("buildingData", buildingData.HTML);
+            this.appendChildToProperty("buildingData", buildingData.domElement);
         });
     }
 
@@ -39,7 +39,7 @@ class BuildingDataList {
         }
         newValue = newValue.toLowerCase();
         this.buildingDatas.forEach((buildingData) => {
-            buildingData.checkSearch(newValue);
+            buildingData.searchAndHighlight(newValue);
         });
     }
 }

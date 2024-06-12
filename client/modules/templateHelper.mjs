@@ -110,6 +110,7 @@ class ContentBinding {
         }
         if (newValue instanceof Element) { this.element.replaceChildren(newValue); }
         else if (newValue.domElement instanceof Element) { this.element.replaceChildren(newValue.domElement); }
+        else if (newValue.HTML instanceof Element) { this.element.replaceChildren(newValue.HTML); } // Temporary, can be removed once buildingDataList is converted
         else { this.element.textContent = newValue; }
     }
     constructor(element) 

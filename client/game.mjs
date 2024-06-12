@@ -29,10 +29,10 @@ loadingScreen.addEventListener("loadComplete", () => {
 document.body.appendChild(loadingScreen.domElement);
 
 // World information
-var worldInfo = new WorldInfo();
+const worldInfo = new WorldInfo();
 
 // Buildings
-var buildingsFrame = new BuildingsFrame();
+const buildingsFrame = new BuildingsFrame();
 
 // Stockpile
 const stockpile = new StockpileFrame();
@@ -347,7 +347,7 @@ var animate = function () {
     if (currentTime - 30 > lastEmit) {
         worldInfo.tick();
         stockpile.displayTick();
-        buildingsFrame.updateDisplay();
+        buildingsFrame.displayTick();
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
     }

@@ -197,7 +197,7 @@ class BuildingTooltip {
         }
     }
 
-    updateDisplay() {
+    displayTick() {
         if (this.workRemaining != this.workRemainingDisplay) {
             if (this.workRemaining < this.workRemainingDisplay) {
                 this.workRemainingDisplay -= Math.floor(1 + ((this.workRemainingDisplay - this.workRemaining) / 10));

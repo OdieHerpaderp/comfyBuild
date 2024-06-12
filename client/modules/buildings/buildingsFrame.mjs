@@ -1,5 +1,5 @@
 import { getHTMLTemplate, useTemplate } from "templateHelper";
-import { BuildingDataList } from "buildingDataList";
+import { BuildingDataList } from "buildingData";
 import { BuildingTooltip } from "buildingTooltip";
 import { jsFrameMixin } from "JSFrame";
 

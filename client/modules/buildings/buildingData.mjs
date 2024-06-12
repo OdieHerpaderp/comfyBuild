@@ -1,6 +1,7 @@
 import { getHTMLTemplate, useTemplate } from "templateHelper";
 import { HighlightableText } from "textHelpers";
 import { ShortResourceDisplayList } from "shortResourceDisplay";
+import { buildings } from "buildings";
 import { socket } from "singletons";
 
 let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataRow");
@@ -33,12 +34,12 @@ class BuildingData {
     }
 
     buildClick() {
-        socket.emit('buildTower', this.name);
+        socket.emit('buildTower', this.name.value);
     }
 
     mouseover() {
         if (!this.infoField) { return; }
-        this.infoField.textContent = this.name + ": " + this.info;
+        this.infoField.textContent = this.name.value + ": " + this.info;
     }
 
     mouseout() {
@@ -69,5 +70,41 @@ class BuildingData {
     }
 }
 
-export { BuildingData };
-export default BuildingData;
+let listTemplate = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataList");
+class BuildingDataList {
+    buildingDatas = [];
+
+    constructor() {
+        useTemplate.bind(this)(listTemplate);
+
+        let infoField = this.domElement.querySelector("#infoField");
+
+        // Temporary array because templates don't handle Array.sort properly yet
+        let buildingDatasTemp = [];
+        for (const buildingName in buildings) {
+            buildingDatasTemp.push(new BuildingData(buildingName, buildings[buildingName], infoField));
+        }
+
+        buildingDatasTemp.sort((a, b) => {
+            if (a.age !== b.age) {
+                return a.age - b.age;
+            }
+            return a.name.value.localeCompare(b.name.value);
+        });
+
+        this.buildingDatas = buildingDatasTemp;
+    }
+
+    searchInputChanged(event) {
+        let newValue =  event.target.value;
+        if (typeof newValue !== "string") {
+            newValue = "";
+        }
+        newValue = newValue.toLowerCase();
+        this.buildingDatas.forEach((buildingData) => {
+            buildingData.searchAndHighlight(newValue);
+        });
+    }
+}
+
+export { BuildingData, BuildingDataList };

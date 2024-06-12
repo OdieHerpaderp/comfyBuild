@@ -70,3 +70,27 @@
         </td>
     </tr>
 </template>
+
+<template id="buildingDataList">
+    <div class="text-normal building-data-list flex-column fullWidth">
+        <div class="flex">
+            <span>Search: <input type="text" data-content="search" data-events="input:searchInputChanged"></input></span>
+        </div>
+        <div class="flex-grow overflow-auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Age</th>
+                        <th>Building</th>
+                        <th style="text-align:right;">Consume</th>
+                        <th>></th>
+                        <th style="text-align:left;">Produce</th>
+                        <th colspan="2">Build</th>
+                    </tr>
+                </thead>
+                <tbody data-list="buildingDatas"></tbody>
+            </table>
+        </div>
+        <div id="infoField"></div>
+    </div>
+</template>

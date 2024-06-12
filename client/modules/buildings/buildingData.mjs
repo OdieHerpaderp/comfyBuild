@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { HighlightableText } from "textHelpers";
 import { ShortResourceDisplayList } from "shortResourceDisplay";
 import { buildings } from "buildings";

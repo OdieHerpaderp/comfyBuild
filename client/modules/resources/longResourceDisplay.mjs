@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { ExponentialMovingAverage, RollingNumber } from "numberHelpers";
 
 let template = await getHTMLTemplate("client/modules/resources/resources.html", "longResource");

@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { buildings, buildingPhases } from "buildings";
 import { socket } from "singletons";
 import { ShortResourceDisplayList } from "shortResourceDisplay";

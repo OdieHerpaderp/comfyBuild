@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { HighlightableText } from "textHelpers";
 
 let template = await getHTMLTemplate("client/modules/resources/resources.html", "shortResource");

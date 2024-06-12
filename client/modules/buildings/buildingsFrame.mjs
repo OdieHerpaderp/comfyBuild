@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { BuildingDataList } from "buildingData";
 import { BuildingTooltip } from "buildingTooltip";
 import { jsFrameMixin } from "JSFrame";

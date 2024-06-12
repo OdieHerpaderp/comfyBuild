@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
 import { socket } from "singletons";
 

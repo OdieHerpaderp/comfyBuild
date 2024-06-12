@@ -1,118 +1,65 @@
-import { getHtmlTemplate, templateMixin } from "templateHelpers";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
+import { HighlightableText } from "textHelpers";
+import { ShortResourceDisplayList } from "shortResourceDisplay";
+import { buildings } from "buildings";
 import { socket } from "singletons";
 
+let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataRow");
 class BuildingData {
     static template;
 
-    // #region properties
-    _name;
-    get name() {
-        return this._name;
-    }
-    set name(value) {
-        this._name = value;
-        this.setProperty("name", value);
-    }
-    _age;
-    get age() {
-        return this._age;
-    }
-    set age(value) {
-        this._age = value ?? -1;
-        this.setProperty("age", this._age);
-    }
-    _info;
-    get info() {
-        return this._info;
-    }
-    set info(value) {
-        this._info = value ?? "[no info available]";
-        this.setProperty("info", this._info);
-    }
-    _node;
-    get node() {
-        return this._node;
-    }
-    set node(value) {
-        this._node = value;
-        this.setProperty("node", this._node);
-    }
-    _build;
-    get build() {
-        return this._build;
-    }
-    set build(value) {
-        this._build = value ?? {};
-        this.setProperty("build", this.getResourceInfo(this._build ?? {}));
-    }
-    _consume;
-    get consume() {
-        return this._consume;
-    }
-    set consume(value) {
-        this._consume = value ?? {};
-        this.setProperty("consume", this.getResourceInfo(this._consume ?? {}));
-    }
-    _produce;
-    get produce() {
-        return this._produce;
-    }
-    set produce(value) {
-        this._produce = value ?? {};
-        this.setProperty("produce", this.getResourceInfo(this._produce ?? {}));
-    }
-    // #endregion
+    name;
+    age;
+    info;
+    node;
+    build;
+    consume;
+    produce;
 
     constructor(name, data, infoField) {
-        var that = this;
+        useTemplate.bind(this)(template);
 
-        this.loadTemplate();
-
-        this.registerProperty("name");
-        this.registerProperty("age");
-        this.registerProperty("info");
-        this.registerProperty("node");
-        this.registerProperty("build");
-        this.registerProperty("consume");
-        this.registerProperty("produce");
-
-        this.registerAction("build", () => { socket.emit('buildTower', that.name) });
-
-        this.name = name;
-        this.age = data.age;
-        this.info = data.info;
+        this.name = new HighlightableText(name);
+        this.age = data.age ?? -1;
+        this.info = data.info ?? "[no info available]";
         this.node = data.node;
-        this.build = data.build;
-        this.consume = data.consume;
-        this.produce = data.produce;
+        this.build = new ShortResourceDisplayList();
+        this.build.setResources(data.build);
+        this.consume = new ShortResourceDisplayList();
+        this.consume.setResources(data.consume);
+        this.produce = new ShortResourceDisplayList();
+        this.produce.setResources(data.produce);
 
-        if (infoField) {
-            this.HTML.addEventListener("mouseover", () => { infoField.innerHTML = this.name + ": " + this.info; });
-            this.HTML.addEventListener("mouseout", () => { infoField.innerHTML = String.fromCharCode(160); });
-        }
+        this.infoField = infoField;
     }
 
-    getResourceInfo(list) {
-        var result = "";
-        for (const resource in list) {
-            result += `<span>${resource}: ${list[resource]}</span>`;
-        }
-        return result;
+    buildClick() {
+        socket.emit('buildTower', this.name.value);
+    }
+
+    mouseover() {
+        if (!this.infoField) { return; }
+        this.infoField.textContent = this.name.value + ": " + this.info;
+    }
+
+    mouseout() {
+        if (!this.infoField) { return; }
+        this.infoField.textContent = "";
     }
 
     hide() {
-        this.HTML.classList.add("hidden");
+        this.domElement.classList.add("hidden");
     }
 
     show() {
-        this.HTML.classList.remove("hidden");
+        this.domElement.classList.remove("hidden");
     }
 
-    checkSearch(searchText) {
-        let nameResult = this._updateSearchValue("name", this.name.toLowerCase().includes(searchText), searchText);
-        let buildResult = this._updateSearchValue("build", this._resourceListMatchesSearch(this.build, searchText), searchText);
-        let consumeResult = this._updateSearchValue("consume", this._resourceListMatchesSearch(this.consume, searchText), searchText);
-        let produceResult = this._updateSearchValue("produce", this._resourceListMatchesSearch(this.produce, searchText), searchText);
+    searchAndHighlight(searchText) {
+        let nameResult = this.name.searchAndHighlight(searchText);
+        let buildResult = this.build.searchAndHighlight(searchText);
+        let consumeResult = this.consume.searchAndHighlight(searchText);
+        let produceResult = this.produce.searchAndHighlight(searchText);
 
         if (nameResult || buildResult || consumeResult || produceResult) {
             this.show();
@@ -121,25 +68,43 @@ class BuildingData {
             this.hide();
         }
     }
+}
 
-    _updateSearchValue(propertyName, searchResult, searchText) {
-        this.highlightPropertyText(propertyName, searchText);
+let listTemplate = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataList");
+class BuildingDataList {
+    buildingDatas = [];
 
-        return searchResult;
+    constructor() {
+        useTemplate.bind(this)(listTemplate);
+
+        let infoField = this.domElement.querySelector("#infoField");
+
+        // Temporary array because templates don't handle Array.sort properly yet
+        let buildingDatasTemp = [];
+        for (const buildingName in buildings) {
+            buildingDatasTemp.push(new BuildingData(buildingName, buildings[buildingName], infoField));
+        }
+
+        buildingDatasTemp.sort((a, b) => {
+            if (a.age !== b.age) {
+                return a.age - b.age;
+            }
+            return a.name.value.localeCompare(b.name.value);
+        });
+
+        this.buildingDatas = buildingDatasTemp;
     }
 
-    _resourceListMatchesSearch(list, searchText) {
-        for (const resource in list) {
-            if (resource.toLowerCase().includes(searchText)) {
-                return true;
-            }
+    searchInputChanged(event) {
+        let newValue =  event.target.value;
+        if (typeof newValue !== "string") {
+            newValue = "";
         }
-        return false;
+        newValue = newValue.toLowerCase();
+        this.buildingDatas.forEach((buildingData) => {
+            buildingData.searchAndHighlight(newValue);
+        });
     }
 }
 
-Object.assign(BuildingData.prototype, templateMixin);
-BuildingData.template = await getHtmlTemplate("client/modules/buildings/buildingData.html");
-
-export { BuildingData };
-export default BuildingData;
+export { BuildingData, BuildingDataList };

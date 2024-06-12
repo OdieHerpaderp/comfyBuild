@@ -1,5 +1,10 @@
-<template>
-    <div id="buildingTooltip" class="flex-column">
+<template id="buildingsFrame">
+    <div data-content="content" class="buildingsFrame">
+    </div>
+</template>
+
+<template id="buildingTooltip">
+    <div class="buildingTooltip" class="flex-column">
         <div class="flex-column fullWidth">
             <span>Building type: <span data-content="buildingType">?</span></span>
             <span>Level: <span data-content="upgradeLevel">?</span> > <span data-content="targetLevel">?</span></span>
@@ -38,5 +43,54 @@
             </div>
         </div>
 
+    </div>
+</template>
+
+<template id="buildingDataRow">
+    <tr data-events="mouseover:mouseover|mouseout:mouseout">
+        <td data-content="age"></td>
+        <td>
+            <span data-content="name"></span><br />
+            <span data-content="node" class="text-xsmall"></span>
+        </td>
+        <td style="text-align:right;">
+            <div data-content="consume"></div>
+        </td>
+        <td style="font-size:35px; line-height: 35px; color:lightgray;">></td>
+        <td style="text-align:left;">
+            <div data-content="produce"></div>
+        </td>
+        <td>
+            <button class="comfyButton" data-events="click:buildClick">Build</button>
+        </td>
+        <td>
+            <div class="flex-center">
+                <div data-content="build"></div>
+            </div>
+        </td>
+    </tr>
+</template>
+
+<template id="buildingDataList">
+    <div class="text-normal building-data-list flex-column fullWidth">
+        <div class="flex">
+            <span>Search: <input type="text" data-content="search" data-events="input:searchInputChanged"></input></span>
+        </div>
+        <div class="flex-grow overflow-auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Age</th>
+                        <th>Building</th>
+                        <th style="text-align:right;">Consume</th>
+                        <th>></th>
+                        <th style="text-align:left;">Produce</th>
+                        <th colspan="2">Build</th>
+                    </tr>
+                </thead>
+                <tbody data-list="buildingDatas"></tbody>
+            </table>
+        </div>
+        <div id="infoField"></div>
     </div>
 </template>

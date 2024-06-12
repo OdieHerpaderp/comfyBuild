@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import * as THREE from 'three';
 
 let template = await getHTMLTemplate("client/modules/loadingScreen/loadingScreen.html");

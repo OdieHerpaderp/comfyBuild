@@ -1,6 +1,5 @@
 import { EntityManager } from "entityManager";
 import { LightingManager } from "lightingManager";
-import { ResourceList } from "resourceList";
 import { LoadingScreen } from "loadingScreen";
 import { LoginScreen } from "loginScreen";
 import { WorldInfo } from "worldInfo";
@@ -13,6 +12,7 @@ import { socket } from "singletons"
 import { materialMap } from "constants";
 import BuildingsFrame from "buildingsFrame";
 import SettingsFrame from "settingsFrame";
+import StockpileFrame from "stockpileFrame";
 import { PlayerList } from "playerList";
 import Stats from 'three/addons/libs/stats.module.js';
 
@@ -30,16 +30,16 @@ loadingScreen.addEventListener("loadComplete", () => {
 document.body.appendChild(loadingScreen.domElement);
 
 // World information
-var worldInfo = new WorldInfo();
+const worldInfo = new WorldInfo();
 
 // Buildings
-var buildingsFrame = new BuildingsFrame();
+const buildingsFrame = new BuildingsFrame();
 
 // Settings
 var settingsFrame = new SettingsFrame();
 
 // Stockpile
-var stockpile = new ResourceList();
+const stockpile = new StockpileFrame();
 socket.on('stockpile', function (data) {
     stockpile.updateResources(data);
 });
@@ -60,6 +60,7 @@ loginScreen.addEventListener("loginSuccessful", () => {
     playerList.showFrame();
     playerList.setFramePosition(window.innerWidth - 4, 4, "RIGHT_TOP");
     worldInfo.showFrame();
+    worldInfo.setFramePosition(window.innerWidth / 2, 4, 'CENTER_TOP');
 });
 
 // Player list
@@ -311,8 +312,8 @@ var animate = function () {
     lightingManager.animationFrame(camera.position, controls.target);
     if (currentTime - 30 > lastEmit) {
         worldInfo.tick();
-        stockpile.updateResourceDisplays();
-        buildingsFrame.updateDisplay();
+        stockpile.displayTick();
+        buildingsFrame.displayTick();
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
     }

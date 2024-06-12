@@ -1,10 +1,10 @@
-import { BuildingDataList } from "buildingDataList";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
+import { BuildingDataList } from "buildingData";
 import { BuildingTooltip } from "buildingTooltip";
-import { getHtmlTemplate, templateMixin } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
 
+let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingsFrame");
 class BuildingsFrame {
-    static template;
     jsFrameSettings = {
         name: "frameBuildingTooltip",
         title: "Buildings",
@@ -21,16 +21,12 @@ class BuildingsFrame {
     currentBuilding;
 
     constructor() {
-        this.loadTemplate();
-        this.registerProperty("content");
-
-        this.displayingBuildingList = false;
-        this.displayingTooltip = false;
+        useTemplate.bind(this)(template);
 
         this.buildingList = new BuildingDataList();
         this.buildingTooltip = new BuildingTooltip();
 
-        this.replacePropertyWithChild("content", this.buildingList.HTML);
+        this.content = this.buildingList;
     }
 
     selectedBuildingChanged(building) {
@@ -38,23 +34,21 @@ class BuildingsFrame {
         this.currentBuilding = building;
         if (building) {
             this.buildingTooltip.selectedBuilding = building;
-            this.replacePropertyWithChild("content", this.buildingTooltip.domElement);
+            this.content = this.buildingTooltip;
         }
         else {
-            this.replacePropertyWithChild("content", this.buildingList.HTML);
+            this.content = this.buildingList;
         }
     }
 
-    updateDisplay() {
+    displayTick() {
         if (this.currentBuilding) {
-            this.buildingTooltip.updateDisplay();
+            this.buildingTooltip.displayTick();
         }
     }
 }
 
 Object.assign(BuildingsFrame.prototype, jsFrameMixin);
-Object.assign(BuildingsFrame.prototype, templateMixin);
-BuildingsFrame.template = await getHtmlTemplate("client/modules/buildings/buildingsFrame.html");
 
 export { BuildingsFrame };
 export default BuildingsFrame;

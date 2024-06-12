@@ -1,10 +1,10 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { buildings, buildingPhases } from "buildings";
 import { socket } from "singletons";
 import { ShortResourceDisplayList } from "shortResourceDisplay";
 import { progressPerBuild, progressPerProduction, buildCostMultiplier, consumeMultiplier, produceMultiplier } from "lib";
 
-let template = await getHTMLTemplate("client/modules/buildings/buildingTooltip.html");
+let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingTooltip");
 class BuildingTooltip {
     upgradeAmount = 1;
 
@@ -197,7 +197,7 @@ class BuildingTooltip {
         }
     }
 
-    updateDisplay() {
+    displayTick() {
         if (this.workRemaining != this.workRemainingDisplay) {
             if (this.workRemaining < this.workRemainingDisplay) {
                 this.workRemainingDisplay -= Math.floor(1 + ((this.workRemainingDisplay - this.workRemaining) / 10));

@@ -1,4 +1,4 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
 
 let playerListEntryTemplate = await getHTMLTemplate("client/modules/playerList/playerListEntry.html");

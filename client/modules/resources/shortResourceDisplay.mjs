@@ -1,18 +1,25 @@
-import { getHTMLTemplate, useTemplate } from "templateHelper";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
+import { HighlightableText } from "textHelpers";
 
 let template = await getHTMLTemplate("client/modules/resources/resources.html", "shortResource");
 let listTemplate = await getHTMLTemplate("client/modules/resources/resources.html", "shortResourceList");
 
 class ShortResourceDisplay {
     name;
+    originalName;
     amount;
     isVisible = false;
 
     constructor(name = "[unknown]", amount = 0) {
         useTemplate.bind(this)(template);
-        
-        this.name = name;
+
+        this.name = new HighlightableText(name);
+        this.originalName = name;
         this.amount = amount;
+    }
+
+    searchAndHighlight(searchText) {
+        return this.name.searchAndHighlight(searchText);
     }
 }
 
@@ -25,10 +32,9 @@ class ShortResourceDisplayList {
     }
 
     clearResources() {
-        let resource = this.resources.pop();
-        while(resource){
+        let resource;
+        while (resource = this.resources.pop()) {
             resource.isVisible = false;
-            resource = this.resources.pop();
         }
     }
 
@@ -51,6 +57,12 @@ class ShortResourceDisplayList {
             this.resources.push(this.resourceDisplays[name]);
             this.resourceDisplays[name].isVisible = true;
         }
+    }
+
+    searchAndHighlight(searchText) {
+        var result = false;
+        this.resources.forEach((resource) => { result = resource.searchAndHighlight(searchText) || result; });
+        return result;
     }
 }
 

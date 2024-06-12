@@ -4,7 +4,7 @@ import { socket } from "singletons";
 import { ShortResourceDisplayList } from "shortResourceDisplay";
 import { progressPerBuild, progressPerProduction, buildCostMultiplier, consumeMultiplier, produceMultiplier } from "lib";
 
-let template = await getHTMLTemplate("client/modules/buildings/buildingTooltip.html");
+let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingTooltip");
 class BuildingTooltip {
     upgradeAmount = 1;
 

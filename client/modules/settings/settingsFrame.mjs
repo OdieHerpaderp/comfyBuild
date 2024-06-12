@@ -1,12 +1,12 @@
-import { getHtmlTemplate, templateMixin } from "templateHelpers";
+import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { jsFrameMixin } from "JSFrame";
 
+let template = await getHTMLTemplate("client/modules/settings/settingsFrame.html", "settingsFrame");
 class SettingsFrame {
-    static template;
     jsFrameSettings = {
-        name: "frameBuildingTooltip",
+        name: "settingsFrame",
         title: "Settings",
-        left: 380, top: 360, width: 320, height: 320, minWidth: 560, minHeight: 110,
+        left: 380, top: 360, width: 280, height: 280, minWidth: 560, minHeight: 110,
         style: {
             backgroundColor: '#22222255',
             overflow: 'hidden',
@@ -17,28 +17,16 @@ class SettingsFrame {
     };
 
     constructor() {
-        this.loadTemplate();
-        this.registerProperty("content");
+        //TODO: i am borked :(
+        useTemplate.bind(this)(template);
     }
 
-    updateDisplay() {
+
+    displayTick() {
     }
 }
 
-// TODO: make this work again
-//document.getElementById("frameTimeSlider").oninput = function () {
-//    targetFrameTime = this.value;
-//    document.getElementById("targetFrameTime").innerHTML = this.value;
-//}
-
-//document.getElementById("renderScaleSlider").oninput = function () {
-//    renderScale = this.value;
-//    document.getElementById("renderScale").innerHTML = this.value;
-//}
-
 Object.assign(SettingsFrame.prototype, jsFrameMixin);
-Object.assign(SettingsFrame.prototype, templateMixin);
-SettingsFrame.template = await getHtmlTemplate("client/modules/settings/settingsFrame.html");
 
 export { SettingsFrame };
 export default SettingsFrame;

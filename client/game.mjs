@@ -92,6 +92,11 @@ var renderer = new THREE.WebGLRenderer({ canvas: threejs });
 var oldWidth = 0;
 var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Post-Processing
+renderer.toneMapping = THREE.AgXToneMapping; //Default to AgX
+renderer.toneMappingExposure = 1;
+
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 

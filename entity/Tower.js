@@ -95,7 +95,7 @@ Tower = function (param) {
 			if (self.checkBuildingConsumptionProduce(self.towerType, true) && self.productionLevel < self.upgradeLevel) {
 				if (buildings[self.towerType].category == "housing") {
 					// housing skips directly to build after one consumption.
-					self.workRemaining = 24 + self.productionLevel;
+					self.workRemaining = 24 + self.productionLevel * 4;
 					self.buildingPhase = 4;
 				}
 				self.productionLevel++;

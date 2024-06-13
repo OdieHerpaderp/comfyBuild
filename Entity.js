@@ -49,26 +49,26 @@ Entity = function(param){
 Entity.getFrameUpdateData = function(){
 	var pack = {
 		initPack:{
-			player:initPack.player,
-			bullet:initPack.bullet,
-			tower:initPack.tower,
+			players:initPack.player,
+			resourceNodes:initPack.bullet,
+			buildings:initPack.tower,
 		},
 		removePack:{
-			player:removePack.player,
-			bullet:removePack.bullet,
-			tower:removePack.tower,
+			players:removePack.player,
+			resourceNodes:removePack.bullet,
+			buildings:removePack.tower,
 		},
 		updatePack:{
-			player:Player.update(),
-			bullet:Bullet.update(),
-			tower:Tower.update(),
+			players:Player.update(),
+			resourceNodes:Bullet.update(),
+			buildings:Tower.update(),
 		}
 	};
-	initPack.player = [];
-	initPack.bullet = [];
-	initPack.tower = [];
-	removePack.player = [];
-	removePack.bullet = [];
-	removePack.tower = [];
+	initPack.players = [];
+	initPack.resourceNodes = [];
+	initPack.buildings = [];
+	removePack.players = [];
+	removePack.resourceNodes = [];
+	removePack.buildings = [];
 	return pack;
 }

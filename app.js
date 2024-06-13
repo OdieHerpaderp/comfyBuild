@@ -153,9 +153,9 @@ io.sockets.on('connection', function(socket){
 	socket.on('sendInit',function(){
 		socket.emit('init',{
 			selfId:socket.id,
-			player:Player.getAllInitPack(),
-			bullet:Bullet.getAllInitPack(),
-			tower:Tower.getAllInitPack(),
+			players:Player.getAllInitPack(),
+			resourceNodes:Bullet.getAllInitPack(),
+			buildings:Tower.getAllInitPack(),
 		});
 	});
 

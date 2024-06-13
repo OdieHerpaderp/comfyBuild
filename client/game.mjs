@@ -7,7 +7,7 @@ import { Chat } from "chat";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MapControls } from 'three/addons/controls/OrbitControls.js';
 import { socket } from "singletons"
 import { materialMap } from "constants";
 import BuildingsFrame from "buildingsFrame";
@@ -104,7 +104,7 @@ const settingsFrame = new SettingsFrame(renderer, scene);
 // Camera controls
 const gameElement = document.getElementById("game");
 // note: normally renderer.domElement is used, but that's hidden behind other elements so it doesn't capture mouse events.
-const controls = new OrbitControls(camera, gameElement);
+const controls = new MapControls(camera, gameElement);
 controls.target.x = 260;
 controls.target.z = 260;
 controls.maxDistance = 750;

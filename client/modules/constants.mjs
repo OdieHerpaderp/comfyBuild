@@ -16,10 +16,10 @@ const texRockDisp = textureLoader.load('client/textures/rockDis.png'); texRockDi
 // Load building textures
 const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
 const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
-const texStone = textureLoader.load('client/textures/buildings/stone.png');
-const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.png');
-const texWood = textureLoader.load('client/textures/buildings/wood.png');
-const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.png');
+const texStone = textureLoader.load('client/textures/buildings/stone.webp');
+const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.jpg');
+const texWood = textureLoader.load('client/textures/buildings/wood.webp');
+const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.webp');
 const texIron = textureLoader.load('client/textures/buildings/iron.jpg');
 const texIronNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
 const texCopper = textureLoader.load('client/textures/buildings/copper.jpg');

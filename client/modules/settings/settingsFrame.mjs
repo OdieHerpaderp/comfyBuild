@@ -16,8 +16,10 @@ class SettingsFrame {
         }
     };
 
-    constructor() {
+    constructor(renderer) {
         useTemplate.bind(this)(template);
+
+        this.renderer = renderer;
     }
 
 
@@ -27,13 +29,13 @@ class SettingsFrame {
     renderExpChanged(event) {
         let newValue =  event.target.value;
         //TODO gain access to renderer.
-        renderer.toneMappingExposure = newValue / 100;
+        this.renderer.toneMappingExposure = newValue / 100;
     }
 
     renderScaleChanged(event) {
         let newValue =  event.target.value;
         //TODO gain access to renderer.
-        renderer.setPixelRatio(window.devicePixelRatio * newValue / 100);
+        this.renderer.setPixelRatio(window.devicePixelRatio * newValue / 100);
     }
 }
 

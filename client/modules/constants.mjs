@@ -74,14 +74,16 @@ const materialMap = {
         map: texIron,
         normalMap: texIronNor,
         roughness: 0.4,
-        metalness: 0.4
+        metalness: 0.4,
+        envMapIntensity: 1, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texCopper,
         normalMap: texCopperNor,
         roughness: 0.4,
-        metalness: 0.4
+        metalness: 0.4,
+        envMapIntensity: 1, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
         color: 0xffffff, // Set the base color

@@ -48,7 +48,7 @@ class SettingsFrame {
         } else if (newValue == 5) {
             this.renderer.toneMapping = THREE.AgXToneMapping;
         } else if (newValue == 6) {
-            this.renderer.toneMapping = THREE.NeuralToneMapping;
+            this.renderer.toneMapping = THREE.NeutralToneMapping;
         } else {
             this.renderer.toneMapping = THREE.NoToneMapping;
         }

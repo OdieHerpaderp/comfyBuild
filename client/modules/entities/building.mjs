@@ -180,7 +180,7 @@ class Building extends BaseEntity {
             lineGap: 0.02,
             strokeColor: '#000',
             strokeWidth: 0.15,
-            text: this.upgradeLevel + "\n" + this.buildingType,
+            text: this.upgradeLevel + "\n" + this.buildingType + "\n" ,
         });
 
         this.textSprite.position.set(0, 3.4, 1.1);

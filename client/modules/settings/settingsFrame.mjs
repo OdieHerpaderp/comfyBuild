@@ -20,9 +20,9 @@ class SettingsFrame {
     constructor(renderer, scene) {
         useTemplate.bind(this)(template);
 
-        this.renderTonemap = 2;
+        this.renderTonemap = 4;
         this.renderScale = 100;
-        this.renderExp = 100;
+        this.renderExp = 80;
 
         this.renderer = renderer;
         this.scene = scene;

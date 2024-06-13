@@ -32,7 +32,8 @@ const materialMap = {
         normalMap: texSandNor,
         displacementMap: texSandDisp,
         displacementScale: 0.7, // Adjust displacement strength
-        roughness: 0.9
+        roughness: 0.95,
+        envMapIntensity: 0.4, // Reflect environment
     }),
     'grass': new THREE.MeshStandardMaterial({
         color:"#aaaaaa",
@@ -40,7 +41,8 @@ const materialMap = {
         normalMap: texGrassNor,
         displacementMap: texGrassDisp,
         displacementScale: 0.7,
-        roughness: 0.9
+        roughness: 0.95,
+        envMapIntensity: 0.4, // Reflect environment
     }),
     'rock': new THREE.MeshStandardMaterial({
         color:"#aaaaaa",
@@ -48,42 +50,46 @@ const materialMap = {
         normalMap: texRockNor,
         displacementMap: texRockDisp,
         displacementScale: 0.7,
-        roughness: 0.9
+        roughness: 0.95,
+        envMapIntensity: 0.4, // Reflect environment
     }),
     // Buildings
     'stone': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texStone,
         normalMap: texStoneNor,
-        roughness: 0.9
+        roughness: 0.9,
+        envMapIntensity: 0.8, // Reflect environment
     }),
     'wood': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texWood,
         normalMap: texWoodNor,
-        roughness: 0.9
+        roughness: 0.9,
+        envMapIntensity: 0.8, // Reflect environment
     }),
     'dirt': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texDirt,
         normalMap: texDirtNor,
-        roughness: 0.9
+        roughness: 0.9,
+        envMapIntensity: 0.8, // Reflect environment
     }),
     'iron': new THREE.MeshStandardMaterial({
-        color:"#ffffff",
+        color:"#666666",
         map: texIron,
         normalMap: texIronNor,
-        roughness: 0.4,
-        metalness: 0.4,
-        envMapIntensity: 1, // Reflect environment
+        roughness: 0.3,
+        metalness: 0.5,
+        envMapIntensity: 1.4, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
-        color:"#ffffff",
+        color:"#bb7722",
         map: texCopper,
         normalMap: texCopperNor,
-        roughness: 0.4,
-        metalness: 0.4,
-        envMapIntensity: 1, // Reflect environment
+        roughness: 0.3,
+        metalness: 0.5,
+        envMapIntensity: 1.4, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
         color: 0xffffff, // Set the base color
@@ -91,7 +97,7 @@ const materialMap = {
         roughness: 0, // Smooth surface
         transmission: 0.9, // High transmission for glass
         transparent: true, // Enable transparency
-        envMapIntensity: 1, // Reflect environment
+        envMapIntensity: 3, // Reflect environment
         clearcoat: 1, // Add a clear coat layer
         clearcoatRoughness: 0 // Smooth clear coat
       })

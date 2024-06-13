@@ -25,29 +25,29 @@ class LightingManager {
 
         // Size = 100, Y offset = 50 => ground is at acos(50/100) = acos(0.5)
         let sun = new OrbitingLight(scene, 0, new THREE.Vector3(0, 50, 100), 100, [
-            { angle: Math.acos(0.5), color: 0xff3f00, intensity: 0 },
+            { angle: Math.acos(0.4), color: 0xff3f00, intensity: 0 },
             { angle: tau * .25, color: 0xffdd88, intensity: 1.1 },
             { angle: tau * .4, color: 0xfffef4, intensity: 1.6 },
             { angle: tau * .6, color: 0xfffef4, intensity: 1.6 },
             { angle: tau * .75, color: 0xffdd88, intensity: 1.1 },
-            { angle: tau - Math.acos(0.5), color: 0xff3f00, intensity: 0 }
+            { angle: tau - Math.acos(0.4), color: 0xff3f00, intensity: 0 }
         ]);
         let moon = new OrbitingLight(scene, tau * 0.5, new THREE.Vector3(0, 50, 100), 100, [
-            { angle: Math.acos(0.5), color: 0x224477, intensity: 0 },
-            { angle: tau * .25, color: 0x66bbff, intensity: 0.4 },
+            { angle: Math.acos(0.4), color: 0x224477, intensity: 0 },
+            { angle: tau * .25, color: 0x66bbff, intensity: 0.3 },
             { angle: tau * .4, color: 0x77ccff, intensity: 0.7 },
             { angle: tau * .6, color: 0x77ccff, intensity: 0.7 },
-            { angle: tau * .75, color: 0x66bbff, intensity: 0.4 },
-            { angle: tau - Math.acos(0.5), color: 0x224477, intensity: 0 }
+            { angle: tau * .75, color: 0x66bbff, intensity: 0.3 },
+            { angle: tau - Math.acos(0.4), color: 0x224477, intensity: 0 }
         ]);
 
         this.orbitingLights.push(sun, moon);
 
         this.globalLight = new TimeBasedLight(new THREE.HemisphereLight(0x111111, 0xff1111, 0.1), [
             { angle: Math.acos(0.5), color: 0xbbbbdd, groundColor: 0xddddff, intensity: 0.1 },
-            { angle: tau * .25, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.35 },
-            { angle: tau * .50, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.4 },
-            { angle: tau * .75, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.35 },
+            { angle: tau * .25, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.15 },
+            { angle: tau * .50, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.2 },
+            { angle: tau * .75, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.15 },
             { angle: tau - Math.acos(0.5), color: 0xbbbbdd, groundColor: 0xddddff, intensity: 0.1 }
         ]);
 

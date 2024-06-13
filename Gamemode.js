@@ -85,11 +85,14 @@ Gamemode.prepare = function(){
 	});
 	PFGrid.grid.setWalkableAt(68, 68, false);
 	PFGrid.gridBackup.setWalkableAt(68, 68, false);
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("freshWater",60,0,74,127); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("soil",70,4,124,124); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("freshWater",58,0,76,127); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("soil",60,4,124,124); }
 	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("wildGame",4,4,124,124); }
 	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("forest",4,4,90,120); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("rockDeposit",4,4,120,40); }
+	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("rockDeposit",4,4,120,50); }
+	for (i = 0; i < 64; i++){ Gamemode.spawnBullet("quartzDeposit",4,4,120,40); }
+	for (i = 0; i < 48; i++){ Gamemode.spawnBullet("copperDeposit",4,4,120,40); }
+	for (i = 0; i < 48; i++){ Gamemode.spawnBullet("tinDeposit",4,4,120,40); }
 	return;
 	Tower({
 		towerType:"waterSource",

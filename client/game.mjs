@@ -91,14 +91,15 @@ var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Post-Processing
-renderer.toneMapping = THREE.AgXToneMapping; //Default to AgX
+renderer.toneMapping = THREE.ReinhardToneMapping; //Default to AgX
 renderer.toneMappingExposure = 1;
+renderer.outputEncoding = THREE.sRGBEncoding;
 
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 // Settings
-const settingsFrame = new SettingsFrame(renderer);
+const settingsFrame = new SettingsFrame(renderer, scene);
 
 // Camera controls
 const gameElement = document.getElementById("game");

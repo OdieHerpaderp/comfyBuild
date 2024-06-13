@@ -2,12 +2,16 @@
     <div class="settingsFrame">
         ja mooi
 		<div class="slidecontainer text-normal">
+			<p>Tonemap: <span id="render">1</span></p>
+			<input type="range" min="0" max="6" value="2" class="slider" id="renderTonemapSlider" data-content="renderTonemap" data-events="input:renderTonemapChanged">
+		</div>
+		<div class="slidecontainer text-normal">
 			<p>Render Scale %: <span id="renderScale">100</span></p>
 			<input type="range" min="50" max="200" value="100" class="slider" id="renderScaleSlider" data-content="renderScale" data-events="input:renderScaleChanged">
 		</div>
 		<div class="slidecontainer text-normal">
 			<p>Camera Exposure: <span id="renderScale">100</span></p>
-			<input type="range" min="50" max="200" value="100" class="slider" id="renderScaleSlider" data-content="renderExp" data-events="input:renderExpChanged">
+			<input type="range" min="50" max="200" value="100" class="slider" id="renderExpSlider" data-content="renderExp" data-events="input:renderExpChanged">
 		</div>
 	</div>
 </template>

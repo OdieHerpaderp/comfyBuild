@@ -64,11 +64,11 @@ Entity.getFrameUpdateData = function(){
 			buildings:Tower.update(),
 		}
 	};
-	initPack.players = [];
-	initPack.resourceNodes = [];
-	initPack.buildings = [];
-	removePack.players = [];
-	removePack.resourceNodes = [];
-	removePack.buildings = [];
+	initPack.player = [];
+	initPack.bullet = [];
+	initPack.tower = [];
+	removePack.player = [];
+	removePack.bullet = [];
+	removePack.tower = [];
 	return pack;
 }

@@ -17,12 +17,23 @@ class SettingsFrame {
     };
 
     constructor() {
-        //TODO: i am borked :(
         useTemplate.bind(this)(template);
     }
 
 
     displayTick() {
+    }
+
+    renderExpChanged(event) {
+        let newValue =  event.target.value;
+        //TODO gain access to renderer.
+        renderer.toneMappingExposure = newValue / 100;
+    }
+
+    renderScaleChanged(event) {
+        let newValue =  event.target.value;
+        //TODO gain access to renderer.
+        renderer.setPixelRatio(window.devicePixelRatio * newValue / 100);
     }
 }
 

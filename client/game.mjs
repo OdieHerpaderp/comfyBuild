@@ -358,7 +358,8 @@ window.closeSettings = function (e) {
 }
 
 //UI
-gameElement.onkeydown = function (event) {
+document.body.onkeydown = function (event) {
+    if (event.target.tagName == "INPUT") { return; }
     if (event.keyCode === 68)	//d
         fakePlayer.right = true;
     else if (event.keyCode === 83)	//s
@@ -369,7 +370,7 @@ gameElement.onkeydown = function (event) {
         fakePlayer.up = true;
 
 }
-gameElement.onkeyup = function (event) {
+document.body.onkeyup = function (event) {
     if (event.keyCode === 68)	//d
         fakePlayer.right = false;
     else if (event.keyCode === 83)	//s

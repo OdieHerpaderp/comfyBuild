@@ -35,9 +35,6 @@ const worldInfo = new WorldInfo();
 // Buildings
 const buildingsFrame = new BuildingsFrame();
 
-// Settings
-var settingsFrame = new SettingsFrame();
-
 // Stockpile
 const stockpile = new StockpileFrame();
 socket.on('stockpile', function (data) {
@@ -99,6 +96,9 @@ renderer.toneMappingExposure = 1;
 
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+// Settings
+const settingsFrame = new SettingsFrame(renderer);
 
 // Camera controls
 const gameElement = document.getElementById("game");

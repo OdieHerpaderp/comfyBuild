@@ -167,17 +167,17 @@ function gameTick() {
 	if (Base.moraleCR < 5) Base.moraleCR = 5;
 	if (Base.morale < 5) Base.morale = 5;
 
-	if (Base.moraleCR > Base.morale) Base.moraleCR -= 15;
-	else if (Base.moraleCR < Base.morale) Base.moraleCR += 15;
+	if (Base.moraleCR > Base.morale) Base.moraleCR -= 6;
+	else if (Base.moraleCR < Base.morale) Base.moraleCR += 5;
 
 	if(tick === 5){
 		Gamemode.prepare();
 	}
 	if(tick % 15 === 0){
 		//console.log(Base.stockpile);
-		var oldMorale = Math.max(Base.morale + Base.moraleCR, 50) / 2.5;
-		var flatMorale = Math.max(Math.min((12500 + oldMorale / 1.25) * ((35 + Math.max(Base.totalPopRemaining(), -20)) / Base.totalPopProduce * 0.75), 99999), 1500);
-		Base.morale = Math.round(Math.max(5000 + Math.pow(flatMorale / 4.2, 0.92) * 7.6, 75));
+		var oldMorale = Math.max(Base.morale + Base.moraleCR, 50) / 4;
+		var flatMorale = Math.max(Math.min((7500 + oldMorale) * ((35 + Math.max(Base.totalPopRemaining(), -20)) / (Base.totalPopProduce * 0.75)), 99999), 1500);
+		Base.morale = Math.round(Math.max(5000 + Math.pow(flatMorale / 4.6, 0.9) * 6.4, 75));
 		if( Base.totalPopRemaining() < 5 ) { Base.moraleCR -= 250; Base.morale -= 250; }
 		//console.log("flatMorale:" + Math.round(flatMorale) + " Morale: " + Base.morale + " MoraleCR: " + Base.moraleCR);
 

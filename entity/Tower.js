@@ -44,7 +44,7 @@ Tower = function (param) {
 	var super_update = self.update;
 
 	self.getMaxWorkers = function (upgradeLevel) {
-		return Math.min(Math.max(Math.floor(Base.moraleCR / 10000 * upgradeLevel + 0.25), 1), upgradeLevel + 1);
+		return Math.min(Math.max(Math.round(Base.moraleCR / 10000 * upgradeLevel), 1), Math.round(upgradeLevel * 1.25 + 0.5));
 	};
 
 
@@ -65,7 +65,7 @@ Tower = function (param) {
 			}
 			else {
 				self.repeatIdle++;
-				if (self.repeatIdle % 50 == 0 && self.repeatIdle > 49) { Base.announce(self.towerType + " has idled for " + self.repeatIdle + " consequtive times!") }
+				if (self.repeatIdle % 100 == 0 && self.repeatIdle > 99) { Base.announce(self.towerType + " has idled for " + self.repeatIdle + " consequtive times!") }
 			}
 		}
 		else if (self.buildingPhase == 1) { //buildCon
@@ -95,7 +95,7 @@ Tower = function (param) {
 			if (self.checkBuildingConsumptionProduce(self.towerType, true) && self.productionLevel < self.upgradeLevel) {
 				if (buildings[self.towerType].category == "housing") {
 					// housing skips directly to build after one consumption.
-					self.workRemaining = 24 + self.productionLevel * 4;
+					self.workRemaining = 24 + self.productionLevel * 8;
 					self.buildingPhase = 4;
 				}
 				self.productionLevel++;
@@ -110,8 +110,8 @@ Tower = function (param) {
 		}
 		else if (self.buildingPhase == 4) { //produce
 			self.workCapacity = Math.max(1, self.upgradeLevel);
-			self.workUsage = self.getMaxWorkers(Math.max(1, self.upgradeLevel));
-			if (buildings[self.towerType].category == "housing") { self.outputBuildingProduce(self.towerType, self.upgradeLevel); }
+			if (buildings[self.towerType].category == "housing") { self.outputBuildingProduce(self.towerType, self.upgradeLevel); self.workUsage = Math.round(self.getMaxWorkers(Math.max(1, self.upgradeLevel / 2))); }
+			else self.workUsage = self.getMaxWorkers(Math.max(1, self.upgradeLevel));
 			//console.log("Work remaining: " + self.workRemaining);
 			if (self.workRemaining > self.workUsage) {
 				self.workRemaining -= self.workUsage;

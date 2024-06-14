@@ -6,7 +6,7 @@ class ResourceNode extends BaseEntity {
 
     constructor(initData) {
         super(initData);
-        this.resourceType = initData.towerType ?? "unknown";
+        this.resourceType = initData.towerType ?? initData.resourceType ?? "unknown";
 
         let geometry = new THREE.PlaneGeometry(3, 3, 1, 1);
 

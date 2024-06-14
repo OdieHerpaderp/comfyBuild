@@ -88,8 +88,8 @@ class Building extends BaseEntity {
 
     constructor(initData) {
         super(initData);
-
-        this.buildingType = initData.towerType ?? "unknown";
+        
+        this.buildingType = initData.towerType ?? initData.buildingType ?? "unknown";
         this.upgradeLevel = initData.upgradeLevel ?? 0;
         this.targetLevel = initData.targetLevel ?? this.upgradeLevel;
         this.productionLevel = initData.productionLevel ?? 1;

@@ -35,6 +35,7 @@ class BuildingData {
 
     buildClick() {
         socket.emit('buildTower', this.name.value);
+        socket.emit('buildBuilding', this.name.value);
     }
 
     mouseover() {

@@ -35,12 +35,12 @@ class BaseEntity extends EventTarget {
 
     setPosition(x, y) {
         let positionChanged = false;
-        if (x !== undefined && x !== this._position.x) {
+        if (typeof x === "number" && !isNaN(x) && x !== this._position.x) {
             this._position.x = x;
             this.propertyChanged("x", x);
             positionChanged = true;
         }
-        if (y !== undefined && y !== this._position.y) {
+        if (typeof y === "number" && !isNaN(y) && y !== this._position.y) {
             this._position.y = y;
             this.propertyChanged("y", y);
             positionChanged = true;

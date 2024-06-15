@@ -1,3 +1,5 @@
+import serverSettings from "../serverSettings.mjs";
+
 const moraleMultiplier = 10000;
 
 class WorldManager {
@@ -42,7 +44,7 @@ class WorldManager {
         this.currentCarriers = 0;
         this.currentWorkers = 0;
 
-        this.futurePopulationTotal = 10;
+        this.futurePopulationTotal = serverSettings.freePopulationGeneration;
         this.futureBuilders = 0;
         this.futureCarriers = 0;
         this.futureWorkers = 0;

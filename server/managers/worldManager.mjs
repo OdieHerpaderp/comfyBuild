@@ -27,7 +27,7 @@ class WorldManager {
         let targetMorale = (this.currentIdlePopulation / (this.currentPopulationTotal * .25));
         targetMorale = Math.max(0.01, Math.min(1, targetMorale));
 
-        // Every tick, step 5 percent towards the target morale to prevent wild fluctuations
+        // Every tick, step 1 percent towards the target morale to prevent wild fluctuations
         let diff = targetMorale - this.morale;
 
         if (Math.abs(diff) < 0.01) {

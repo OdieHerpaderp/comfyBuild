@@ -7,10 +7,11 @@ class ResourceNodeManager extends GridEntityManager {
         for (let i = 0; i < 96; i++) { this.spawnRandomResourceNode("soil", 60, 4, 124, 124); }
         for (let i = 0; i < 96; i++) { this.spawnRandomResourceNode("wildGame", 4, 4, 124, 124); }
         for (let i = 0; i < 96; i++) { this.spawnRandomResourceNode("forest", 4, 4, 90, 120); }
-        for (let i = 0; i < 96; i++) { this.spawnRandomResourceNode("rockDeposit", 4, 4, 120, 50); }
-        for (let i = 0; i < 64; i++) { this.spawnRandomResourceNode("quartzDeposit", 4, 4, 120, 40); }
-        for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("copperDeposit", 4, 4, 120, 40); }
-        for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("tinDeposit", 4, 4, 120, 40); }
+        for (let i = 0; i < 96; i++) { this.spawnRandomResourceNode("rockDeposit", 4, 8, 120, 50); }
+        for (let i = 0; i < 64; i++) { this.spawnRandomResourceNode("quartzDeposit", 4, 8, 120, 40); }
+        for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("copperDeposit", 4, 8, 120, 40); }
+        for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("tinDeposit", 4, 8, 120, 40); }
+        for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("ironDeposit", 4, 8, 120, 40); }
     }
 
     spawnRandomResourceNode(type, xMin, yMin, xMax, yMax) {

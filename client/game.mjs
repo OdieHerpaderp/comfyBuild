@@ -23,7 +23,7 @@ loadingScreen.addEventListener("loadComplete", () => {
     loginScreen.showFrame();
     loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
     loadingScreen = undefined;
-    socket.emit('sendInit');
+//    socket.emit('sendInit');
     
     animate();
 });
@@ -46,7 +46,9 @@ var chat = new Chat();
 
 // Login
 var loginScreen = new LoginScreen();
-loginScreen.addEventListener("loginSuccessful", () => {
+loginScreen.addEventListener("loginSuccessful", (data) => {
+    if (data.detail) { entityManager.localPlayerId = data.detail };
+
     loginScreen.closeFrame();
     stockpile.showFrame();
     buildingsFrame.showFrame();
@@ -384,5 +386,7 @@ document.body.onkeyup = function (event) {
 document.oncontextmenu = function (event) {
     event.preventDefault();
 }
+
+socket.emit('sendInit');
 
 console.log("*Main Loaded");

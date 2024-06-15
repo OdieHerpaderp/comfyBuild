@@ -26,7 +26,9 @@ class LoginScreen extends EventTarget {
         useTemplate.bind(this)(template);
 
         socket.on('signInResponse', (data) => {
-            if (data.success) { this.dispatchEvent(LoginScreen.loginSuccessfulEvent); }
+            if (data.success) {
+                this.dispatchEvent(new CustomEvent("loginSuccessful", { detail: data.playerId }));
+            }
             else { alert("Sign in unsuccessful."); }
         });
 

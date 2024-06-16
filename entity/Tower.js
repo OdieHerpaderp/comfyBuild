@@ -95,7 +95,7 @@ Tower = function (param) {
 			if (self.checkBuildingConsumptionProduce(self.towerType, true) && self.productionLevel < self.upgradeLevel) {
 				if (buildings[self.towerType].category == "housing") {
 					// housing skips directly to build after one consumption.
-					self.workRemaining = 24 + self.productionLevel * 8;
+					self.workRemaining = 24 + self.productionLevel * 2;
 					self.buildingPhase = 4;
 				}
 				self.productionLevel++;
@@ -110,7 +110,7 @@ Tower = function (param) {
 		}
 		else if (self.buildingPhase == 4) { //produce
 			self.workCapacity = Math.max(1, self.upgradeLevel);
-			if (buildings[self.towerType].category == "housing") { self.outputBuildingProduce(self.towerType, self.upgradeLevel); self.workUsage = Math.round(self.getMaxWorkers(Math.max(1, self.upgradeLevel / 2))); }
+			if (buildings[self.towerType].category == "housing") { self.outputBuildingProduce(self.towerType, self.upgradeLevel); self.workUsage = Math.round(self.getMaxWorkers(Math.max(1, self.upgradeLevel))); }
 			else self.workUsage = self.getMaxWorkers(Math.max(1, self.upgradeLevel));
 			//console.log("Work remaining: " + self.workRemaining);
 			if (self.workRemaining > self.workUsage) {

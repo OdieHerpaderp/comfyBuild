@@ -86,7 +86,7 @@ Gamemode.prepare = function(){
 	PFGrid.grid.setWalkableAt(68, 68, false);
 	PFGrid.gridBackup.setWalkableAt(68, 68, false);
 	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("freshWater",58,0,76,127); }
-	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("soil",60,4,124,124); }
+	for (i = 0; i < 128; i++){ Gamemode.spawnBullet("soil",50,48,124,124); }
 	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("wildGame",4,4,124,124); }
 	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("forest",4,48,90,120); }
 	for (i = 0; i < 96; i++){ Gamemode.spawnBullet("rockDeposit",4,8,120,50); }

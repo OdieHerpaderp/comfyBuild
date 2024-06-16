@@ -437,7 +437,7 @@ div:has(>.frameManager) {
     container-name: frame-manager;
 }
 
-@container frame-manager (height > 159px) {
+@container frame-manager (height > 239px) {
     .frameManager {
         flex-direction: column;
     }

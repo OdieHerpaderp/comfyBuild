@@ -34,28 +34,28 @@ class LightingManager {
         ]);
         let moon = new OrbitingLight(scene, tau * 0.5, new THREE.Vector3(0, 50, 100), 100, [
             { angle: Math.acos(0.4), color: 0x333333, intensity: 0 },
-            { angle: tau * .25, color: 0x3366dd, intensity: 0.15 },
-            { angle: tau * .4, color: 0x4499ff, intensity: 0.25 },
-            { angle: tau * .6, color: 0x4499ff, intensity: 0.25 },
-            { angle: tau * .75, color: 0x3366dd, intensity: 0.15 },
+            { angle: tau * .25, color: 0x3366dd, intensity: 0.2 },
+            { angle: tau * .4, color: 0x4499ff, intensity: 0.3 },
+            { angle: tau * .6, color: 0x4499ff, intensity: 0.3 },
+            { angle: tau * .75, color: 0x3366dd, intensity: 0.2 },
             { angle: tau - Math.acos(0.4), color: 0x333333, intensity: 0 }
         ]);
 
         this.orbitingLights.push(sun, moon);
 
         this.globalLight = new TimeBasedLight(new THREE.HemisphereLight(0x111111, 0xff1111, 0.1), [
-            { angle: Math.acos(0.5), color: 0x8888dd, groundColor: 0x9999ff, intensity: 0.04 },
-            { angle: tau * .25, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.06 },
-            { angle: tau * .50, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.08 },
-            { angle: tau * .75, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.06 },
-            { angle: tau - Math.acos(0.5), color: 0x8888dd, groundColor: 0x9999ff, intensity: 0.04 }
+            { angle: Math.acos(0.5), color: 0x8888dd, groundColor: 0xaaaaff, intensity: 0.2 },
+            { angle: tau * .25, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.3 },
+            { angle: tau * .50, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.4 },
+            { angle: tau * .75, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.3 },
+            { angle: tau - Math.acos(0.5), color: 0x8888dd, groundColor: 0xaaaaff, intensity: 0.2 }
         ]);
 
         this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau / 50, 1), [
-            { angle: tau * .19, color: 0xffffff, intensity: 0.06 },
+            { angle: tau * .19, color: 0xffffff, intensity: 0.2 },
             { angle: tau * .2, color: 0xffffff, intensity: 0 },
-            { angle: tau * .78, color: 0xffffff, intensity: 0 },
-            { angle: tau * .79, color: 0xffffff, intensity: 0.06 }
+            { angle: tau * .75, color: 0xffffff, intensity: 0 },
+            { angle: tau * .76, color: 0xffffff, intensity: 0.2 }
         ]);
 
         scene.add(this.globalLight.light, this.spotLight.light, this.spotLight.light.target);

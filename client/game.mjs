@@ -93,9 +93,9 @@ var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Post-Processing
-renderer.toneMapping = THREE.ACESFilmicToneMapping; //Default to Linear
-renderer.toneMappingExposure = 0.8;
-renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.CineonToneMapping; //Default to Linear
+renderer.toneMappingExposure = 1.4;
+renderer.outputEncoding = THREE.LinearEncoding;
 
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap

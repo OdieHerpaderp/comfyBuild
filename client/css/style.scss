@@ -31,6 +31,7 @@ body {
     font-size: $font-size-normal;
     line-height: 1;
     text-shadow: 0.5px 0.5px 1px #000000;
+    user-select: none;
 }
 
 table {
@@ -424,4 +425,40 @@ div:has(>#worldInfo) {
 #playerList {
     font-size: $font-size-normal;
     padding: $defaultPadding;
+}
+
+.frameManager {
+    display: flex;
+    font-size: $font-size-normal;
+}
+
+div:has(>.frameManager) {
+    container-type: size;
+    container-name: frame-manager;
+}
+
+@container frame-manager (height > 159px) {
+    .frameManager {
+        flex-direction: column;
+    }
+}
+
+label.toggleButton {
+    >input {
+        display: none;
+
+        &:checked+span {
+            margin-top: 4px;
+            margin-bottom: 0px;
+            box-shadow: 0 0 #333333;
+            color: $font-color;
+            background-color: color.scale($color: $button-background-color, $lightness: -50%);
+        }
+    }
+
+    >span {
+        @extend .comfyButton;
+        padding: 6px;
+        display: block;
+    }
 }

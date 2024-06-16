@@ -318,7 +318,7 @@ var animate = function () {
 
     controls.update();
     lightingManager.animationFrame(camera.position, controls.target);
-    if (currentTime - 30 > lastEmit) {
+    if (currentTime - 60 > lastEmit) {
         worldInfo.tick();
         stockpile.displayTick();
         buildingsFrame.displayTick();

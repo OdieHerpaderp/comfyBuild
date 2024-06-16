@@ -11,6 +11,15 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "program": "${workspaceFolder}/server/app.mjs"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program (old server)",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
             "program": "${workspaceFolder}/app.js"
         }
     ]

@@ -22,7 +22,7 @@ class SettingsFrame {
 
         this.renderTonemap = 3;
         this.renderScale = 100;
-        this.renderExp = 140;
+        this.renderExp = 200;
 
         this.renderer = renderer;
         this.scene = scene;

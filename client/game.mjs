@@ -94,7 +94,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Post-Processing
 renderer.toneMapping = THREE.CineonToneMapping; //Default to Linear
-renderer.toneMappingExposure = 1.4;
+renderer.toneMappingExposure = 2.0;
 renderer.outputEncoding = THREE.LinearEncoding;
 
 renderer.shadowMap.enabled = true; // Enables Shadows

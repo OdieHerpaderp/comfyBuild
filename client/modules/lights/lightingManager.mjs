@@ -44,11 +44,11 @@ class LightingManager {
         this.orbitingLights.push(sun, moon);
 
         this.globalLight = new TimeBasedLight(new THREE.HemisphereLight(0x111111, 0xff1111, 0.1), [
-            { angle: Math.acos(0.5), color: 0x8888dd, groundColor: 0xaaaaff, intensity: 0.2 },
+            { angle: Math.acos(0.5), color: 0x8888dd, groundColor: 0xaaaaff, intensity: 0.1 },
             { angle: tau * .25, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.3 },
             { angle: tau * .50, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.4 },
             { angle: tau * .75, color: 0xdddddd, groundColor: 0xeeffee, intensity: 0.3 },
-            { angle: tau - Math.acos(0.5), color: 0x8888dd, groundColor: 0xaaaaff, intensity: 0.2 }
+            { angle: tau - Math.acos(0.5), color: 0x8888dd, groundColor: 0xaaaaff, intensity: 0.1 }
         ]);
 
         this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau / 50, 1), [

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -25,33 +26,42 @@ const texIronNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
 const texCopper = textureLoader.load('client/textures/buildings/copper.jpg');
 const texCopperNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
 
+const envMap = new RGBELoader()
+    .setPath('/client/textures/')
+    .load('envMap.hdr', function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearFilter;
+        //envMap = texture;
+});
+
 const materialMap = {
     'sand': new THREE.MeshStandardMaterial({
-        color:"#cccccc",
+        color:"#dddddd",
         map: texSanddiff, // Set diffuse/color map
         normalMap: texSandNor,
         displacementMap: texSandDisp,
-        displacementScale: 0.7, // Adjust displacement strength
+        displacementScale: 0.65, // Adjust displacement strength
         roughness: 0.95,
-        envMapIntensity: 0.4, // Reflect environment
+        envMapIntensity: 0.015, // Reflect environment
     }),
     'grass': new THREE.MeshStandardMaterial({
-        color:"#cccccc",
+        color:"#dddddd",
         map: texGrassdiff,
         normalMap: texGrassNor,
         displacementMap: texGrassDisp,
-        displacementScale: 0.7,
+        displacementScale: 0.65,
         roughness: 0.95,
-        envMapIntensity: 0.4, // Reflect environment
+        envMapIntensity: 0.015, // Reflect environment
     }),
     'rock': new THREE.MeshStandardMaterial({
-        color:"#cccccc",
+        color:"#dddddd",
         map: texRockdiff,
         normalMap: texRockNor,
         displacementMap: texRockDisp,
-        displacementScale: 0.7,
+        displacementScale: 0.65,
         roughness: 0.95,
-        envMapIntensity: 0.4, // Reflect environment
+        envMapIntensity: 0.015, // Reflect environment
     }),
     // Buildings
     'stone': new THREE.MeshStandardMaterial({
@@ -59,37 +69,37 @@ const materialMap = {
         map: texStone,
         normalMap: texStoneNor,
         roughness: 0.9,
-        envMapIntensity: 0.6, // Reflect environment
+        envMapIntensity: 0.015, // Reflect environment
     }),
     'wood': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texWood,
         normalMap: texWoodNor,
         roughness: 0.9,
-        envMapIntensity: 0.6, // Reflect environment
+        envMapIntensity: 0.015, // Reflect environment
     }),
     'dirt': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texDirt,
         normalMap: texDirtNor,
         roughness: 0.9,
-        envMapIntensity: 0.6, // Reflect environment
+        envMapIntensity: 0.015, // Reflect environment
     }),
     'iron': new THREE.MeshStandardMaterial({
-        color:"#888888",
+        color:"#bbbbbb",
         map: texIron,
         normalMap: texIronNor,
-        roughness: 0.2,
+        roughness: 0.1,
         metalness: 0.7,
-        envMapIntensity: 1.4, // Reflect environment
+        envMapIntensity: 0.3, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
         color:"#dd8822",
         map: texCopper,
         normalMap: texCopperNor,
-        roughness: 0.2,
+        roughness: 0.1,
         metalness: 0.7,
-        envMapIntensity: 1.4, // Reflect environment
+        envMapIntensity: 0.3, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
         color: 0xffffff, // Set the base color
@@ -97,10 +107,10 @@ const materialMap = {
         roughness: 0, // Smooth surface
         transmission: 0.9, // High transmission for glass
         transparent: true, // Enable transparency
-        envMapIntensity: 2, // Reflect environment
+        envMapIntensity: 0.3, // Reflect environment
         clearcoat: 1, // Add a clear coat layer
         clearcoatRoughness: 0 // Smooth clear coat
       })
 };
 
-export { materialMap };
+export { materialMap, envMap };

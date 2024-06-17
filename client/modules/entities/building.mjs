@@ -2,7 +2,7 @@ import BaseEntity from "baseEntity";
 import { modelCache } from "singletons";
 import * as THREE from 'three';
 import { Text } from 'troika-three-text'
-import { materialMap } from "constants";
+import { materialMap, envMap } from "constants";
 import { createDerivedMaterial } from 'troika-three-utils'
 import {preloadFont} from 'troika-three-text'
 
@@ -37,7 +37,6 @@ gl_Position = projectionMatrix * mvPosition;
     )
   )
 }
-
 
 class Building extends BaseEntity {
     _buildingType;
@@ -147,7 +146,9 @@ class Building extends BaseEntity {
                         if(materialName == "glass") { child.castShadow = false; }
                             else child.castShadow = true;
                     }
+                    child.material.envMap = envMap;
                     child.receiveShadow = true;
+                    child.material.needsUpdate = true;
                 }
             });
         }
@@ -167,7 +168,9 @@ class Building extends BaseEntity {
                         if(materialName == "glass") child.castShadow = false;
                             else child.castShadow = true;
                     }
+                    child.material.envMap = envMap;
                     child.receiveShadow = true;
+                    child.material.needsUpdate = true;
                 }
             });
             // Sprite fallback

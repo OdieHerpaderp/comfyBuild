@@ -142,7 +142,7 @@ class Building extends BaseEntity {
             this.tickBuildGather();
             return;
         }
-        if (this.checkProductionResources(false)) {
+        if (this.upgradeLevel > 0 && this.checkProductionResources(false)) {
             this.buildingPhase = buildingPhases.consume;
             this.productionLevel = 0;
             this.repeatIdle = 0;

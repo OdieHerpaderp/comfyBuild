@@ -176,8 +176,8 @@ function gameTick() {
 	if(tick % 15 === 0){
 		//console.log(Base.stockpile);
 		var oldMorale = Math.max(Base.morale + Base.moraleCR, 50) / 4;
-		var flatMorale = Math.max(Math.min((7500 + oldMorale) * ((35 + Math.max(Base.totalPopRemaining(), -20)) / (Base.totalPopProduce * 0.75)), 99999), 1500);
-		Base.morale = Math.round(Math.max(5000 + Math.pow(flatMorale / 4.6, 0.9) * 6.4, 75));
+		var flatMorale = Math.max(Math.min((7500 + oldMorale) * ((35 + Math.max(Base.totalPopRemaining(), -20)) / (Base.totalPopProduce * 0.5)), 99999), 1500);
+		Base.morale = Math.round(Math.max(5000 + Math.pow(flatMorale / 4.2, 0.9) * 6.6, 75));
 		if( Base.totalPopRemaining() < 5 ) { Base.moraleCR -= 250; Base.morale -= 250; }
 		//console.log("flatMorale:" + Math.round(flatMorale) + " Morale: " + Base.morale + " MoraleCR: " + Base.moraleCR);
 

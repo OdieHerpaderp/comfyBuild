@@ -1,4 +1,5 @@
 import { jsFrameMixin } from "JSFrame";
+import { socket } from "singletons"
 import { LongResourceDisplayList } from "longResourceDisplay";
 
 class StockpileFrame {
@@ -10,6 +11,7 @@ class StockpileFrame {
 
     constructor() {
         this.frameContent = new LongResourceDisplayList();
+        socket.on('stockpile', (...args) => this.frameContent.updateResources(...args));
     }
 
     updateResources(...args) {

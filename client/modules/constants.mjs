@@ -27,7 +27,7 @@ const texCopperNor = textureLoader.load('client/textures/buildings/ironNor.jpg')
 
 const materialMap = {
     'sand': new THREE.MeshStandardMaterial({
-        color:"#aaaaaa",
+        color:"#cccccc",
         map: texSanddiff, // Set diffuse/color map
         normalMap: texSandNor,
         displacementMap: texSandDisp,
@@ -36,7 +36,7 @@ const materialMap = {
         envMapIntensity: 0.4, // Reflect environment
     }),
     'grass': new THREE.MeshStandardMaterial({
-        color:"#aaaaaa",
+        color:"#cccccc",
         map: texGrassdiff,
         normalMap: texGrassNor,
         displacementMap: texGrassDisp,
@@ -45,7 +45,7 @@ const materialMap = {
         envMapIntensity: 0.4, // Reflect environment
     }),
     'rock': new THREE.MeshStandardMaterial({
-        color:"#aaaaaa",
+        color:"#cccccc",
         map: texRockdiff,
         normalMap: texRockNor,
         displacementMap: texRockDisp,
@@ -76,20 +76,20 @@ const materialMap = {
         envMapIntensity: 0.6, // Reflect environment
     }),
     'iron': new THREE.MeshStandardMaterial({
-        color:"#666666",
+        color:"#888888",
         map: texIron,
         normalMap: texIronNor,
         roughness: 0.2,
-        metalness: 0.8,
-        envMapIntensity: 1.1, // Reflect environment
+        metalness: 0.7,
+        envMapIntensity: 1.4, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
-        color:"#bb7722",
+        color:"#dd8822",
         map: texCopper,
         normalMap: texCopperNor,
         roughness: 0.2,
-        metalness: 0.8,
-        envMapIntensity: 1.1, // Reflect environment
+        metalness: 0.7,
+        envMapIntensity: 1.4, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
         color: 0xffffff, // Set the base color

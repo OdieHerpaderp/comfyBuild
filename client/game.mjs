@@ -1,67 +1,28 @@
 import { EntityManager } from "entityManager";
 import { LightingManager } from "lightingManager";
 import { LoadingScreen } from "loadingScreen";
-import { LoginScreen } from "loginScreen";
-import { WorldInfo } from "worldInfo";
-import { Chat } from "chat";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { MapControls } from 'three/addons/controls/OrbitControls.js';
-import { socket } from "singletons"
+import { socket } from "singletons";
 import { materialMap } from "constants";
-import BuildingsFrame from "buildingsFrame";
-import SettingsFrame from "settingsFrame";
-import StockpileFrame from "stockpileFrame";
-import { PlayerList } from "playerList";
 import Stats from 'three/addons/libs/stats.module.js';
+import FrameManager from "frameManager";
 
 // Loading screen
 let loadingScreen = new LoadingScreen();
 loadingScreen.addEventListener("loadComplete", () => {
     gameDiv.style.display = 'inline-block';
-    loginScreen.showFrame();
-    loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+    frameManager.loadComplete();
+    //loginScreen.showFrame();
+    //loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
     loadingScreen = undefined;
-    socket.emit('sendInit');
-    
+    //    socket.emit('sendInit');
+
     animate();
 });
 document.body.appendChild(loadingScreen.domElement);
-
-// World information
-const worldInfo = new WorldInfo();
-
-// Buildings
-const buildingsFrame = new BuildingsFrame();
-
-// Stockpile
-const stockpile = new StockpileFrame();
-socket.on('stockpile', function (data) {
-    stockpile.updateResources(data);
-});
-
-// Chat
-var chat = new Chat();
-
-// Login
-var loginScreen = new LoginScreen();
-loginScreen.addEventListener("loginSuccessful", () => {
-    loginScreen.closeFrame();
-    stockpile.showFrame();
-    buildingsFrame.showFrame();
-    settingsFrame.showFrame();
-    buildingsFrame.setFramePosition(window.innerWidth - 4, window.innerHeight - 4, 'RIGHT_BOTTOM');
-    chat.showFrame();
-    chat.setFramePosition(4, window.innerHeight - 4, "LEFT_BOTTOM");
-    playerList.showFrame();
-    playerList.setFramePosition(window.innerWidth - 4, 4, "RIGHT_TOP");
-    worldInfo.showFrame();
-    worldInfo.setFramePosition(window.innerWidth / 2, 4, 'CENTER_TOP');
-});
-
-// Player list
-var playerList = new PlayerList();
 
 //ThreeJS
 var scene = new THREE.Scene();
@@ -69,13 +30,13 @@ var scene = new THREE.Scene();
 // Don't mind me, I just need the scene...
 var entityManager = new EntityManager(scene);
 entityManager.addEventListener("selectedBuildingChanged", (event) => {
-    buildingsFrame.selectedBuildingChanged(event.detail.building);
+    frameManager.buildingsFrame.selectedBuildingChanged(event.detail.building);
 });
 entityManager.addEventListener("playerConnected", (event) => {
-    playerList.addPlayer(event.detail.player);
+    frameManager.playerList.addPlayer(event.detail.player);
 });
 entityManager.addEventListener("playerDisconnected", (event) => {
-    playerList.removePlayer(event.detail.player);
+    frameManager.playerList.removePlayer(event.detail.player);
 });
 
 var lightingManager = new LightingManager(scene);
@@ -91,15 +52,18 @@ var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Post-Processing
-renderer.toneMapping = THREE.ACESFilmicToneMapping; //Default to Linear
-renderer.toneMappingExposure = 0.8;
-renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.CineonToneMapping; //Default to Linear
+renderer.toneMappingExposure = 2.0;
+renderer.outputEncoding = THREE.LinearEncoding;
 
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-// Settings
-const settingsFrame = new SettingsFrame(renderer, scene);
+// Frame Manager
+const frameManager = new FrameManager(renderer, scene);
+frameManager.addEventListener("loginSuccessful", data => {
+    if (data.detail) { entityManager.localPlayerId = data.detail };
+});
 
 // Camera controls
 const gameElement = document.getElementById("game");
@@ -316,10 +280,8 @@ var animate = function () {
 
     controls.update();
     lightingManager.animationFrame(camera.position, controls.target);
-    if (currentTime - 30 > lastEmit) {
-        worldInfo.tick();
-        stockpile.displayTick();
-        buildingsFrame.displayTick();
+    if (currentTime - 60 > lastEmit) {
+        frameManager.displayTick();
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
     }
@@ -384,5 +346,7 @@ document.body.onkeyup = function (event) {
 document.oncontextmenu = function (event) {
     event.preventDefault();
 }
+
+socket.emit('sendInit');
 
 console.log("*Main Loaded");

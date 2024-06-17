@@ -54,6 +54,7 @@ class BuildingTooltip {
 
     upgrade() {
         socket.emit('upgradeTower', this.upgradeAmount);
+        socket.emit('upgradeBuilding', this.upgradeAmount);
     }
 
     upgradeAll() {
@@ -74,6 +75,7 @@ class BuildingTooltip {
 
     sell() {
         socket.emit('sellTower');
+        socket.emit('sellBuilding');
     }
 
     updateWorkTotal() {

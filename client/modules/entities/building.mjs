@@ -94,8 +94,8 @@ class Building extends BaseEntity {
         this.targetLevel = initData.targetLevel ?? this.upgradeLevel;
         this.productionLevel = initData.productionLevel ?? 1;
         this.workRemaining = initData.workRemaining ?? 0;
-        this.workCapacity = initData.workCapacity ?? 0;
-        this.workUsage = initData.workUsage ?? 0;
+        this.workCapacity = initData.workCapacity ?? initData.maxWorkers ?? 0;
+        this.workUsage = initData.workUsage ?? initData.currentWorkers ?? 0;
         this.buildingPhase = initData.buildingPhase ?? 0;
 
         let model = modelCache.getModel(this.buildingType);
@@ -192,8 +192,8 @@ class Building extends BaseEntity {
 
         this.workRemaining = data.workRemaining ?? this.workRemaining;
         this.productionLevel = data.productionLevel ?? this.productionLevel;
-        this.workCapacity = data.workCapacity ?? this.workCapacity;
-        this.workUsage = data.workUsage ?? this.workUsage;
+        this.workCapacity = data.workCapacity ?? data.maxWorkers ?? this.workCapacity;
+        this.workUsage = data.workUsage ?? data.currentWorkers ?? this.workUsage;
 
         var textNeedsUpdate = false;
         if (data.upgradeLevel !== undefined && data.upgradeLevel !== this.upgradeLevel) {

@@ -3,6 +3,30 @@ import { modelCache } from "singletons";
 import * as THREE from 'three';
 import { Text } from 'troika-three-text'
 import { materialMap } from "constants";
+import { createDerivedMaterial } from 'troika-three-utils'
+
+export function createBillboardMaterial(baseMaterial, opts) {
+  return createDerivedMaterial(
+    baseMaterial,
+    Object.assign(
+      {
+        vertexMainOutro: `
+vec4 mvPosition = modelViewMatrix * vec4( 0.0, 0.0, 0.0, 1.0 );
+vec3 scale = vec3(
+  length(modelViewMatrix[0].xyz),
+  length(modelViewMatrix[1].xyz),
+  length(modelViewMatrix[2].xyz)
+  );
+// size attenuation: scale *= -mvPosition.z * 0.2;
+mvPosition.xyz += position * scale;
+gl_Position = projectionMatrix * mvPosition;
+`
+      },
+      opts
+    )
+  )
+}
+
 
 class Building extends BaseEntity {
     _buildingType;
@@ -175,8 +199,10 @@ class Building extends BaseEntity {
         this.textSprite = new Text()
 
         // TODO: Turn text into a sprite so it faces the camera.
+        let material = createBillboardMaterial(new THREE.MeshBasicMaterial());
         this.textSprite.text = this.upgradeLevel + "\n" + this.buildingType + "\n";
         this.textSprite.fontSize = 0.5;
+        this.textSprite.material = material;
         this.textSprite.anchorX = "center";
         this.textSprite.textAlign = "center";
         this.textSprite.color = 0xFFFFFF;

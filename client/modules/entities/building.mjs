@@ -1,7 +1,7 @@
 import BaseEntity from "baseEntity";
 import { modelCache } from "singletons";
 import * as THREE from 'three';
-import TextSprite from '@seregpie/three.text-sprite';
+import { Text } from 'troika-three-text'
 import { materialMap } from "constants";
 
 class Building extends BaseEntity {
@@ -172,16 +172,18 @@ class Building extends BaseEntity {
         }
 
         // Text
-        this.textSprite = new TextSprite({
-            alignment: 'center',
-            color: '#fff',
-            fontFamily: 'Roboto Slab',
-            fontSize: 0.50,
-            lineGap: 0.02,
-            strokeColor: '#000',
-            strokeWidth: 0.15,
-            text: this.upgradeLevel + "\n" + this.buildingType + "\n" ,
-        });
+        this.textSprite = new Text()
+
+        // TODO: Turn text into a sprite so it faces the camera.
+        this.textSprite.text = this.upgradeLevel + "\n" + this.buildingType + "\n";
+        this.textSprite.fontSize = 0.5;
+        this.textSprite.anchorX = "center";
+        this.textSprite.textAlign = "center";
+        this.textSprite.color = 0xFFFFFF;
+        this.textSprite.outlineWidth = 0.03;
+
+        // Update the rendering:
+        this.textSprite.sync()
 
         this.textSprite.position.set(0, 3.4, 1.1);
         this.mesh.add(this.textSprite);

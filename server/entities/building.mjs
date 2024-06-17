@@ -142,7 +142,7 @@ class Building extends BaseEntity {
             this.tickBuildGather();
             return;
         }
-        if (this.checkProductionResources(false)) {
+        if (this.upgradeLevel > 0 && this.checkProductionResources(false)) {
             this.buildingPhase = buildingPhases.consume;
             this.productionLevel = 0;
             this.repeatIdle = 0;
@@ -203,7 +203,7 @@ class Building extends BaseEntity {
         const maxWorkers = this.getCurrentCarriers();
         this.currentWorkers = 0;
         let didConsume = false;
-        while (this.productionLevel < Math.max(1, this.upgradeLevel) && this.currentWorkers < maxWorkers && this.checkProductionResources(true)) {
+        while (this.productionLevel < this.upgradeLevel && this.currentWorkers < maxWorkers && this.checkProductionResources(true)) {
             this.productionLevel++;
             this.currentWorkers++;
             didConsume = true;

@@ -66,7 +66,7 @@ class ListBinding {
     set value(items) { this.replaceWith(...items); }
     constructor(element) { this.element = element; }
     convertToElement(item) {
-        if (item === undefined) { return document.createTextNode(""); }
+        if (item === undefined || item === null) { return document.createTextNode(""); }
         else if (item instanceof Element) { return item; }
         else if (item.domElement instanceof Element) { return item.domElement; }
         else { return document.createTextNode(item); }

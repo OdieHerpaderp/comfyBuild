@@ -4,6 +4,17 @@ import * as THREE from 'three';
 import { Text } from 'troika-three-text'
 import { materialMap } from "constants";
 import { createDerivedMaterial } from 'troika-three-utils'
+import {preloadFont} from 'troika-three-text'
+
+preloadFont(
+  {
+    font: '/client/font/RobotoSlab-Bold.woff', 
+    characters: 'abcdefghijklmnopqrstuvwxyz1234567890/>'
+  },
+  () => {
+    console.log("Font preloaded!");
+  }
+)
 
 export function createBillboardMaterial(baseMaterial, opts) {
   return createDerivedMaterial(
@@ -201,7 +212,10 @@ class Building extends BaseEntity {
         // TODO: Turn text into a sprite so it faces the camera.
         let material = createBillboardMaterial(new THREE.MeshBasicMaterial());
         this.textSprite.text = this.upgradeLevel + "\n" + this.buildingType + "\n";
-        this.textSprite.fontSize = 0.5;
+        this.textSprite.font = '/client/font/RobotoSlab-Bold.woff';
+        this.textSprite.fontSize = 0.45;
+        this.textSprite.fontWeight = 600;
+        this.textSprite.lineHeight = 0.9;
         this.textSprite.material = material;
         this.textSprite.anchorX = "center";
         this.textSprite.textAlign = "center";

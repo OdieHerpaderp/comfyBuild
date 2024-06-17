@@ -203,7 +203,7 @@ class Building extends BaseEntity {
         const maxWorkers = this.getCurrentCarriers();
         this.currentWorkers = 0;
         let didConsume = false;
-        while (this.productionLevel < this.upgradeLevel && this.currentWorkers < maxWorkers && this.checkProductionResources(true)) {
+        while (this.productionLevel < Math.max(1, this.upgradeLevel) && this.currentWorkers < maxWorkers && this.checkProductionResources(true)) {
             this.productionLevel++;
             this.currentWorkers++;
             didConsume = true;

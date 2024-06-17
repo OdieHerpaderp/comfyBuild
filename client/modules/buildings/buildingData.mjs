@@ -3,6 +3,7 @@ import { HighlightableText } from "textHelpers";
 import { ShortResourceDisplayList } from "shortResourceDisplay";
 import { buildings } from "buildings";
 import { socket } from "singletons";
+import { romanize } from "textHelpers";
 
 let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataRow");
 class BuildingData {
@@ -21,6 +22,7 @@ class BuildingData {
 
         this.name = new HighlightableText(name);
         this.age = data.age ?? -1;
+        this.ageText = romanize(data.age + 1);
         this.info = data.info ?? "[no info available]";
         this.node = data.node;
         this.build = new ShortResourceDisplayList();

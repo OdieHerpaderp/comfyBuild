@@ -27,10 +27,10 @@ class ComfyBuildServer {
         buildingManager.tryBuildBuilding(54, 54, "headquarters");
 
         resourceNodeManager.addEntity(new ResourceNode(50, 50, "rockDeposit"));
-        buildingManager.tryBuildBuilding(50, 50, "caveDiggers");
+        buildingManager.tryBuildBuilding(50, 50, "caveGatherers");
 
         resourceNodeManager.addEntity(new ResourceNode(58, 58, "forest"));
-        buildingManager.tryBuildBuilding(58, 58, "forestry");
+        buildingManager.tryBuildBuilding(58, 58, "forestGatherers");
 
         resourceNodeManager.generateResourceNodes();
 

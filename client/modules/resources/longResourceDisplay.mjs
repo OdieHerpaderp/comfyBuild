@@ -13,10 +13,11 @@ class LongResourceDisplay {
     amountCalculator;
     changeCalculator;
 
-    constructor(name = "[unknown]", amount = 0) {
+    constructor(name = "[unknown]", amount = 0, parent) {
         useTemplate.bind(this)(template);
 
         this.name = name;
+        this.parent = parent;
 
         this.amountCalculator = new RollingNumber(amount, 0.1);
         this.amount = this.amountCalculator.displayAmount;
@@ -57,13 +58,18 @@ class LongResourceDisplay {
         this.amountCalculator.displayTick();
         this.amount = this.amountCalculator.displayAmount;
     }
+
+    resourceNameClick() {
+        this.parent?.resourceClicked(this.name);
+    }
 }
 
-class LongResourceDisplayList {
+class LongResourceDisplayList extends EventTarget {
     resourceDisplays = {};
     resources = [];
 
     constructor() {
+        super();
         useTemplate.bind(this)(listTemplate);
     }
 
@@ -88,7 +94,7 @@ class LongResourceDisplayList {
 
     updateResource(name, amount) {
         if (this.resourceDisplays[name] === undefined) {
-            this.resourceDisplays[name] = new LongResourceDisplay(name, amount);
+            this.resourceDisplays[name] = new LongResourceDisplay(name, amount, this);
         }
         else {
             this.resourceDisplays[name].setAmount(amount);
@@ -98,6 +104,10 @@ class LongResourceDisplayList {
             this.resources.push(this.resourceDisplays[name]);
             this.resourceDisplays[name].isVisible = true;
         }
+    }
+
+    resourceClicked(name) {
+        this.dispatchEvent(new CustomEvent("resourceClicked", { detail: name }));
     }
 
     displayTick() {

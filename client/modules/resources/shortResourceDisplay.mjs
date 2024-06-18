@@ -10,24 +10,30 @@ class ShortResourceDisplay {
     amount;
     isVisible = false;
 
-    constructor(name = "[unknown]", amount = 0) {
+    constructor(name = "[unknown]", amount = 0, parent) {
         useTemplate.bind(this)(template);
 
         this.name = new HighlightableText(name);
         this.originalName = name;
         this.amount = amount;
+        this.parent = parent;
     }
 
     searchAndHighlight(searchText) {
         return this.name.searchAndHighlight(searchText);
     }
+
+    resourceNameClick() {
+        this.parent?.resourceClicked(this.name.value);
+    }
 }
 
-class ShortResourceDisplayList {
+class ShortResourceDisplayList extends EventTarget {
     resourceDisplays = {};
     resources = [];
 
     constructor() {
+        super();
         useTemplate.bind(this)(listTemplate);
     }
 
@@ -47,7 +53,7 @@ class ShortResourceDisplayList {
 
     updateResource(name, amount) {
         if (this.resourceDisplays[name] === undefined) {
-            this.resourceDisplays[name] = new ShortResourceDisplay(name, amount);
+            this.resourceDisplays[name] = new ShortResourceDisplay(name, amount, this);
         }
         else {
             this.resourceDisplays[name].amount = amount;
@@ -63,6 +69,10 @@ class ShortResourceDisplayList {
         var result = false;
         this.resources.forEach((resource) => { result = resource.searchAndHighlight(searchText) || result; });
         return result;
+    }
+
+    resourceClicked(name) {
+        this.dispatchEvent(new CustomEvent("resourceClicked", { detail: name }));
     }
 }
 

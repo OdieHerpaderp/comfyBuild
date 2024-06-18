@@ -21,7 +21,7 @@ class BuildingData {
     hiddenAge = false;
     hiddenResource = false;
 
-    constructor(name, data, infoField) {
+    constructor(name, data, infoField, parent) {
         useTemplate.bind(this)(template);
 
         this.name = new HighlightableText(name);
@@ -37,7 +37,16 @@ class BuildingData {
         this.produce.setResources(data.produce);
 
         this.infoField = infoField;
+        this.parent = parent;
         this.nodeField = this.domElement.querySelector("[data-content=node]");
+
+        this.build.addEventListener('resourceClicked', event => this.resourceClicked(event.detail));
+        this.consume.addEventListener('resourceClicked', event => this.resourceClicked(event.detail));
+        this.produce.addEventListener('resourceClicked', event => this.resourceClicked(event.detail));
+    }
+
+    resourceClicked(resourceName) {
+        this.parent?.setSearch(resourceName);
     }
 
     buildClick() {
@@ -136,7 +145,7 @@ class BuildingDataList {
         // Temporary array because templates don't handle Array.sort properly yet
         let buildingDatasTemp = [];
         for (const buildingName in buildings) {
-            buildingDatasTemp.push(new BuildingData(buildingName, buildings[buildingName], infoField));
+            buildingDatasTemp.push(new BuildingData(buildingName, buildings[buildingName], infoField, this));
             maxAge = Math.max(maxAge, buildings[buildingName].age ?? -1);
         }
 
@@ -221,9 +230,14 @@ class BuildingDataList {
     }
 
     clearSearch() {
-        this.search = "";
+        this.setSearch("");
+    }
+
+    setSearch(searchText = "") {
+        this.search = searchText;
+        let searchValue = this.search.toLowerCase();
         this.buildingDatas.forEach((buildingData) => {
-            buildingData.searchAndHighlight(this.search);
+            buildingData.searchAndHighlight(searchValue);
         });
     }
 }

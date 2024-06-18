@@ -45,6 +45,10 @@ class BuildingsFrame {
         this.buildingList.selectedResourceNodeChanged(resourceNode);
     }
 
+    resourceClicked(resourceName) {
+        this.buildingList.setSearch(resourceName);
+    }
+
     displayTick() {
         if (this.currentBuilding) {
             this.buildingTooltip.displayTick();

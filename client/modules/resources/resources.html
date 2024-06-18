@@ -1,6 +1,6 @@
 <template id="shortResource">
     <div class="shortResource">
-        <span><span data-content="name"></span>: <span class="monospace" data-content="amount"></span></span>
+        <span><span data-content="name" data-events="click:resourceNameClick"></span>: <span class="monospace" data-content="amount"></span></span>
     </div>
 </template>
 
@@ -11,7 +11,7 @@
 
 <template id="longResource">
     <tr>
-        <td data-content="name"></td>
+        <td data-content="name" data-events="click:resourceNameClick"></td>
         <td data-content="amount" class="monospace"></td>
         <td id="changeColor"><span data-content="changePrefix"></span><span data-content="change" data-decimals="1" class="monospace"></span></td>
     </tr>

@@ -2,7 +2,7 @@ import { jsFrameMixin } from "JSFrame";
 import { socket } from "singletons"
 import { LongResourceDisplayList } from "longResourceDisplay";
 
-class StockpileFrame {
+class StockpileFrame extends EventTarget {
     jsFrameSettings = {
         name: "frameStockpile",
         title: "Stockpile",
@@ -10,7 +10,9 @@ class StockpileFrame {
     };
 
     constructor() {
+        super();
         this.frameContent = new LongResourceDisplayList();
+        this.frameContent.addEventListener('resourceClicked', event => this.dispatchEvent(new CustomEvent("resourceClicked", { detail: event.detail })));
         socket.on('stockpile', (...args) => this.frameContent.updateResources(...args));
     }
 

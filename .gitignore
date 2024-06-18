@@ -132,6 +132,9 @@ dist
 # generated files
 client/generated
 
+# Blender temp files 
+*.blend?
+
 # Krita temp files 
 *.kra~
 *.png~

@@ -17,6 +17,7 @@ class ResourceNodeManager extends GridEntityManager {
         for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("leadDeposit", 4, 8, 120, 40); }
         for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("silverDeposit", 4, 8, 120, 40); }
         for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("coalDeposit", 4, 8, 120, 40); }
+        for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("nickelDeposit", 4, 8, 120, 40); }
         for (let i = 0; i < 48; i++) { this.spawnRandomResourceNode("saltWater", 0, (serverSettings.mapHeight-1), serverSettings.mapWidth, serverSettings.mapHeight); }
     }
 

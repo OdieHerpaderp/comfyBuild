@@ -16,7 +16,7 @@ class ModelCache {
 
     loadModel(modelName) {
         var that = this;
-        this.constructor.loader.load('client/models/tower/' + modelName + '.glb',
+        this.constructor.loader.load('client/models/buildings/' + modelName + '.glb',
             (data) => { that.modelLoadedCallback(data, modelName); },
             undefined,
             () => {  });

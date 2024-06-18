@@ -46,8 +46,6 @@ class EntityManager extends EventTarget {
     }
 
     onInitEntities(data) {
-        this.localPlayerId = data.selfId ?? this.localPlayerId;
-
         for (var i = 0; i < data.players.length; i++) {
             if (this.players[data.players[i].id]) {
                 console.warn(`Player ${data.players[i].id} was already initialized! Skipping...`);

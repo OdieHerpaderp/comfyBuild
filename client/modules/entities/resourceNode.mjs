@@ -6,11 +6,11 @@ class ResourceNode extends BaseEntity {
 
     constructor(initData) {
         super(initData);
-        this.resourceType = initData.towerType ?? initData.resourceType ?? "unknown";
+        this.resourceType = initData.resourceType ?? "unknown";
 
         let geometry = new THREE.PlaneGeometry(3, 3, 1, 1);
 
-        let texture = new THREE.TextureLoader().load('/client/img/bullets/' + this.resourceType + '.png');
+        let texture = new THREE.TextureLoader().load('/client/img/resourceNodes/' + this.resourceType + '.png');
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(1, 1);
 

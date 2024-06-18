@@ -33,11 +33,11 @@ class LongResourceDisplay {
         this.change = this.changeCalculator.addNumber(newAmount - this.amountCalculator.amount);
         if (this.change >= 0.05) { 
             this.changePrefix = "+"; 
-            this.setChangeColor("green");
+            this.setChangeColor("text-green");
         }
         else if (this.change < -0.05) { 
             this.changePrefix = ""; 
-            this.setChangeColor("red");
+            this.setChangeColor("text-red");
         }
         else { 
             this.change = 0;

@@ -123,7 +123,7 @@ class Building extends BaseEntity {
     constructor(initData) {
         super(initData);
         
-        this.buildingType = initData.towerType ?? initData.buildingType ?? "unknown";
+        this.buildingType = initData.buildingType ?? "unknown";
         this.upgradeLevel = initData.upgradeLevel ?? 0;
         this.targetLevel = initData.targetLevel ?? this.upgradeLevel;
         this.productionLevel = initData.productionLevel ?? 1;
@@ -176,7 +176,7 @@ class Building extends BaseEntity {
             // Sprite fallback
             let geometry = new THREE.PlaneGeometry(1.8, 1.8, 1.8);
 
-            let texture = new THREE.TextureLoader().load('/client/img/towers/' + this.buildingType + '.png');
+            let texture = new THREE.TextureLoader().load('/client/img/buildings/' + this.buildingType + '.png');
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             texture.repeat.set(1, 1);
 
@@ -195,19 +195,6 @@ class Building extends BaseEntity {
         //this.mesh.castShadow = true;
         //this.mesh.receiveShadow = true;
         this.mesh.position.set(this.worldX, -0.16, this.worldY - 0.01);
-
-        // Bottom plane
-        {
-            let geometry = new THREE.PlaneGeometry(4.5, 4.5, 1, 1);
-            let texture = new THREE.TextureLoader().load('/client/img/towerplane' + initData.bulletType + '.png');
-            let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-            let planemesh = new THREE.Mesh(geometry, material);
-
-            planemesh.position.set(0, 0, -0.01);
-            planemesh.rotation.x = 0 - Math.PI / 2;
-
-            //this.mesh.add(planemesh);
-        }
 
         // Text
         this.textSprite = new Text()
@@ -237,8 +224,8 @@ class Building extends BaseEntity {
 
         this.workRemaining = data.workRemaining ?? this.workRemaining;
         this.productionLevel = data.productionLevel ?? this.productionLevel;
-        this.workCapacity = data.workCapacity ?? data.maxWorkers ?? this.workCapacity;
-        this.workUsage = data.workUsage ?? data.currentWorkers ?? this.workUsage;
+        this.workCapacity = data.maxWorkers ?? this.workCapacity;
+        this.workUsage = data.currentWorkers ?? this.workUsage;
 
         var textNeedsUpdate = false;
         if (data.upgradeLevel !== undefined && data.upgradeLevel !== this.upgradeLevel) {

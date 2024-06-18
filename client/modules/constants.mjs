@@ -86,7 +86,7 @@ const materialMap = {
         envMapIntensity: 0.015, // Reflect environment
     }),
     'iron': new THREE.MeshStandardMaterial({
-        color:"#bbbbbb",
+        color:"#cccccc",
         map: texIron,
         normalMap: texIronNor,
         roughness: 0.1,
@@ -94,7 +94,7 @@ const materialMap = {
         envMapIntensity: 0.3, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
-        color:"#dd8822",
+        color:"#eeaa55",
         map: texCopper,
         normalMap: texCopperNor,
         roughness: 0.1,

@@ -41,7 +41,7 @@ entityManager.addEventListener("playerDisconnected", (event) => {
 
 var lightingManager = new LightingManager(scene);
 
-var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight) * 1.15, 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 20, 900);
 camera.position.set(260, 100, 460);
 
 var fakePlayer = { left: false, right: false, up: false, down: false };
@@ -58,6 +58,8 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+renderer.logarithmicDepthBuffer = true; // should address clipping
 
 // Frame Manager
 const frameManager = new FrameManager(renderer, scene);
@@ -119,6 +121,7 @@ var gridMaterial = new THREE.MeshStandardMaterial({
     map: gridTexture,
     transparent: true,
     roughness: 0.99,
+    depthWrite: false,
 });
 
 // Create the geometry and mesh

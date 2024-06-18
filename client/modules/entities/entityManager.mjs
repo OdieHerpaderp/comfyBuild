@@ -141,6 +141,7 @@ class EntityManager extends EventTarget {
     updateSelectedBuilding() {
         if (!this.localPlayer) { return; }
         this.selectedBuilding = this.getBuildingAtCoordinates(this.localPlayer.x, this.localPlayer.y);
+        this.selectedResourceNode = this.getResourceNodeAtCoordinates(this.localPlayer.x, this.localPlayer.y);
     }
 
     getBuildingAtCoordinates(x, y) {

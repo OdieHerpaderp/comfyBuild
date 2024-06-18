@@ -199,7 +199,7 @@ class Building extends BaseEntity {
         // Text
         this.textSprite = new Text()
 
-        // TODO: Turn text into a sprite so it faces the camera.
+        // Turn text into a sprite so it faces the camera.
         let material = createBillboardMaterial(new THREE.MeshBasicMaterial());
         this.textSprite.text = this.upgradeLevel + "\n" + this.buildingType + "\n";
         this.textSprite.font = '/client/font/RobotoSlab-Bold.woff';

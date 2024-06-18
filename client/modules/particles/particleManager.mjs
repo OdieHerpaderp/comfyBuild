@@ -32,11 +32,11 @@ class ParticleManager {
         {
             var color = 0xffffff; 
             var spriteMaterial;
-            if (type == "smoke" || type == "psmoke" || type == "poison" || type == "gem" || type == "skull") spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type], transparent:true } );
+            if (type == "smoke" || type == "psmoke" || type == "poison" || type == "gem" || type == "skull") spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type], transparent:true, depthWrite: false } );
             else spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type] } );
                 
             var sprite = new THREE.Sprite( spriteMaterial );
-            var spriteScale = (2.5 + Math.random() * 2.3) * scale;
+            var spriteScale = (0.5 + Math.random() * 0.5) * scale;
             //if (type == "smoke") spriteScale /= 2;
             sprite.scale.set( spriteScale, spriteScale, 1.0 ); // imageWidth, imageHeight
             sprite.position.set( x,y,z );

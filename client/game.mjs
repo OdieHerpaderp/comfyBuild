@@ -105,6 +105,7 @@ gameElement.addEventListener('click', (event) => {
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
         socket.emit('fakePlayer', { x: intersection.point.x * 10, y: intersection.point.z * 10 });
+        particleManager.spawnParticle("fire",3,1,intersection.point.x,-0.1,intersection.point.z,undefined);
     }
 });
 
@@ -244,7 +245,6 @@ var animate = function () {
     lightingManager.animationFrame(camera.position, controls.target);
     if (currentTime - 60 > lastEmit) {
         frameManager.displayTick();
-        particleManager.spawnParticle("fire",3,1,controls.target.x,1,controls.target.z,undefined);
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
     }

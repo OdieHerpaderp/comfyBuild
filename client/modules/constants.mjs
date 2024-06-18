@@ -86,12 +86,20 @@ const materialMap = {
         envMapIntensity: 0.015, // Reflect environment
     }),
     'iron': new THREE.MeshStandardMaterial({
-        color:"#cccccc",
+        color:"#aaaaaa",
         map: texIron,
         normalMap: texIronNor,
         roughness: 0.01,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
+    }),
+    'steel': new THREE.MeshStandardMaterial({
+        color:"#dddddd",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.4, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
         color:"#eeaa55",
@@ -100,6 +108,78 @@ const materialMap = {
         roughness: 0.01,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
+    }),
+    'tin': new THREE.MeshStandardMaterial({
+        color:"#2288dd",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'bronze': new THREE.MeshStandardMaterial({
+        color:"#aa9922",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'zinc': new THREE.MeshStandardMaterial({
+        color:"#bbaa88",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'nickel': new THREE.MeshStandardMaterial({
+        color:"#998844",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'sulphur': new THREE.MeshStandardMaterial({
+        color:"#bbcc44",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'lead': new THREE.MeshStandardMaterial({
+        color:"#661199",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'silver': new THREE.MeshStandardMaterial({
+        color:"#ddddee",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.4, // Reflect environment
+    }),
+    'invar': new THREE.MeshStandardMaterial({
+        color:"#669911",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.3, // Reflect environment
+    }),
+    'gold': new THREE.MeshStandardMaterial({
+        color:"#ddcc99",
+        map: texIron,
+        normalMap: texIronNor,
+        roughness: 0.01,
+        metalness: 0.99,
+        envMapIntensity: 0.4, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
         color: 0xffffff, // Set the base color

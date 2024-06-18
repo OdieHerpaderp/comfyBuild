@@ -131,3 +131,7 @@ dist
 
 # generated files
 client/generated
+
+# Krita temp files 
+*.kra~
+*.png~

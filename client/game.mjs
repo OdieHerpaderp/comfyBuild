@@ -32,6 +32,9 @@ var entityManager = new EntityManager(scene);
 entityManager.addEventListener("selectedBuildingChanged", (event) => {
     frameManager.buildingsFrame.selectedBuildingChanged(event.detail.building);
 });
+entityManager.addEventListener("selectedResourceNodeChanged", (event) => {
+    frameManager.buildingsFrame.selectedResourceNodeChanged(event.detail.resourceNode);
+});
 entityManager.addEventListener("playerConnected", (event) => {
     frameManager.playerList.addPlayer(event.detail.player);
 });

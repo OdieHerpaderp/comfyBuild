@@ -41,6 +41,10 @@ class BuildingsFrame {
         }
     }
 
+    selectedResourceNodeChanged(resourceNode) {
+        this.buildingList.selectedResourceNodeChanged(resourceNode);
+    }
+
     displayTick() {
         if (this.currentBuilding) {
             this.buildingTooltip.displayTick();

@@ -19,6 +19,7 @@ class BuildingData {
 
     hiddenSearch = false;
     hiddenAge = false;
+    hiddenResource = false;
 
     constructor(name, data, infoField) {
         useTemplate.bind(this)(template);
@@ -36,6 +37,7 @@ class BuildingData {
         this.produce.setResources(data.produce);
 
         this.infoField = infoField;
+        this.nodeField = this.domElement.querySelector("[data-content=node]");
     }
 
     buildClick() {
@@ -54,7 +56,7 @@ class BuildingData {
     }
 
     updateVisibility() {
-        if (this.hiddenSearch || this.hiddenAge) {
+        if (this.hiddenSearch || this.hiddenAge || this.hiddenResource) {
             this.domElement.classList.add("hidden");
         }
         else {
@@ -88,6 +90,36 @@ class BuildingData {
         this.hiddenAge = false;
         this.updateVisibility();
     }
+
+    highlightResourceNode(resourceNode) {
+        if (!this.nodeField) { return; }
+        if (this.node === resourceNode) {
+            this.nodeField.classList.add("text-green");
+            this.nodeField.classList.remove("text-red");
+        }
+        else {
+            this.nodeField.classList.add("text-red");
+            this.nodeField.classList.remove("text-green");
+        }
+    }
+
+    updateResourceNodeVisibilityAndHighlight(resourceNode, resourceDisplayMode) {
+        this.highlightResourceNode(resourceNode);
+
+        switch (resourceDisplayMode) {
+            case "showSelected": // Show only selected
+                this.hiddenResource = this.node !== resourceNode;
+                break;
+            case "hideNonSelected":
+                this.hiddenResource = this.node !== undefined && this.node !== resourceNode;
+                break;
+            default:
+                this.hiddenResource = false;
+                break;
+        }
+
+        this.updateVisibility();
+    }
 }
 
 let listTemplate = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataList");
@@ -118,13 +150,17 @@ class BuildingDataList {
 
         this.buildingDatas = buildingDatasTemp;
 
-        this.ageSelectorsElement = this.domElement.querySelector("#ageSelectors")
+        this.ageSelectorsElement = this.domElement.querySelector("#ageSelectors");
+        this.resourceNodeSelectorsElement = this.domElement.querySelector("#resourceNodeSelectors");
 
         for (let i = 0; i <= maxAge; i++) {
             let button = new ToggleButton(romanize(i + 1), true);
             button.addEventListener("input", event => { this.ageToggleChanged(i, event.target.checked); });
             this.ageSelectors.push(button);
         }
+
+        this.currentResourceType = undefined;
+        this.currentResourceDisplayMode = "all";
     }
 
     searchInputChanged(event) {
@@ -158,6 +194,31 @@ class BuildingDataList {
                 buildingData.hideIfAge(age);
             });
         }
+    }
+
+    resourceNodesToggleChanged(event) {
+        if (event.target.checked) {
+            this.resourceNodeSelectorsElement.classList.remove("hidden");
+        }
+        else {
+            this.resourceNodeSelectorsElement.classList.add("hidden");
+        }
+    }
+
+    resourceNodeSelectionChanged(event) {
+        this.currentResourceDisplayMode = event.target.value;
+        this.updateResourceNodeVisibilityAndHighlight();
+    }
+
+    selectedResourceNodeChanged(resourceNode) {
+        this.currentResourceType = resourceNode?.resourceType;
+        this.updateResourceNodeVisibilityAndHighlight();
+    }
+
+    updateResourceNodeVisibilityAndHighlight() {
+        this.buildingDatas.forEach((buildingData) => {
+            buildingData.updateResourceNodeVisibilityAndHighlight(this.currentResourceType, this.currentResourceDisplayMode);
+        });
     }
 
     clearSearch() {

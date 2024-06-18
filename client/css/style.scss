@@ -81,6 +81,14 @@ mark {
     font-size: $font-size-xlarge;
 }
 
+.text-red {
+    color: rgb(255, 0, 128);
+}
+
+.text-green {
+    color: rgb(96, 192, 0);
+}
+
 .flex {
     display: flex;
 }
@@ -265,14 +273,6 @@ mark {
             text-align: right;
             font-size: $font-size-xsmall;
             font-weight: bold;
-
-            &.red {
-                color: red;
-            }
-
-            &.green {
-                color: rgb(0, 192, 0);
-            }
         }
     }
 }

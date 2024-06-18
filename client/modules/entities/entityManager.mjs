@@ -12,6 +12,8 @@ class EntityManager extends EventTarget {
 
     localPlayerId;
     _selectedBuilding;
+    _selectedResourceNode;
+
     get selectedBuilding() {
         return this._selectedBuilding;
     }
@@ -19,6 +21,15 @@ class EntityManager extends EventTarget {
         if (this._selectedBuilding === value) { return; }
         this._selectedBuilding = value;
         this.dispatchEvent(new CustomEvent("selectedBuildingChanged", { detail: { "building": this.selectedBuilding } }));
+    }
+
+    get selectedResourceNode() {
+        return this._selectedResourceNode;
+    }
+    set selectedResourceNode(value) {
+        if (this._selectedResourceNode === value) { return; }
+        this._selectedResourceNode = value;
+        this.dispatchEvent(new CustomEvent("selectedResourceNodeChanged", { detail: { "resourceNode": this.selectedResourceNode } }));
     }
 
     get localPlayer() {
@@ -142,8 +153,22 @@ class EntityManager extends EventTarget {
         }
     }
 
+    getResourceNodeAtCoordinates(x, y) {
+        // Do we need something more efficient for this?
+        for (let resourceNodeId in this.resourceNodes) {
+            let resourceNode = this.resourceNodes[resourceNodeId];
+            if (resourceNode.x === x && resourceNode.y === y) {
+                return resourceNode;
+            }
+        }
+    }
+
     getSelectedBuilding() {
         return this.selectedBuilding;
+    }
+
+    getSelectedResourceNode() {
+        return this.selectedResourceNode;
     }
 }
 

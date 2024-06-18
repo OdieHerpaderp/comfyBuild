@@ -37,6 +37,8 @@ class FrameManager {
         this.worldInfo = new WorldInfo();
 
         this.settingsFrame = new SettingsFrame(renderer, scene);
+
+        this.stockpile.addEventListener('resourceClicked', event => this.buildingsFrame.resourceClicked(event.detail));
     }
 
     addEventListener(eventName, callbackFunction) {

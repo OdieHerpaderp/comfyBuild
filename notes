@@ -1,12 +1,3 @@
-Resource Nodes:
-    Replace bullet system with resource nodes
-    resource nodes have percentage for production penalty based on excessive use
-    production will stop when production percentage is below 25%
-
-Production Timer:
-    Do not produce every tick to spread load
-    Reduce production bonus per level, instead increase speed    
-
 Prehistoric Era:
     Pit houses/dugouts (dwellings that consumed wood, hides, stone for construction) Consumed resources like wood for framing, earth for insulation, animal hides/plants for roofing
     Wattle and daub huts Consumed wood for the wattle (woven lattice), clay/mud for daub (coating), plants/reeds for thatched roofing
@@ -17,29 +8,6 @@ Prehistoric Era:
     Crannogs - Fortified artificial islands in lakes/marshes, built with timber piles and connected by a causeway.
     Brochs - Drystone hollow-walled structures found in Scotland, possibly defensive towers or homes for extended families.
     Longhouses (large wooden houses for multiple families)
-
-Ancient Civilizations:
-    Mud brick houses (consumed mud/clay, straw, wood)
-    Stone quarries (produced building stone)
-    Pottery kilns (consumed wood/fuel to produce ceramics)
-    Granaries (stored/consumed agricultural produce)
-    Primitive smelters (consumed ores, charcoal to produce metals)
-    Ziggurats - Massive stepped pyramids made of mud-brick, built by Mesopotamians like the Sumerians.
-    Aqueducts - Stone masonry channels and bridges to transport water, perfected by the ancient Romans.
-    Amphitheaters - Large oval or circular open-air venues for events, with sloping stone seating around a central area.
-    Insulae - Ancient Roman apartment buildings, some rising up to 7-8 stories using timber framing and brick/concrete.
-
-    The ancient Mesopotamians had a diverse diet that included a significant amount of fruits, vegetables, grains, and meat/animal products. However, the evidence suggests they likely consumed more plant-based foods like grains, fruits, and vegetables overall compared to meat.
-    Grains, especially barley, were a staple food used to make bread and beer. Barley was described as the "staff of life" in Mesopotamia 
-    A wide variety of fruits and vegetables were cultivated and consumed, including dates, pomegranates, apples, figs, apricots, grapes, onions, garlic, leeks, lettuce, radishes, beets, and more
-    Meat sources included domesticated livestock like sheep, goats, cattle, and pigs, as well as wild game, fowl, and fish. However, beef was noted as being "in short supply" compared to other meats
-    While meat was certainly part of the diet, the search results emphasize the importance and prevalence of plant-based foods like grains, fruits, and vegetables in Mesopotamian cuisine
-
-    Frogs were commonly found in the rivers and marshes of Mesopotamia. They were used in healing rituals and incantations, sometimes being caught live, recited over, and then released back into the water
-    Fish like the giritu-fish were also utilized in Mesopotamian healing practices. One ritual involved having the patient urinate on the head of a live giritu-fish before releasing it back into a canal
-    In addition to medicinal uses, fish and other aquatic creatures like turtles were caught and consumed as food sources in the Mesopotamian diet
-    The rivers and marshlands of Mesopotamia provided abundant aquatic wildlife that was hunted and trapped, including various species of fish, waterfowl like ducks and geese, and reptiles like turtles
-    Some wild aquatic birds like pelicans were even domesticated and trained by the Mesopotamians to assist in fishing
 
 Paleolithic Age
     Lower Paleolithic (oldest stone tool cultures like Oldowan and Acheulean)
@@ -63,6 +31,29 @@ Neolithic Age
     Neolithic Revolution (origins of agriculture, pottery, permanent settlements)
     Buildings: Mud-brick houses, granaries, early temples
     Resources: Domesticated plants/animals, pottery, polished stone tools, weaving
+
+Ancient Civilizations:
+    Mud brick houses (consumed mud/clay, straw, wood)
+    Stone quarries (produced building stone)
+    Pottery kilns (consumed wood/fuel to produce ceramics)
+    Granaries (stored/consumed agricultural produce)
+    Primitive smelters (consumed ores, charcoal to produce metals)
+    Ziggurats - Massive stepped pyramids made of mud-brick, built by Mesopotamians like the Sumerians.
+    Aqueducts - Stone masonry channels and bridges to transport water, perfected by the ancient Romans.
+    Amphitheaters - Large oval or circular open-air venues for events, with sloping stone seating around a central area.
+    Insulae - Ancient Roman apartment buildings, some rising up to 7-8 stories using timber framing and brick/concrete.
+
+    The ancient Mesopotamians had a diverse diet that included a significant amount of fruits, vegetables, grains, and meat/animal products. However, the evidence suggests they likely consumed more plant-based foods like grains, fruits, and vegetables overall compared to meat.
+    Grains, especially barley, were a staple food used to make bread and beer. Barley was described as the "staff of life" in Mesopotamia 
+    A wide variety of fruits and vegetables were cultivated and consumed, including dates, pomegranates, apples, figs, apricots, grapes, onions, garlic, leeks, lettuce, radishes, beets, and more
+    Meat sources included domesticated livestock like sheep, goats, cattle, and pigs, as well as wild game, fowl, and fish. However, beef was noted as being "in short supply" compared to other meats
+    While meat was certainly part of the diet, the search results emphasize the importance and prevalence of plant-based foods like grains, fruits, and vegetables in Mesopotamian cuisine
+
+    Frogs were commonly found in the rivers and marshes of Mesopotamia. They were used in healing rituals and incantations, sometimes being caught live, recited over, and then released back into the water
+    Fish like the giritu-fish were also utilized in Mesopotamian healing practices. One ritual involved having the patient urinate on the head of a live giritu-fish before releasing it back into a canal
+    In addition to medicinal uses, fish and other aquatic creatures like turtles were caught and consumed as food sources in the Mesopotamian diet
+    The rivers and marshlands of Mesopotamia provided abundant aquatic wildlife that was hunted and trapped, including various species of fish, waterfowl like ducks and geese, and reptiles like turtles
+    Some wild aquatic birds like pelicans were even domesticated and trained by the Mesopotamians to assist in fishing
 
 Early Medieval:
     Motte and Bailey Castles - Early medieval fortifications with a wooden tower on a mound (motte) and an enclosed courtyard (bailey).

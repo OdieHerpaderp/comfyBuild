@@ -1,5 +1,6 @@
 import { EntityManager } from "entityManager";
 import { LightingManager } from "lightingManager";
+import { ParticleManager } from "particleManager";
 import { LoadingScreen } from "loadingScreen";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -15,6 +16,7 @@ let loadingScreen = new LoadingScreen();
 loadingScreen.addEventListener("loadComplete", () => {
     gameDiv.style.display = 'inline-block';
     frameManager.loadComplete();
+    particleManager.addParticleGroup();
     //loginScreen.showFrame();
     //loginScreen.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
     loadingScreen = undefined;
@@ -40,6 +42,8 @@ entityManager.addEventListener("playerDisconnected", (event) => {
 });
 
 var lightingManager = new LightingManager(scene);
+
+var particleManager = new ParticleManager(scene);
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 20, 900);
 camera.position.set(260, 100, 460);
@@ -230,12 +234,14 @@ var animate = function () {
     deltaAvg += delta;
     deltaCount++;
     previousTime = currentTime;
+    particleManager.animateParticles(delta);
     pollInputs(delta);
 
     controls.update();
     lightingManager.animationFrame(camera.position, controls.target);
     if (currentTime - 60 > lastEmit) {
         frameManager.displayTick();
+        particleManager.spawnParticle("fire",3,1,controls.target.x,1,controls.target.z,undefined);
         lightingManager.tick(delta, controls.target);
         lastEmit = currentTime;
     }

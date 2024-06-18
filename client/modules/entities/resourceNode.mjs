@@ -14,7 +14,7 @@ class ResourceNode extends BaseEntity {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(1, 1);
 
-        let material = new THREE.MeshLambertMaterial({ color:"#ffffff", emissive:"#555555" ,emissiveMap: texture , map: texture, transparent: true,depthWrite: false, });
+        let material = new THREE.MeshBasicMaterial({ color:"#999", map: texture, transparent: true,depthWrite: false, });
 
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(this.worldX, 0.05, this.worldY);

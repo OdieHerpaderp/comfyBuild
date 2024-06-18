@@ -148,7 +148,7 @@ mark {
 }
 
 .comfyButton {
-    margin: 2px;
+    margin: 0 2px 2px 2px;
     box-shadow: 0 2px #222222, inset 0 2px #666666;
     color: color.scale($color: $font-color, $lightness: -10%);
     text-decoration: none;
@@ -159,7 +159,10 @@ mark {
     border-width: 1.5px;
     border-radius: 3px;
     text-align: center;
-    font-size: $font-size-large;
+    font-size: $font-size-normal;
+    line-height: 1;
+    padding-block: calc($defaultPadding/2);
+    padding-inline: calc($defaultPadding*1.5);
 
     &:hover {
         box-shadow: 0 2px #222222, inset 0 2px #888888;
@@ -168,7 +171,7 @@ mark {
     }
 
     &:active {
-        margin-top: 4px;
+        margin-top: 2px;
         margin-bottom: 0px;
         box-shadow: 0 0 #333333;
         color: $font-color;
@@ -448,7 +451,7 @@ label.toggleButton {
         display: none;
 
         &:checked+span {
-            margin-top: 4px;
+            margin-top: 2px;
             margin-bottom: 0px;
             box-shadow: 0 0 #333333;
             color: $font-color;
@@ -458,7 +461,5 @@ label.toggleButton {
 
     >span {
         @extend .comfyButton;
-        padding: 6px;
-        display: block;
     }
 }

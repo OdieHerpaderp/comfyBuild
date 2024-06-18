@@ -1,8 +1,42 @@
 import BaseEntity from "baseEntity";
 import { modelCache } from "singletons";
 import * as THREE from 'three';
-import TextSprite from '@seregpie/three.text-sprite';
-import { materialMap } from "constants";
+import { Text } from 'troika-three-text'
+import { materialMap, envMap } from "constants";
+import { createDerivedMaterial } from 'troika-three-utils'
+import {preloadFont} from 'troika-three-text'
+
+preloadFont(
+  {
+    font: '/client/font/RobotoSlab-Bold.woff', 
+    characters: 'abcdefghijklmnopqrstuvwxyz1234567890/>'
+  },
+  () => {
+    console.log("Font preloaded!");
+  }
+)
+
+export function createBillboardMaterial(baseMaterial, opts) {
+  return createDerivedMaterial(
+    baseMaterial,
+    Object.assign(
+      {
+        vertexMainOutro: `
+vec4 mvPosition = modelViewMatrix * vec4( 0.0, 0.0, 0.0, 1.0 );
+vec3 scale = vec3(
+  length(modelViewMatrix[0].xyz),
+  length(modelViewMatrix[1].xyz),
+  length(modelViewMatrix[2].xyz)
+  );
+// size attenuation: scale *= -mvPosition.z * 0.2;
+mvPosition.xyz += position * scale;
+gl_Position = projectionMatrix * mvPosition;
+`
+      },
+      opts
+    )
+  )
+}
 
 class Building extends BaseEntity {
     _buildingType;
@@ -112,7 +146,9 @@ class Building extends BaseEntity {
                         if(materialName == "glass") { child.castShadow = false; }
                             else child.castShadow = true;
                     }
+                    child.material.envMap = envMap;
                     child.receiveShadow = true;
+                    child.material.needsUpdate = true;
                 }
             });
         }
@@ -132,7 +168,9 @@ class Building extends BaseEntity {
                         if(materialName == "glass") child.castShadow = false;
                             else child.castShadow = true;
                     }
+                    child.material.envMap = envMap;
                     child.receiveShadow = true;
+                    child.material.needsUpdate = true;
                 }
             });
             // Sprite fallback
@@ -172,16 +210,23 @@ class Building extends BaseEntity {
         }
 
         // Text
-        this.textSprite = new TextSprite({
-            alignment: 'center',
-            color: '#fff',
-            fontFamily: 'Roboto Slab',
-            fontSize: 0.50,
-            lineGap: 0.02,
-            strokeColor: '#000',
-            strokeWidth: 0.15,
-            text: this.upgradeLevel + "\n" + this.buildingType + "\n" ,
-        });
+        this.textSprite = new Text()
+
+        // TODO: Turn text into a sprite so it faces the camera.
+        let material = createBillboardMaterial(new THREE.MeshBasicMaterial());
+        this.textSprite.text = this.upgradeLevel + "\n" + this.buildingType + "\n";
+        this.textSprite.font = '/client/font/RobotoSlab-Bold.woff';
+        this.textSprite.fontSize = 0.45;
+        this.textSprite.fontWeight = 600;
+        this.textSprite.lineHeight = 0.9;
+        this.textSprite.material = material;
+        this.textSprite.anchorX = "center";
+        this.textSprite.textAlign = "center";
+        this.textSprite.color = 0xFFFFFF;
+        this.textSprite.outlineWidth = 0.03;
+
+        // Update the rendering:
+        this.textSprite.sync()
 
         this.textSprite.position.set(0, 3.4, 1.1);
         this.mesh.add(this.textSprite);

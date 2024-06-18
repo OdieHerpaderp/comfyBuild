@@ -4,9 +4,9 @@ import { LoadingScreen } from "loadingScreen";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { MapControls } from 'three/addons/controls/OrbitControls.js';
+import { MapControls } from 'three/addons/controls/MapControls.js';
 import { socket } from "singletons";
-import { materialMap } from "constants";
+import { materialMap, envMap } from "constants";
 import Stats from 'three/addons/libs/stats.module.js';
 import FrameManager from "frameManager";
 
@@ -41,23 +41,25 @@ entityManager.addEventListener("playerDisconnected", (event) => {
 
 var lightingManager = new LightingManager(scene);
 
-var camera = new THREE.PerspectiveCamera(15, window.innerWidth / (window.innerHeight) * 1.15, 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 20, 900);
 camera.position.set(260, 100, 460);
 
 var fakePlayer = { left: false, right: false, up: false, down: false };
 
-var renderer = new THREE.WebGLRenderer({ canvas: threejs });
+var renderer = new THREE.WebGLRenderer({ canvas: threejs, antialias: true });
 var oldWidth = 0;
 var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Post-Processing
 renderer.toneMapping = THREE.CineonToneMapping; //Default to Linear
-renderer.toneMappingExposure = 2.0;
-renderer.outputEncoding = THREE.LinearEncoding;
+renderer.toneMappingExposure = 1.5;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+renderer.logarithmicDepthBuffer = true; // should address clipping
 
 // Frame Manager
 const frameManager = new FrameManager(renderer, scene);
@@ -119,6 +121,7 @@ var gridMaterial = new THREE.MeshStandardMaterial({
     map: gridTexture,
     transparent: true,
     roughness: 0.99,
+    depthWrite: false,
 });
 
 // Create the geometry and mesh
@@ -135,6 +138,10 @@ grid.rotation.x = Math.PI * 1.5;
 //grid.receiveShadow = true;
 scene.add(grid);
 
+//scene.background = envMap;
+//scene.backgroundBlurriness = 0.9;
+//scene.environment = envMap;
+
 const loader = new GLTFLoader();
 var terrain;
 
@@ -142,6 +149,7 @@ loader.load('client/models/terrain.glb', function (gltf) {
     gltf.scene.traverse(function (child) {
         if (child.isMesh) {
             //child.castShadow = true;
+            child.material.envMap = envMap;
             child.receiveShadow = true;
         }
     });
@@ -159,6 +167,7 @@ loader.load('client/models/terrain.glb', function (gltf) {
                 child.material = materialMap[materialName];
             }
             child.receiveShadow = true;
+            child.material.envMap = envMap;
             child.material.map && (child.material.map.anisotropy = Math.min(maxAnisotropy, 16));
             child.material.emissiveMap && (child.material.emissiveMap.anisotropy = Math.min(maxAnisotropy, 16));
             child.material.roughnessMap && (child.material.roughnessMap.anisotropy = Math.min(maxAnisotropy, 16));
@@ -172,61 +181,6 @@ loader.load('client/models/terrain.glb', function (gltf) {
 }, undefined, function (error) {
     console.error(error);
 });
-
-// Global plane geom
-//var textureSB = {};
-////cubemap HDR
-//new RGBELoader()
-//    .setPath('/client/img/')
-//    .load('morning.hdr', function (texture) {
-//        texture.mapping = THREE.EquirectangularReflectionMapping;
-//        texture.magFilter = THREE.LinearFilter;
-//        texture.minFilter = THREE.LinearFilter;
-//        //texture.generateMipmaps = true;
-//        //scene.background = texture;
-//        //scene.backgroundBlurriness = 2;
-//        //scene.environment = texture;
-//        textureSB["morning"] = texture;
-//    });
-
-new RGBELoader()
-    .setPath('/client/textures/')
-    .load('envMap.hdr', function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
-        //texture.generateMipmaps = true;
-        scene.background = texture;
-        scene.backgroundBlurriness = 0.9;
-        scene.environment = texture;
-        //textureSB["noon"] = texture;
-    });
-
-//new RGBELoader()
-//    .setPath('/client/img/')
-//    .load('evening.hdr', function (texture) {
-//        texture.mapping = THREE.EquirectangularReflectionMapping;
-//        texture.magFilter = THREE.LinearFilter;
-//        texture.minFilter = THREE.LinearFilter;
-//        //texture.generateMipmaps = true;
-//        //scene.background = texture;
-//        //scene.backgroundBlurriness = 2;
-//        //scene.environment = texture;
-//        textureSB["evening"] = texture;
-//    });
-//
-//new RGBELoader()
-//    .setPath('/client/img/')
-//    .load('night.hdr', function (texture) {
-//        texture.mapping = THREE.EquirectangularReflectionMapping;
-//        texture.magFilter = THREE.LinearFilter;
-//        texture.minFilter = THREE.LinearFilter;
-//        //texture.generateMipmaps = true;
-//        //scene.background = texture;
-//        //scene.backgroundBlurriness = 2;
-//        //scene.environment = texture;
-//        textureSB["night"] = texture;
-//    });
 
 var targetFrameTime = 20;
 var renderScale = 100;

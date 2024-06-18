@@ -46,7 +46,7 @@ camera.position.set(260, 100, 460);
 
 var fakePlayer = { left: false, right: false, up: false, down: false };
 
-var renderer = new THREE.WebGLRenderer({ canvas: threejs });
+var renderer = new THREE.WebGLRenderer({ canvas: threejs, antialias: true });
 var oldWidth = 0;
 var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);

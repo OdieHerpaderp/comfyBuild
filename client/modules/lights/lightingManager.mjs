@@ -58,9 +58,7 @@ class LightingManager {
             { angle: tau * .75, color: 0xffffff, intensity: 0 },
             { angle: tau * .76, color: 0xffffff, intensity: 8888 }
         ]);
-        let lightHelper = new THREE.SpotLightHelper( this.spotLight.light );
         scene.add(this.globalLight.light, this.spotLight.light, this.spotLight.light.target);
-        scene.add(lightHelper);
     }
 
     tick(deltaTimeMs, targetPosition) {
@@ -77,7 +75,7 @@ class LightingManager {
 
     animationFrame(cameraPosition, targetPosition) {
         var cameraDistance = cameraPosition.distanceTo(targetPosition);
-        this.spotLight.light.position.set(targetPosition.x, cameraDistance, targetPosition.z);
+        this.spotLight.light.position.set(targetPosition.x, 75 + cameraDistance * 2, targetPosition.z);
         this.spotLight.light.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
     }
 }

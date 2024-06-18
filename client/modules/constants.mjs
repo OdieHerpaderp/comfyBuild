@@ -89,16 +89,16 @@ const materialMap = {
         color:"#cccccc",
         map: texIron,
         normalMap: texIronNor,
-        roughness: 0.1,
-        metalness: 0.7,
+        roughness: 0.01,
+        metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
     }),
     'copper': new THREE.MeshStandardMaterial({
         color:"#eeaa55",
         map: texCopper,
         normalMap: texCopperNor,
-        roughness: 0.1,
-        metalness: 0.7,
+        roughness: 0.01,
+        metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({

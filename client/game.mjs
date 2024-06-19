@@ -10,6 +10,7 @@ import { socket } from "singletons";
 import { materialMap, envMap } from "constants";
 import Stats from 'three/addons/libs/stats.module.js';
 import FrameManager from "frameManager";
+import serverSettings from "serverSettings";
 
 // Loading screen
 let loadingScreen = new LoadingScreen();
@@ -49,7 +50,6 @@ var lightingManager = new LightingManager(scene);
 var particleManager = new ParticleManager(scene);
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 20, 900);
-camera.position.set(260, 100, 460);
 
 var fakePlayer = { left: false, right: false, up: false, down: false };
 
@@ -71,23 +71,27 @@ renderer.logarithmicDepthBuffer = true; // should address clipping
 // Frame Manager
 const frameManager = new FrameManager(renderer, scene);
 frameManager.addEventListener("loginSuccessful", data => {
-    if (data.detail) { entityManager.localPlayerId = data.detail };
+    if (data.detail) { 
+        entityManager.localPlayerId = data.detail;
+    };
 });
 
 // Camera controls
 const gameElement = document.getElementById("game");
 // note: normally renderer.domElement is used, but that's hidden behind other elements so it doesn't capture mouse events.
 const controls = new MapControls(camera, gameElement);
-controls.target.x = 260;
-controls.target.z = 260;
-controls.maxDistance = 750;
-controls.minDistance = 50;
+controls.target.x = 54;
+controls.target.y = 0;
+controls.target.z = 54;
+controls.maxDistance = 128;
+controls.minDistance = 30;
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.4;
 controls.mouseButtons = {
     RIGHT: THREE.MOUSE.PAN,
     MIDDLE: THREE.MOUSE.ROTATE
 };
+camera.position.set(54, 10, 100);
 
 var raycaster = new THREE.Raycaster();
 raycaster.params.Points.threshold = 0.1;
@@ -104,12 +108,11 @@ gameElement.addEventListener('click', (event) => {
     var intersections = raycaster.intersectObject(grid);
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
-        socket.emit('fakePlayer', { x: intersection.point.x * 10, y: intersection.point.z * 10 });
-        particleManager.spawnParticle("fire",3,1,intersection.point.x,-0.1,intersection.point.z,undefined);
+        socket.emit('fakePlayer', { x: intersection.point.x, y: intersection.point.z });
+        particleManager.spawnParticle("fire",3,1,intersection.point.x,0,intersection.point.z,undefined);
     }
 });
 
-var size = 614.4;
 // Get the maximum anisotropy value supported by the renderer
 const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
 
@@ -118,7 +121,7 @@ var gridTexture = new THREE.TextureLoader().load('/client/img/grid.png');
 
 // Set the wrap mode and repeat
 gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping;
-gridTexture.repeat.set(128, 128);
+gridTexture.repeat.set(serverSettings.mapWidth, serverSettings.mapHeight);
 
 // Enable anisotropic filtering
 gridTexture.anisotropy = Math.min(maxAnisotropy, 16);
@@ -133,13 +136,13 @@ var gridMaterial = new THREE.MeshStandardMaterial({
 });
 
 // Create the geometry and mesh
-var gridGeometry = new THREE.PlaneGeometry(size, size, 1, 1);
+var gridGeometry = new THREE.PlaneGeometry(serverSettings.mapWidth, serverSettings.mapHeight, 1, 1);
 var grid = new THREE.Mesh(gridGeometry, gridMaterial);
 
 // Position and rotate the mesh
-grid.position.x = size / 2 - 2.4;
-grid.position.y = -0.13;
-grid.position.z = size / 2 - 2.4;
+grid.position.x = serverSettings.mapWidth / 2 - .5;
+grid.position.y = 0;
+grid.position.z = serverSettings.mapHeight / 2 - .5;
 grid.rotation.x = Math.PI * 1.5;
 
 // Add the mesh to the scene
@@ -163,9 +166,13 @@ loader.load('client/models/terrain.glb', function (gltf) {
     });
     terrain = gltf.scene;
     terrain.receiveShadow = true;
-    terrain.position.x = size / 2 - 2.4;
-    terrain.position.y = -0.6;
-    terrain.position.z = size / 2 - 2.4;
+    terrain.scale.x = 1/4.8;
+    terrain.scale.y = 1/4.8;
+    terrain.scale.z = 1/4.8;
+    terrain.position.x = serverSettings.mapWidth / 2 - 0.5;
+    terrain.position.y = -0.12;
+    terrain.position.z = serverSettings.mapHeight / 2 - 0.5;
+    
 
     // Traverse the scene and apply anisotropic filtering to all textures, also add materials
     gltf.scene.traverse(function (child) {
@@ -245,7 +252,7 @@ var animate = function () {
     lightingManager.animationFrame(camera.position, controls.target);
     if (currentTime - 60 > lastEmit) {
         frameManager.displayTick();
-        lightingManager.tick(delta, controls.target);
+        lightingManager.tick(delta, camera.position, controls.target);
         lastEmit = currentTime;
     }
 

@@ -12,13 +12,13 @@ class PlayerListEntry {
     get x() { return this._x; }
     set x(value) {
         this._x = value;
-        this.displayX = value / 48;
+        this.displayX = value;
     }
     _y;
     get y() { return this._y; }
     set y(value) {
         this._y = value;
-        this.displayY = value / 48;
+        this.displayY = value;
     }
     displayX;
     displayY;
@@ -32,9 +32,9 @@ class PlayerListEntry {
         this.username = player.username;
         this.isLocal = player.isLocal;
         this.x = player.x;
-        this.displayX = this.x / 48;
+        this.displayX = this.x;
         this.y = player.y;
-        this.displayY = this.y / 48;
+        this.displayY = this.y;
 
         var userNameElement = this.domElement.querySelector("[data-content=username]");
         if (userNameElement) { userNameElement.style.color = this.color; }

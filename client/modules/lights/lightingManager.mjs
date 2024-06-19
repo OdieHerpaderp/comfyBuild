@@ -51,22 +51,22 @@ class LightingManager {
             { angle: tau - Math.acos(0.5), color: 0xaabbcc, groundColor: 0xddeeff, intensity: 0.1 }
         ]);
 
-        //TODO: This spotlight no longer seems to show up
-        this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau / 50, 1), [
-            { angle: tau * .19, color: 0xffffff, intensity: 8888 },
+        this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau / 50, 1, 0), [
+            { angle: tau * .19, color: 0xffffff, intensity: 0.3 },
             { angle: tau * .2, color: 0xffffff, intensity: 0 },
             { angle: tau * .75, color: 0xffffff, intensity: 0 },
-            { angle: tau * .76, color: 0xffffff, intensity: 8888 }
+            { angle: tau * .76, color: 0xffffff, intensity: 0.3 }
         ]);
         scene.add(this.globalLight.light, this.spotLight.light, this.spotLight.light.target);
     }
 
-    tick(deltaTimeMs, targetPosition) {
+    tick(deltaTimeMs, cameraPosition, targetPosition) {
+        let cameraDistance = cameraPosition.distanceTo(targetPosition);
         this.currentAngle += anglePerMs * deltaTimeMs;
         this.currentAngle = this.currentAngle % tau;
 
         this.orbitingLights.forEach(light => {
-            light.update(this.currentAngle, targetPosition);
+            light.update(this.currentAngle, targetPosition, cameraDistance);
         });
 
         this.globalLight.update(this.currentAngle);
@@ -74,9 +74,10 @@ class LightingManager {
     }
 
     animationFrame(cameraPosition, targetPosition) {
-        var cameraDistance = cameraPosition.distanceTo(targetPosition);
-        this.spotLight.light.position.set(targetPosition.x, 75 + cameraDistance * 2, targetPosition.z);
+        let cameraDistance = cameraPosition.distanceTo(targetPosition);
+        this.spotLight.light.position.set(targetPosition.x, cameraDistance, targetPosition.z);
         this.spotLight.light.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
+        
     }
 }
 

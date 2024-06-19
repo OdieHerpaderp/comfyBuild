@@ -13,10 +13,10 @@ class BaseEntity extends EventTarget {
     mesh;
 
     get worldX() {
-        return this.x / 10;
+        return this.x;
     }
     get worldY() {
-        return this.y / 10;
+        return this.y;
     }
 
     constructor(initData) {

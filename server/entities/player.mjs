@@ -1,4 +1,4 @@
-import { BaseEntity, clientScaleModifier } from "./baseEntity.mjs";
+import { BaseEntity } from "./baseEntity.mjs";
 import { Socket } from "socket.io";
 import buildingManager from "../managers/buildingManager.mjs";
 
@@ -77,8 +77,8 @@ class Player extends BaseEntity {
     }
 
     movePlayer(data) {
-        this.x = Math.round(data.x / clientScaleModifier);
-        this.y = Math.round(data.y / clientScaleModifier);
+        this.x = Math.round(data.x);
+        this.y = Math.round(data.y);
     }
 
     upgradeBuilding(amount) {

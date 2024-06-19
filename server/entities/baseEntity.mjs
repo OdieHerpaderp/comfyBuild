@@ -1,6 +1,3 @@
-// TODO: this should be removed, it's the responsibility of the client to deal with whatever scaling it needs
-const clientScaleModifier = 48;
-
 let idCounter = 1;
 
 class BaseEntity {
@@ -21,7 +18,7 @@ class BaseEntity {
     }
     set x(value) {
         this._x = value;
-        this.updateData.x = value * clientScaleModifier;
+        this.updateData.x = value;
     }
 
     _y;
@@ -30,7 +27,7 @@ class BaseEntity {
     }
     set y(value) {
         this._y = value;
-        this.updateData.y = value * clientScaleModifier;
+        this.updateData.y = value;
     }
 
     constructor(x, y) {
@@ -70,11 +67,11 @@ class BaseEntity {
     getAllData() {
         return {
             id: this.id,
-            x: this.x * clientScaleModifier,
-            y: this.y * clientScaleModifier
+            x: this.x,
+            y: this.y
         };
     }
 }
 
 export default BaseEntity;
-export { BaseEntity, clientScaleModifier };
+export { BaseEntity };

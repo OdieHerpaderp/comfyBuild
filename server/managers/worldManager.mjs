@@ -1,4 +1,4 @@
-import serverSettings from "../serverSettings.mjs";
+import serverSettings from "../../lib/serverSettings.mjs";
 
 const moraleMultiplier = 10000;
 

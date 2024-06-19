@@ -55,8 +55,8 @@ class EntityManager extends EventTarget {
             this.players[player.id] = player;
             this.scene.add(player.mesh);
             if (player.isLocal) {
-                var that = this;
-                player.addEventListener("propertyChanged", (event) => { that.localPlayerPropertyChanged(event); });
+                player.addEventListener("propertyChanged", (event) => { this.localPlayerPropertyChanged(event); });
+                this.updateSelectedBuilding();
             }
             this.dispatchEvent(new CustomEvent("playerConnected", { detail: { "player": player } }));
         }

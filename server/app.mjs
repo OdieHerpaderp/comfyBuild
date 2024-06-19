@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import serverSettings from './serverSettings.mjs';
+import serverSettings from '../lib/serverSettings.mjs';
 import ComfyBuildServer from './comfyBuildServer.mjs';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file

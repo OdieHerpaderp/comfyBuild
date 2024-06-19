@@ -1,5 +1,5 @@
 import BaseEntity from "../entities/baseEntity.mjs";
-import serverSettings from "../serverSettings.mjs"
+import serverSettings from "../../lib/serverSettings.mjs"
 
 class GridEntityManager {
     /** @type { BaseEntity[][] } */

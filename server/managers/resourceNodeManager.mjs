@@ -1,5 +1,5 @@
 import ResourceNode from "../entities/resourceNode.mjs";
-import serverSettings from "../serverSettings.mjs";
+import serverSettings from "../../lib/serverSettings.mjs";
 import GridEntityManager from "./gridEntityManager.mjs";
 
 const grassArea = {

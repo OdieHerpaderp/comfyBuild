@@ -4,7 +4,6 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!--<link rel="stylesheet" href="./client/style.css">-->
 	<link rel="stylesheet" href="./client/generated/style.css">
 	<script type="importmap">
 		{
@@ -60,31 +59,12 @@
 	<div id="gameDiv" style="display:none;">
 		<div id="game" style="overflow:hidden; position:absolute;width:100%;height:100%;top:0px; left:0px;">
 			<canvas id="threejs" style="z-index: -1; position: absolute; left:0; top:0;"></canvas>
-
-			<a class="button comfyButton" href="javascript:zoomOut()"
-				style="position:absolute;height:24px;top:4px;left:34px;width:31px">
-				-
-			</a>
-			<a class="button comfyButton" href="javascript:zoomDefault()"
-				style="position:absolute;height:24px;top:4px;left:69px;width:31px">
-				R
-			</a>
-			<a class="button comfyButton" href="javascript:zoomIn()"
-				style="position:absolute;height:24px;top:4px;left:104px;width:31px">
-				+
-			</a>
-			<a class="button comfyButton" href="javascript:openSettings()"
-				style="position:absolute;height:24px;top:4px;left:129px;width:31px">
-				S
-			</a>
 		</div>
-
-		<div id="settingsDiv" style="position:absolute; width:100%; height:100%; display:none;">
-			
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/jsframe.js/lib/jsframe.min.js"></script>
 	<script src="/client/blowfish.js"></script>
 	<script type="module" src="/client/game.mjs" defer></script>
 </body>
+
 </html>

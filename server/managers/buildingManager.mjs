@@ -3,6 +3,7 @@ import Building from "../entities/building.mjs";
 import Housing from "../entities/housing.mjs";
 import WonderNatural from "../entities/wonderNatural.mjs";
 import GridEntityManager from "./gridEntityManager.mjs";
+import researchManager from "./researchManager.mjs";
 import resourceNodeManager from "./resourceNodeManager.mjs";
 
 class BuildingManager extends GridEntityManager {
@@ -13,13 +14,18 @@ class BuildingManager extends GridEntityManager {
      * @returns an object containing a success boolean and an error if building failed
      */
     tryBuildBuilding(x, y, buildingType) {
-        if (this.grid[x][y]) { return { success: false, error: "There is already another building in this location!" }; }
+        if (this.grid[x][y]) { return { success: false, message: "There is already another building in this location!" }; }
 
         let buildingData = buildings[buildingType];
-        if (!buildingData) { return { success: false, error: "This building type does not exist." }; }
+        if (!buildingData) { return { success: false, message: "This building type does not exist." }; }
+
+        let missingResearch = researchManager.getMissingResearchNames(buildingData.requiredResearch);
+        if (missingResearch.length !== 0) {
+            return { success: false, message: "You must unlock the required research first: " + missingResearch.join(", ") };
+        }
 
         if (buildingData.node && buildingData.node !== resourceNodeManager.grid[x][y]?.resourceType) {
-            return { success: false, error: buildingType + " must be placed on a " + buildingData.node + " node" };
+            return { success: false, message: buildingType + " must be placed on a " + buildingData.node + " node" };
         }
 
         if (buildingData.category === "housing") {

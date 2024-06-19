@@ -1,6 +1,7 @@
 import { BaseEntity } from "./baseEntity.mjs";
 import { Socket } from "socket.io";
 import buildingManager from "../managers/buildingManager.mjs";
+import researchManager from "../managers/researchManager.mjs";
 
 let playerColors = [
     "#FF6666",
@@ -57,8 +58,9 @@ class Player extends BaseEntity {
         socket.on('upgradeBuilding', (data) => this.upgradeBuilding(data));
         socket.on('upgradeAll', (data) => this.upgradeAllBuildings(data));
         socket.on('upgradeSameType', (data) => this.upgradeSameType(data));
-        socket.on('sellBuilding', (data) => this.sellBuilding());
+        socket.on('sellBuilding', () => this.sellBuilding());
         socket.on('buildBuilding', (data) => this.buildBuilding(data));
+        socket.on('unlockResearch', (data) => this.unlockResearch(data))
 
         socket.on('fakePlayer', (data) => this.movePlayer(data));
 
@@ -111,9 +113,16 @@ class Player extends BaseEntity {
 
     buildBuilding(buildingName) {
         var result = buildingManager.tryBuildBuilding(this.x, this.y, buildingName);
-        if (result.success) { return; }
+        if (result.message) {
+            this.socket.emit('addToChat', result.message);
+        }
+    }
 
-        this.socket.emit('addToChat', result.error);
+    unlockResearch(researchId) {
+        let result = researchManager.tryUnlockResearch(researchId);
+        if (result.message) {
+            this.socket.emit('addToChat', result.message);
+        }
     }
 }
 

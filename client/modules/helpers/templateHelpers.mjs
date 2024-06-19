@@ -69,7 +69,11 @@ class ListBinding {
         if (item === undefined || item === null) { return document.createTextNode(""); }
         else if (item instanceof Element) { return item; }
         else if (item.domElement instanceof Element) { return item.domElement; }
-        else { return document.createTextNode(item); }
+        else { 
+            let span = document.createElement("span");
+            span.textContent = item;
+            return span; 
+        }
     }
 
     push(...items) {

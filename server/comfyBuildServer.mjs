@@ -6,6 +6,8 @@ import resourceNodeManager from "./managers/resourceNodeManager.mjs";
 import worldManager from "./managers/worldManager.mjs";
 import stockpile from "./stockpile.mjs";
 import playerManager from "./managers/playerManager.mjs";
+import "./managers/researchManager.mjs";
+import researchManager from "./managers/researchManager.mjs";
 
 class ComfyBuildServer {
     /** @type { Player[] } */
@@ -96,6 +98,8 @@ class ComfyBuildServer {
 
         socket.emit('init', init);
         socket.emit('stockpile', stockpile.getCurrentStockpile());
+        let unlockedResearch = researchManager.getAllUnlockedResearch();
+        if (unlockedResearch.length > 0) { socket.emit('unlockedResearch',unlockedResearch); }
     }
 
     sendTickData() {
@@ -124,6 +128,8 @@ class ComfyBuildServer {
         this.io.emit('update', update);
         this.io.emit('remove', remove);
         this.io.emit('gameState', worldManager.getWorldState());
+        let unlockedResearch = researchManager.getNewlyUnlockedResearch();
+        if (unlockedResearch.length > 0) { this.io.emit('unlockedResearch',unlockedResearch); }
     }
 
     sendStockpileChanges() {

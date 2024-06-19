@@ -7,6 +7,7 @@ import PlayerList from "playerList";
 import StockpileFrame from "stockpileFrame";
 import WorldInfo from "worldInfo";
 import SettingsFrame from "settingsFrame";
+import ResearchFrame from "researchFrame";
 
 
 let template = await getHTMLTemplate("client/modules/frameManager/frameManager.html");
@@ -35,6 +36,8 @@ class FrameManager {
         this.playerList = new PlayerList();
         this.stockpile = new StockpileFrame();
         this.worldInfo = new WorldInfo();
+
+        this.research = new ResearchFrame();
 
         this.settingsFrame = new SettingsFrame(renderer, scene);
 
@@ -94,6 +97,11 @@ class FrameManager {
     playersToggleChanged(event) {
         if (event.target.checked) { this.playerList.showFrame(); }
         else { this.playerList.hideFrame(); }
+    }
+
+    researchToggleChanged(event) {
+        if (event.target.checked) { this.research.showFrame(); }
+        else { this.research.hideFrame(); }
     }
 
     settingsToggleChanged(event) {

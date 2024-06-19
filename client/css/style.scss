@@ -463,3 +463,44 @@ label.toggleButton {
         @extend .comfyButton;
     }
 }
+
+.researchFrame {
+    font-size: $font-size-normal;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+
+    .researchEntry {
+        padding: $defaultPadding;
+        border: 1px solid $font-color;
+
+        button, .unlockedText {
+            min-width: 150px;
+            max-width: 150px;
+        }
+
+        .unlockedText {
+            display: none;
+        }
+
+        &.unlocked {
+            button {
+                display: none;
+            }
+
+            .unlockedText {
+                display: flex;
+            }
+        }
+    }
+}
+
+.text-list>span {
+    &::before {
+        content: ', ';
+    }
+
+    &:first-child::before {
+        content: '';
+    }
+}

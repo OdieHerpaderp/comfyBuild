@@ -21,6 +21,7 @@ class Building extends BaseEntity {
     baseConsume;
     baseProduce;
     baseBuild;
+    requiredResearch;
 
     // dynamic values
     _upgradeLevel;
@@ -103,6 +104,7 @@ class Building extends BaseEntity {
         this.baseConsume = buildingData.consume ?? {};
         this.baseProduce = buildingData.produce ?? {};
         this.baseBuild = buildingData.build ?? {};
+        this.requiredResearch = buildingData.requiredResearch ?? [];
 
         this.workRemaining = 0;
         this.upgradeLevel = 0;

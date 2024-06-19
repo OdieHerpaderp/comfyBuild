@@ -20,7 +20,7 @@ class SettingsFrame {
     constructor(renderer, scene) {
         useTemplate.bind(this)(template);
 
-        this.renderTonemap = 5;
+        this.renderTonemap = 7;
         this.renderScale = 100;
         this.renderExp = 150;
 
@@ -49,6 +49,8 @@ class SettingsFrame {
             this.renderer.toneMapping = THREE.AgXToneMapping;
         } else if (newValue == 6) {
             this.renderer.toneMapping = THREE.NeutralToneMapping;
+        } else if (newValue == 7) {
+            this.renderer.toneMapping = THREE.CustomToneMapping;
         } else {
             this.renderer.toneMapping = THREE.NoToneMapping;
         }

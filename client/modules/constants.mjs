@@ -18,11 +18,15 @@ const texRockDisp = textureLoader.load('client/textures/rockDis.png'); texRockDi
 const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
 const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
 const texStone = textureLoader.load('client/textures/buildings/stone.webp');
-const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.jpg');
+const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.webp');
 const texWood = textureLoader.load('client/textures/buildings/wood.webp');
 const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.webp');
 const texIron = textureLoader.load('client/textures/buildings/iron.jpg');
 const texIronNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
+const texHide = textureLoader.load('client/textures/buildings/hide.webp');
+const texHideNor = textureLoader.load('client/textures/buildings/hideNor.webp');
+const texLinen = textureLoader.load('client/textures/buildings/linen.webp');
+const texLinenNor = textureLoader.load('client/textures/buildings/linenNor.webp');
 
 const envMap = new RGBELoader()
     .setPath('/client/textures/')
@@ -80,6 +84,20 @@ const materialMap = {
         color:"#ffffff",
         map: texDirt,
         normalMap: texDirtNor,
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
+    'hide': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texHide,
+        normalMap: texHideNor,
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
+    'linen': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texLinen,
+        normalMap: texLinenNor,
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),

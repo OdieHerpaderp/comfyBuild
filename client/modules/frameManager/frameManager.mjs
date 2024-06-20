@@ -15,7 +15,7 @@ class FrameManager {
     jsFrameSettings = {
         name: "frameManager",
         title: "Frames",
-        left: 380, top: 360, width: 560, height: 56, minWidth: 50, minHeight: 56,
+        left: 380, top: 360, width: 590, height: 42, minWidth: 50, minHeight: 42,
         style: {
             backgroundColor: '#22222255',
             overflow: 'hidden',
@@ -73,6 +73,10 @@ class FrameManager {
 
         this.worldInfo.showFrame();
         this.worldInfo.setFramePosition(window.innerWidth / 2, 4, 'CENTER_TOP');
+
+        this.settingsFrame.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+        
+        this.research.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
 
         this.showFrame();
         this.setFramePosition(window.innerWidth / 2, window.innerHeight - 4, 'CENTER_BOTTOM');

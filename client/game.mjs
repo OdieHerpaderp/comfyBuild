@@ -11,6 +11,9 @@ import { materialMap, envMap } from "constants";
 import Stats from 'three/addons/libs/stats.module.js';
 import FrameManager from "frameManager";
 import serverSettings from "serverSettings";
+import researchManager from "researchManager";
+
+researchManager.initialize();
 
 // Loading screen
 let loadingScreen = new LoadingScreen();

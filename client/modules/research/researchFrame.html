@@ -10,12 +10,20 @@
             <span data-content="fullName"></span>
             <span data-content="ageText"></span>
             <span data-content="info"></span>
-            <span>Requires: <span data-list="requiredResearch" class="text-list"></span></span>
+            <span data-content="requiredResearchDisplay"></span>
         </div>
-        <button class="comfyButton" data-events="click:unlockResearch">
+        <button class="comfyButton" data-events="click:tryUnlockResearch">
             Unlock<br />
             (<span data-content="cost"></span> tech)
         </button>
         <div class="unlockedText flex-center"><span>Unlocked!</span></div>
     </div>
+</template>
+
+<template id="requiredResearchList">
+    <span data-list="requiredResearchEntries"></span>
+</template>
+
+<template id="requiredResearchEntry">
+    <span data-content="fullName" class="requiredResearchEntry"></span>
 </template>

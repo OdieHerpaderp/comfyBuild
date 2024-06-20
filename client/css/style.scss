@@ -301,6 +301,11 @@ mark {
         }
     }
 
+    [data-content=node]:not(:empty)::before {
+        content: 'Node: ';
+        color: $font-color;
+    }
+
     #infoField {
         background-color: rgba(0, 0, 0, 0.5);
         padding: $defaultPadding;
@@ -474,7 +479,8 @@ label.toggleButton {
         padding: $defaultPadding;
         border: 1px solid $font-color;
 
-        button, .unlockedText {
+        button,
+        .unlockedText {
             min-width: 150px;
             max-width: 150px;
         }
@@ -492,15 +498,15 @@ label.toggleButton {
                 display: flex;
             }
         }
+
+        .requiredResearchEntry:not(:first-child)::before {
+            content: ', ';
+            color: $font-color;
+        }
     }
 }
 
-.text-list>span {
-    &::before {
-        content: ', ';
-    }
-
-    &:first-child::before {
-        content: '';
-    }
+[data-list=requiredResearchEntries]:not(:empty)::before {
+    content: 'Research: ';
+    color: $font-color;
 }

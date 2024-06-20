@@ -57,4 +57,5 @@ class ResearchManager extends ResearchManagerBase {
 }
 
 const researchManager = new ResearchManager();
+researchManager.initialize();
 export default researchManager;

@@ -25,13 +25,6 @@ class ResearchFrame {
         useTemplate.bind(this)(listTemplate);
 
         for (const [_id, researchEntry] of Object.entries(researchManager.researchEntries)) {
-            researchEntry.unlockResearch = () => researchManager.tryUnlockResearch(researchEntry.id);
-            researchEntry.unlock = () => { 
-                if (researchEntry.unlocked) { return; }
-                researchEntry.unlocked = true;
-                researchEntry.domElement.classList.add("unlocked");
-            }
-            useTemplate.bind(researchEntry)(listEntryTemplate);
             this.researchEntries.push(researchEntry);
         }
     }

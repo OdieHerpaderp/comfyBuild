@@ -61,6 +61,7 @@ class ResourceNodeManager extends GridEntityManager {
         this.spawnRandomResourceNodes(48, "sulphurDeposit", mountainArea);
         this.spawnRandomResourceNodes(48, "leadDeposit", mountainArea);
         this.spawnRandomResourceNodes(48, "silverDeposit", mountainArea);
+        this.spawnRandomResourceNodes(48, "limeDeposit", mountainArea);
         this.spawnRandomResourceNodes(48, "coalDeposit", {
             xMin: mountainArea.xMin - 2,
             xMax: mountainArea.xMax + 2,

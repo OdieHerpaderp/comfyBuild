@@ -13,6 +13,8 @@ const texSandDisp = textureLoader.load('client/textures/sandDis.jpg'); texSandDi
 const texRockdiff = textureLoader.load('client/textures/rock.png'); texRockdiff.wrapS = texRockdiff.wrapT = THREE.RepeatWrapping; texRockdiff.repeat.set(32, 32);
 const texRockNor = textureLoader.load('client/textures/rockNor.png'); texRockNor.wrapS = texRockNor.wrapT = THREE.RepeatWrapping; texRockNor.repeat.set(32, 32);
 const texRockDisp = textureLoader.load('client/textures/rockDis.png'); texRockDisp.wrapS = texRockDisp.wrapT = THREE.RepeatWrapping; texRockDisp.repeat.set(32, 32);
+const texSeaWater = textureLoader.load('client/textures/buildings/water.webp'); texSeaWater.wrapS = texSeaWater.wrapT = THREE.RepeatWrapping; texSeaWater.repeat.set(32, 32);
+const texSeaWaterNor = textureLoader.load('client/textures/buildings/waterNor.webp'); texSeaWaterNor.wrapS = texSeaWaterNor.wrapT = THREE.RepeatWrapping; texSeaWaterNor.repeat.set(32, 32);
 
 // Load building textures
 const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
@@ -21,12 +23,16 @@ const texStone = textureLoader.load('client/textures/buildings/stone.webp');
 const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.webp');
 const texWood = textureLoader.load('client/textures/buildings/wood.webp');
 const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.webp');
+const texJade = textureLoader.load('client/textures/buildings/jade.webp');
+const texJadeNor = textureLoader.load('client/textures/buildings/jadeNor.webp');
 const texIron = textureLoader.load('client/textures/buildings/iron.jpg');
-const texIronNor = textureLoader.load('client/textures/buildings/ironNor.jpg');
+const texIronNor = textureLoader.load('client/textures/buildings/ironNor.webp');
 const texHide = textureLoader.load('client/textures/buildings/hide.webp');
 const texHideNor = textureLoader.load('client/textures/buildings/hideNor.webp');
 const texLinen = textureLoader.load('client/textures/buildings/linen.webp');
 const texLinenNor = textureLoader.load('client/textures/buildings/linenNor.webp');
+const texWater = textureLoader.load('client/textures/buildings/water.webp');
+const texWaterNor = textureLoader.load('client/textures/buildings/waterNor.webp');
 
 const envMap = new RGBELoader()
     .setPath('/client/textures/')
@@ -34,7 +40,6 @@ const envMap = new RGBELoader()
         texture.mapping = THREE.EquirectangularReflectionMapping;
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
-        //envMap = texture;
 });
 
 const materialMap = {
@@ -42,6 +47,7 @@ const materialMap = {
         color:"#dddddd",
         map: texSanddiff, // Set diffuse/color map
         normalMap: texSandNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         displacementMap: texSandDisp,
         displacementScale: 0.65, // Adjust displacement strength
         roughness: 0.95,
@@ -51,6 +57,7 @@ const materialMap = {
         color:"#dddddd",
         map: texGrassdiff,
         normalMap: texGrassNor,
+        normalScale: new THREE.Vector2( 2, 2 ),
         displacementMap: texGrassDisp,
         displacementScale: 0.65,
         roughness: 0.95,
@@ -60,16 +67,32 @@ const materialMap = {
         color:"#dddddd",
         map: texRockdiff,
         normalMap: texRockNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         displacementMap: texRockDisp,
         displacementScale: 0.65,
         roughness: 0.95,
         envMapIntensity: 0.015, // Reflect environment
     }),
+    'seaWater': new THREE.MeshPhysicalMaterial({
+        color: 0xbbeeff,
+        map: texSeaWater,
+        normalMap: texSeaWaterNor,
+        displacementMap: texRockDisp,
+        displacementScale: 0.10,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        metalness: 0,
+        roughness: 0, // Smooth surface
+        transmission: 0.8,
+        opacity: 0.6,
+        transparent: true, // Enable transparency
+        envMapIntensity: 0.2, // Reflect environment
+      }),
     // Buildings
     'stone': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texStone,
         normalMap: texStoneNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -77,6 +100,7 @@ const materialMap = {
         color:"#ffffff",
         map: texWood,
         normalMap: texWoodNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -84,6 +108,7 @@ const materialMap = {
         color:"#ffffff",
         map: texDirt,
         normalMap: texDirtNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -91,6 +116,7 @@ const materialMap = {
         color:"#ffffff",
         map: texHide,
         normalMap: texHideNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -98,6 +124,7 @@ const materialMap = {
         color:"#ffffff",
         map: texLinen,
         normalMap: texLinenNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -105,6 +132,7 @@ const materialMap = {
         color:"#cecccc",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.22,
         metalness: 0.77,
         envMapIntensity: 0.2, // Reflect environment
@@ -113,6 +141,7 @@ const materialMap = {
         color:"#dfdddd",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.05,
         metalness: 0.88,
         envMapIntensity: 0.4, // Reflect environment
@@ -121,6 +150,7 @@ const materialMap = {
         color:"#ff9955",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.22,
         metalness: 0.77,
         envMapIntensity: 0.2, // Reflect environment
@@ -129,6 +159,7 @@ const materialMap = {
         color:"#88aaee",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.22,
         metalness: 0.77,
         envMapIntensity: 0.2, // Reflect environment
@@ -137,6 +168,7 @@ const materialMap = {
         color:"#aa9922",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.12,
         metalness: 0.92,
         envMapIntensity: 0.3, // Reflect environment
@@ -145,6 +177,7 @@ const materialMap = {
         color:"#bbaa88",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.09,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
@@ -153,6 +186,7 @@ const materialMap = {
         color:"#998844",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.09,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
@@ -161,6 +195,7 @@ const materialMap = {
         color:"#bbcc44",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.09,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
@@ -169,6 +204,7 @@ const materialMap = {
         color:"#661199",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.09,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
@@ -177,6 +213,7 @@ const materialMap = {
         color:"#ddddee",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.01,
         metalness: 0.99,
         envMapIntensity: 0.5, // Reflect environment
@@ -185,6 +222,7 @@ const materialMap = {
         color:"#ffcc55",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.01,
         metalness: 0.99,
         envMapIntensity: 0.5, // Reflect environment
@@ -193,9 +231,18 @@ const materialMap = {
         color:"#669911",
         map: texIron,
         normalMap: texIronNor,
+        normalScale: new THREE.Vector2( 6, 6 ),
         roughness: 0.09,
         metalness: 0.99,
         envMapIntensity: 0.3, // Reflect environment
+    }),
+    'jade': new THREE.MeshStandardMaterial({
+        color:"#ccffcc",
+        map: texJade,
+        normalMap: texJadeNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.2,
+        envMapIntensity: 0.1, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
         color: 0xffffff, // Set the base color
@@ -206,6 +253,18 @@ const materialMap = {
         envMapIntensity: 0.3, // Reflect environment
         clearcoat: 1, // Add a clear coat layer
         clearcoatRoughness: 0 // Smooth clear coat
+      }),
+      'water': new THREE.MeshPhysicalMaterial({
+        color: 0xbbeeff, // Set the base color
+        //map: texWater,
+        normalMap: texWaterNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        metalness: 0,
+        roughness: 0, // Smooth surface
+        transmission: 0.8,
+        opacity: 0.8,
+        transparent: true, // Enable transparency
+        envMapIntensity: 0.2, // Reflect environment
       })
 };
 

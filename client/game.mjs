@@ -52,7 +52,7 @@ var lightingManager = new LightingManager(scene);
 
 var particleManager = new ParticleManager(scene);
 
-var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 20, 900);
+var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1.5, 900);
 
 var fakePlayer = { left: false, right: false, up: false, down: false };
 
@@ -101,7 +101,7 @@ controls.target.x = 54;
 controls.target.y = 0;
 controls.target.z = 54;
 controls.maxDistance = 128;
-controls.minDistance = 30;
+controls.minDistance = 3;
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.4;
 controls.mouseButtons = {
@@ -198,6 +198,7 @@ loader.load('client/models/terrain.glb', function (gltf) {
             if (materialMap[materialName]) {
                 child.material = materialMap[materialName];
             }
+            //if (materialName == "seaWater") return;
             child.receiveShadow = true;
             child.material.envMap = envMap;
             child.material.map && (child.material.map.anisotropy = Math.min(maxAnisotropy, 16));

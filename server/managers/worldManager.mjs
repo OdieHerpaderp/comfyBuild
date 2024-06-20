@@ -82,6 +82,12 @@ class WorldManager {
         this.tech += productionLevel;
     }
 
+    tryPayTech(amount) {
+        if (this.tech < amount) { return false; }
+        this.tech -= amount;
+        return true;
+    }
+
     getWorldState() {
         return {
             morale: Math.round(this.morale * moraleMultiplier),

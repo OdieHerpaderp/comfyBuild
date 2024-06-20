@@ -1,6 +1,7 @@
 import { getHTMLTemplate, useTemplate } from "templateHelpers";
 import { HighlightableText } from "textHelpers";
 import { ShortResourceDisplayList } from "shortResourceDisplay";
+import { RequiredResearchListDisplay } from "researchEntryDisplay";
 import { buildings } from "buildings";
 import { socket } from "singletons";
 import { romanize } from "textHelpers";
@@ -35,6 +36,8 @@ class BuildingData {
         this.consume.setResources(data.consume);
         this.produce = new ShortResourceDisplayList();
         this.produce.setResources(data.produce);
+        this.requiredResearch = data.requiredResearch ?? [];
+        this.requiredResearchDisplay = new RequiredResearchListDisplay(this.requiredResearch);
 
         this.infoField = infoField;
         this.parent = parent;

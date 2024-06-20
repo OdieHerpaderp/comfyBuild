@@ -28,7 +28,9 @@ class WorldInfo {
     }
 
     tick() {
-        if (this.tech > this.techDisplay) this.techDisplay += Math.floor(1 + (this.tech - this.techDisplay) / 10);
+        if (Math.abs(this.techDisplay - this.tech) < 0.1) { this.techDisplay = this.tech; }
+        else if (this.tech > this.techDisplay) { this.techDisplay += Math.floor(1 + (this.tech - this.techDisplay) / 10); }
+        else { this.techDisplay -= Math.floor(1 + (this.techDisplay - this.tech) / 10); }
     }
 
     updateData(data) {

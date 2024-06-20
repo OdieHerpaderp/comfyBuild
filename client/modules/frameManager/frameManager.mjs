@@ -7,6 +7,7 @@ import PlayerList from "playerList";
 import StockpileFrame from "stockpileFrame";
 import WorldInfo from "worldInfo";
 import SettingsFrame from "settingsFrame";
+import ResearchFrame from "researchFrame";
 
 
 let template = await getHTMLTemplate("client/modules/frameManager/frameManager.html");
@@ -14,7 +15,7 @@ class FrameManager {
     jsFrameSettings = {
         name: "frameManager",
         title: "Frames",
-        left: 380, top: 360, width: 560, height: 56, minWidth: 50, minHeight: 56,
+        left: 380, top: 360, width: 590, height: 42, minWidth: 50, minHeight: 42,
         style: {
             backgroundColor: '#22222255',
             overflow: 'hidden',
@@ -35,6 +36,8 @@ class FrameManager {
         this.playerList = new PlayerList();
         this.stockpile = new StockpileFrame();
         this.worldInfo = new WorldInfo();
+
+        this.research = new ResearchFrame();
 
         this.settingsFrame = new SettingsFrame(renderer, scene);
 
@@ -71,6 +74,10 @@ class FrameManager {
         this.worldInfo.showFrame();
         this.worldInfo.setFramePosition(window.innerWidth / 2, 4, 'CENTER_TOP');
 
+        this.settingsFrame.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+        
+        this.research.setFramePosition(window.innerWidth / 2, window.innerHeight / 2, 'CENTER_CENTER');
+
         this.showFrame();
         this.setFramePosition(window.innerWidth / 2, window.innerHeight - 4, 'CENTER_BOTTOM');
     }
@@ -94,6 +101,11 @@ class FrameManager {
     playersToggleChanged(event) {
         if (event.target.checked) { this.playerList.showFrame(); }
         else { this.playerList.hideFrame(); }
+    }
+
+    researchToggleChanged(event) {
+        if (event.target.checked) { this.research.showFrame(); }
+        else { this.research.hideFrame(); }
     }
 
     settingsToggleChanged(event) {

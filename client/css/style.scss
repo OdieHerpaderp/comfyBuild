@@ -10,7 +10,7 @@ $font-color: #FAFAFA;
 $button-background-color: #444444;
 
 :root {
-    --font-size-normal: 18px;
+    --font-size-normal: 15px;
     --font-size-small: calc(var(--font-size-normal) - 3px);
     --font-size-xsmall: calc(var(--font-size-normal) - 6px);
     --font-size-large: calc(var(--font-size-normal) + 3px);
@@ -49,7 +49,7 @@ table {
             margin-right: 0px;
             text-align: center;
             align-content: center;
-            font-size: var(--font-size-small);
+            font-size: var(--font-size-normal);
         }
     }
 }
@@ -199,14 +199,14 @@ mark {
 
     .paneHeader {
         padding-left: $defaultPadding;
-        font-size: var(--font-size-small);
+        font-size: var(--font-size-normal);
         background-color: #44444455;
         border: 1.5px solid #44444455;
     }
 
     .paneContent {
         padding: $defaultPadding;
-        font-size: var(--font-size-large);
+        font-size: var(--font-size-xlarge);
         background-color: #11111155;
         border: 1.5px solid #44444455;
         text-align: right;
@@ -216,7 +216,7 @@ mark {
 
 #chat {
     padding: $defaultPadding;
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-normal);
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -241,7 +241,7 @@ mark {
 .longResourceList {
     border: none;
     border-collapse: collapse;
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-normal);
     padding: $defaultPadding;
 
     tr {
@@ -274,7 +274,7 @@ mark {
 
         #changeColor {
             text-align: right;
-            font-size: var(--font-size-xsmall);
+            font-size: var(--font-size-small);
             font-weight: bold;
         }
     }
@@ -285,7 +285,7 @@ mark {
 }
 
 .shortResource {
-    font-size: var(--font-size-xsmall);
+    font-size: var(--font-size-small);
 }
 
 .building-data-list {
@@ -335,7 +335,7 @@ mark {
         .resourceLabel {
             grid-row-start: 1;
             text-align: center;
-            font-size: var(--font-size-small);
+            font-size: var(--font-size-normal);
             padding-left: $defaultPadding;
             background-color: #44444455;
             border: 1.5px solid #44444455;
@@ -368,14 +368,14 @@ mark {
 
     .paneHeader {
         padding-left: $defaultPadding;
-        font-size: var(--font-size-small);
+        font-size: var(--font-size-normal);
         background-color: #44444455;
         border: 1.5px solid #44444455;
     }
 
     .paneContent {
         padding: $defaultPadding;
-        font-size: var(--font-size-large);
+        font-size: var(--font-size-xlarge);
         background-color: #11111155;
         border: 1.5px solid #44444455;
         text-align: right;
@@ -407,11 +407,11 @@ mark {
     font-size: var(--font-size-normal);
 
     .popDetailsLarge {
-        font-size: var(--font-size-xsmall);
+        font-size: var(--font-size-small);
     }
 
     .popDetailsSmall {
-        font-size: var(--font-size-xsmall);
+        font-size: var(--font-size-small);
         display: none;
     }
 }

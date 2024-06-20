@@ -6,13 +6,16 @@
 $defaultPadding: 4px;
 
 $font-color: #FAFAFA;
-$font-size-xsmall: 12px;
-$font-size-small: 15px;
-$font-size-normal: 18px;
-$font-size-large: 21px;
-$font-size-xlarge: 24px;
 
 $button-background-color: #444444;
+
+:root {
+    --font-size-normal: 18px;
+    --font-size-small: calc(var(--font-size-normal) - 3px);
+    --font-size-xsmall: calc(var(--font-size-normal) - 6px);
+    --font-size-large: calc(var(--font-size-normal) + 3px);
+    --font-size-xlarge: calc(var(--font-size-normal) + 6px);
+}
 
 html,
 body,
@@ -28,7 +31,7 @@ body {
     color: $font-color;
     font-family: 'Roboto Slab';
     font-variant-numeric: tabular-nums lining-nums;
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
     line-height: 1;
     text-shadow: 0.5px 0.5px 1px #000000;
     user-select: none;
@@ -46,7 +49,7 @@ table {
             margin-right: 0px;
             text-align: center;
             align-content: center;
-            font-size: $font-size-small;
+            font-size: var(--font-size-small);
         }
     }
 }
@@ -62,23 +65,23 @@ mark {
 }
 
 .text-xsmall {
-    font-size: $font-size-xsmall;
+    font-size: var(--font-size-xsmall);
 }
 
 .text-small {
-    font-size: $font-size-small;
+    font-size: var(--font-size-small);
 }
 
 .text-normal {
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
 }
 
 .text-large {
-    font-size: $font-size-large;
+    font-size: var(--font-size-large);
 }
 
 .text-xlarge {
-    font-size: $font-size-xlarge;
+    font-size: var(--font-size-xlarge);
 }
 
 .text-red {
@@ -167,7 +170,7 @@ mark {
     border-width: 1.5px;
     border-radius: 3px;
     text-align: center;
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
     line-height: 1;
     padding-block: calc($defaultPadding/2);
     padding-inline: calc($defaultPadding*1.5);
@@ -196,14 +199,14 @@ mark {
 
     .paneHeader {
         padding-left: $defaultPadding;
-        font-size: $font-size-small;
+        font-size: var(--font-size-small);
         background-color: #44444455;
         border: 1.5px solid #44444455;
     }
 
     .paneContent {
         padding: $defaultPadding;
-        font-size: $font-size-large;
+        font-size: var(--font-size-large);
         background-color: #11111155;
         border: 1.5px solid #44444455;
         text-align: right;
@@ -213,7 +216,7 @@ mark {
 
 #chat {
     padding: $defaultPadding;
-    font-size: $font-size-small;
+    font-size: var(--font-size-small);
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -238,7 +241,7 @@ mark {
 .longResourceList {
     border: none;
     border-collapse: collapse;
-    font-size: $font-size-small;
+    font-size: var(--font-size-small);
     padding: $defaultPadding;
 
     tr {
@@ -271,7 +274,7 @@ mark {
 
         #changeColor {
             text-align: right;
-            font-size: $font-size-xsmall;
+            font-size: var(--font-size-xsmall);
             font-weight: bold;
         }
     }
@@ -282,7 +285,7 @@ mark {
 }
 
 .shortResource {
-    font-size: $font-size-xsmall;
+    font-size: var(--font-size-xsmall);
 }
 
 .building-data-list {
@@ -316,7 +319,7 @@ mark {
 
 .buildingTooltip {
     padding: $defaultPadding;
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
 
     progress {
         width: 100%;
@@ -332,7 +335,7 @@ mark {
         .resourceLabel {
             grid-row-start: 1;
             text-align: center;
-            font-size: $font-size-small;
+            font-size: var(--font-size-small);
             padding-left: $defaultPadding;
             background-color: #44444455;
             border: 1.5px solid #44444455;
@@ -365,14 +368,14 @@ mark {
 
     .paneHeader {
         padding-left: $defaultPadding;
-        font-size: $font-size-small;
+        font-size: var(--font-size-small);
         background-color: #44444455;
         border: 1.5px solid #44444455;
     }
 
     .paneContent {
         padding: $defaultPadding;
-        font-size: $font-size-large;
+        font-size: var(--font-size-large);
         background-color: #11111155;
         border: 1.5px solid #44444455;
         text-align: right;
@@ -382,7 +385,7 @@ mark {
 
 .loginScreen {
     padding: $defaultPadding;
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
     display: flex;
 
     span {
@@ -401,14 +404,14 @@ mark {
 }
 
 #worldInfo {
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
 
     .popDetailsLarge {
-        font-size: $font-size-xsmall;
+        font-size: var(--font-size-xsmall);
     }
 
     .popDetailsSmall {
-        font-size: $font-size-xsmall;
+        font-size: var(--font-size-xsmall);
         display: none;
     }
 }
@@ -431,13 +434,13 @@ div:has(>#worldInfo) {
 }
 
 #playerList {
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
     padding: $defaultPadding;
 }
 
 .frameManager {
     display: flex;
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
 }
 
 div:has(>.frameManager) {
@@ -470,7 +473,7 @@ label.toggleButton {
 }
 
 .researchFrame {
-    font-size: $font-size-normal;
+    font-size: var(--font-size-normal);
     overflow: auto;
     display: flex;
     flex-direction: column;

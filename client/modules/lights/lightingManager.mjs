@@ -34,10 +34,10 @@ class LightingManager {
         ]);
         let moon = new OrbitingLight(scene, tau * 0.5, new THREE.Vector3(0, 50, 100), 100, [
             { angle: Math.acos(0.4), color: 0x333333, intensity: 0 },
-            { angle: tau * .25, color: 0x77aadd, intensity: 0.5 },
-            { angle: tau * .4, color: 0x88bbff, intensity: 0.6 },
-            { angle: tau * .6, color: 0x88bbff, intensity: 0.6 },
-            { angle: tau * .75, color: 0x77aadd, intensity: 0.5 },
+            { angle: tau * .25, color: 0x77aadd, intensity: 0.4 },
+            { angle: tau * .4, color: 0x88bbff, intensity: 0.5 },
+            { angle: tau * .6, color: 0x88bbff, intensity: 0.5 },
+            { angle: tau * .75, color: 0x77aadd, intensity: 0.4 },
             { angle: tau - Math.acos(0.4), color: 0x333333, intensity: 0 }
         ]);
 
@@ -52,10 +52,10 @@ class LightingManager {
         ]);
 
         this.spotLight = new TimeBasedLight(new THREE.SpotLight(0xeeeeff, 1, undefined, tau / 50, 1, 0), [
-            { angle: tau * .19, color: 0xffffff, intensity: 0.3 },
+            { angle: tau * .19, color: 0xffffff, intensity: 0.2 },
             { angle: tau * .2, color: 0xffffff, intensity: 0 },
             { angle: tau * .75, color: 0xffffff, intensity: 0 },
-            { angle: tau * .76, color: 0xffffff, intensity: 0.3 }
+            { angle: tau * .76, color: 0xffffff, intensity: 0.2 }
         ]);
         scene.add(this.globalLight.light, this.spotLight.light, this.spotLight.light.target);
     }

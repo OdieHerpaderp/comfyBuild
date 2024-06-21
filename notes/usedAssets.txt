@@ -6,3 +6,4 @@ Models:
 
 Textures:
     sandStone:      https://cc0-textures.com/t/cc0t-bricks-084
+    shingles:       https://ambientcg.com/view?id=RoofingTiles011C

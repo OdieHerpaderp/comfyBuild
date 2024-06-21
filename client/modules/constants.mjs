@@ -21,6 +21,8 @@ const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
 const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
 const texStone = textureLoader.load('client/textures/buildings/stone.webp');
 const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.webp');
+const texShingles = textureLoader.load('client/textures/buildings/shingles.webp');
+const texShinglesNor = textureLoader.load('client/textures/buildings/shinglesNor.webp');
 const texSandStone = textureLoader.load('client/textures/buildings/sandStone.webp');
 const texSandStoneNor = textureLoader.load('client/textures/buildings/sandStoneNor.webp');
 const texWood = textureLoader.load('client/textures/buildings/wood.webp');
@@ -102,6 +104,14 @@ const materialMap = {
         color:"#ffffff",
         map: texSandStone,
         normalMap: texSandStoneNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
+    'shingles': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texShingles,
+        normalMap: texShinglesNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
@@ -266,7 +276,7 @@ const materialMap = {
       }),
       'water': new THREE.MeshPhysicalMaterial({
         color: 0xbbeeff, // Set the base color
-        //map: texWater,
+        map: texWater,
         normalMap: texWaterNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         metalness: 0,

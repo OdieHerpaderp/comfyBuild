@@ -101,7 +101,7 @@ const materialMap = {
         envMapIntensity: 0.015, // Reflect environment
     }),
     'sandStone': new THREE.MeshStandardMaterial({
-        color:"#ffffff",
+        color:"#ffee99",
         map: texSandStone,
         normalMap: texSandStoneNor,
         normalScale: new THREE.Vector2( 3, 3 ),

@@ -10,7 +10,16 @@ class Stockpile {
         return result;
     }
 
+    /**
+     * @param {{name:string, amount:number}[]} resources 
+     */
     addResources(resources) {
+        resources.forEach(resource => {
+            this.addResource(resource.name, resource.amount);
+        });
+    }
+
+    addResourcesOld(resources) {
         for (const [key, value] of Object.entries(resources)) {
             this.addResource(key, value);
         }
@@ -43,7 +52,26 @@ class Stockpile {
         return this.currentStockpile;
     }
 
+    /**
+     * @param {{name:string, amount:number}[]} resources The resources to check
+     * @param {boolean} consumeResources Whether to consume the resources 
+     * @returns True if all resources are present or were consumed
+     */
     checkResources(resources, consumeResources = false) {
+        const hasAllResources = resources.every((resource) => {
+            return resource.amount <= this.currentStockpile[resource.name];
+        });
+
+        if (consumeResources && hasAllResources) {
+            resources.forEach(resource => {
+                this.addResource(resource.name, -resource.amount);
+            })
+        }
+
+        return hasAllResources;
+    }
+
+    checkResourcesOld(resources, consumeResources = false) {
         const resourceKeys = Object.keys(resources);
         const hasAllResources = resourceKeys.every((resource) => {
             return resources[resource] <= this.currentStockpile[resource];
@@ -59,6 +87,6 @@ class Stockpile {
     }
 }
 
-let instance = new Stockpile();
+let stockpile = new Stockpile();
 
-export default instance;
+export default stockpile;

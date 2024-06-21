@@ -2,6 +2,7 @@ import worldManager from "../managers/worldManager.mjs";
 import { buildingPhasesNew as buildingPhases } from "../../lib/buildings.mjs";
 import { progressPerProduction } from "../../lib/lib.mjs";
 import Building from "./building.mjs";
+import { resourceLimits } from "worker_threads";
 
 class Housing extends Building {
     constructor(x, y, buildingType) {
@@ -34,7 +35,7 @@ class Housing extends Building {
 
     tickProduce() {
         this.buildingPhase = buildingPhases.produce;
-        this.currentWorkers = this.upgradeLevel;
+        this.currentWorkers = this.productionLevel;
 
         if (this.workRemaining < this.currentWorkers) {
             this.currentWorkers = this.workRemaining;
@@ -48,7 +49,15 @@ class Housing extends Building {
             return;
         }
 
-        worldManager.producePopulation(this.productionLevel * this.baseProduce.population);
+        if (this.recipes.length === 0) {
+            worldManager.producePopulation(this.productionLevel * this.baseProduce.population);
+            return;
+        }
+
+        this.currentRecipe.produce.forEach(resource => {
+            if (resource.name !== "population") { return; }
+            worldManager.producePopulation(this.productionLevel * resource.amount);
+        });
     }
 }
 

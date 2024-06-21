@@ -22,66 +22,60 @@ class Building extends BaseEntity {
     baseProduce;
     baseBuild;
     requiredResearch;
+    recipes;
 
     // dynamic values
     _upgradeLevel;
-    get upgradeLevel() {
-        return this._upgradeLevel;
-    }
+    get upgradeLevel() { return this._upgradeLevel; }
     set upgradeLevel(value) {
         this._upgradeLevel = value;
         this.updateData.upgradeLevel = value;
         this.maxWorkers = value;
     }
     _targetLevel;
-    get targetLevel() {
-        return this._targetLevel;
-    }
+    get targetLevel() { return this._targetLevel; }
     set targetLevel(value) {
         this._targetLevel = value;
         this.updateData.targetLevel = value;
     }
     _buildingPhase;
-    get buildingPhase() {
-        return this._buildingPhase;
-    }
+    get buildingPhase() { return this._buildingPhase; }
     set buildingPhase(value) {
         this._buildingPhase = value;
         this.updateData.buildingPhase = value;
     }
     _productionLevel;
-    get productionLevel() {
-        return this._productionLevel;
-    }
+    get productionLevel() { return this._productionLevel; }
     set productionLevel(value) {
         this._productionLevel = value;
         this.updateData.productionLevel = value;
     }
     idleTicks;
     _workRemaining;
-    get workRemaining() {
-        return this._workRemaining;
-    }
+    get workRemaining() { return this._workRemaining; }
     set workRemaining(value) {
         this._workRemaining = value;
         this.updateData.workRemaining = value;
     }
     _currentWorkers;
-    get currentWorkers() {
-        return this._currentWorkers;
-    }
+    get currentWorkers() { return this._currentWorkers; }
     set currentWorkers(value) {
         this._currentWorkers = value;
         this.updateData.currentWorkers = value;
     }
     _maxWorkers;
-    get maxWorkers() {
-        return this._maxWorkers;
-    }
+    get maxWorkers() { return this._maxWorkers; }
     set maxWorkers(value) {
         this._maxWorkers = value;
         this.updateData.maxWorkers = value;
     }
+    _currentRecipeIndex;
+    get currentRecipeIndex() { return this._currentRecipeIndex; }
+    set currentRecipeIndex(value) {
+        this._currentRecipeIndex = value;
+        this.updateData.currentRecipeIndex = value;
+    }
+    get currentRecipe() { return this.recipes[this.currentRecipeIndex]; }
 
     // static values
     get canBeUpgraded() { return true; }
@@ -101,11 +95,21 @@ class Building extends BaseEntity {
         this.category = buildingData.category;
         this.info = buildingData.info;
         this.node = buildingData.node;
+        this.recipes = buildingData.recipes ?? [];
+        this.build = buildingData.build ?? [];
+        this.requiredResearch = buildingData.requiredResearch ?? [];
+
+        this.recipes.forEach(recipe => {
+            if (!recipe.consume) { recipe.consume = []; }
+            if (!recipe.produce) { recipe.produce = []; }
+        });
+
+        // TODO: remove these once obsolete
         this.baseConsume = buildingData.consume ?? {};
         this.baseProduce = buildingData.produce ?? {};
         this.baseBuild = buildingData.build ?? {};
-        this.requiredResearch = buildingData.requiredResearch ?? [];
 
+        this.currentRecipeIndex = 0;
         this.workRemaining = 0;
         this.upgradeLevel = 0;
         this.maxWorkers = 1;
@@ -256,32 +260,79 @@ class Building extends BaseEntity {
     }
 
     checkBuildResources(consumeResources = false) {
+        if (this.recipes.length === 0) { return this.checkBuildResourcesOld(consumeResources); }
+
+        const resources = [];
+        const multiplier = buildCostMultiplier(this.buildingType, this.upgradeLevel);
+        this.build.forEach(resource => {
+            resources.push({
+                name: resource.name,
+                amount: resource.amount * multiplier
+            });
+        });
+        return stockpile.checkResources(resources, consumeResources);
+    }
+
+    // TODO: remove this once all old format buildings are gone
+    checkBuildResourcesOld(consumeResources = false) {
         const resources = {};
         const multiplier = buildCostMultiplier(this.buildingType, this.upgradeLevel);
         for (const [key, value] of Object.entries(this.baseBuild)) {
             resources[key] = value * multiplier;
         }
-        return stockpile.checkResources(resources, consumeResources);
+        return stockpile.checkResourcesOld(resources, consumeResources);
     }
 
     checkProductionResources(consumeResources = false) {
+        if (this.recipes.length === 0) { return this.checkProductionResourcesOld(consumeResources); }
+
+        const resources = [];
+        const previousMultiplier = consumeMultiplier(this.buildingType, this.productionLevel);
+        const multiplier = consumeMultiplier(this.buildingType, this.productionLevel + 1) - previousMultiplier;
+        this.currentRecipe.consume.forEach(resource => {
+            resources.push({
+                name: resource.name,
+                amount: resource.amount * multiplier
+            });
+        });
+        return stockpile.checkResources(resources, consumeResources);
+    }
+
+    // TODO: remove this once all old format buildings are gone
+    checkProductionResourcesOld(consumeResources = false) {
         const resources = {};
         const previousMultiplier = consumeMultiplier(this.buildingType, this.productionLevel);
         const multiplier = consumeMultiplier(this.buildingType, this.productionLevel + 1) - previousMultiplier;
         for (const [key, value] of Object.entries(this.baseConsume)) {
             resources[key] = value * multiplier;
         }
-        return stockpile.checkResources(resources, consumeResources);
+        return stockpile.checkResourcesOld(resources, consumeResources);
     }
 
     produceResources() {
+        if (this.recipes.length === 0) { return this.produceResourcesOld(); }
+
+        const resources = [];
+        const multiplier = produceMultiplier(this.buildingType, this.productionLevel);
+        this.currentRecipe.produce.forEach(resource => {
+            resources.push({
+                name: resource.name,
+                amount: resource.amount * multiplier
+            });
+        });
+        worldManager.resourcesProduced(this.productionLevel);
+        return stockpile.addResources(resources);
+    }
+
+    // TODO: remove this once all old format buildings are gone
+    produceResourcesOld() {
         const resources = {};
         const multiplier = produceMultiplier(this.buildingType, this.productionLevel);
         for (const [key, value] of Object.entries(this.baseProduce)) {
             resources[key] = value * multiplier;
         }
         worldManager.resourcesProduced(this.productionLevel);
-        return stockpile.addResources(resources);
+        return stockpile.addResourcesOld(resources);
     }
 
     getCurrentBuilders() {

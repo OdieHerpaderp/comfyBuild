@@ -33,11 +33,20 @@ class BuildingData {
         this.build = new ShortResourceDisplayList();
         this.build.setResources(data.build);
         this.consume = new ShortResourceDisplayList();
-        this.consume.setResources(data.consume);
         this.produce = new ShortResourceDisplayList();
-        this.produce.setResources(data.produce);
+        
         this.requiredResearch = data.requiredResearch ?? [];
         this.requiredResearchDisplay = new RequiredResearchListDisplay(this.requiredResearch);
+
+        if (!data.recipes) {
+            this.consume.setResources(data.consume);
+            this.produce.setResources(data.produce);
+        }
+        else {
+            this.consume.setResources(data.recipes[0].consume);
+            this.produce.setResources(data.recipes[0].produce);
+        }
+        
 
         this.infoField = infoField;
         this.parent = parent;

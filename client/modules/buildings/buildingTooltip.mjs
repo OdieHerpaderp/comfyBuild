@@ -111,49 +111,86 @@ class BuildingTooltip {
     }
 
     updateCurrentConsumeProduce() {
+        this.currentConsume.clearResources();
+        this.currentProduce.clearResources();
         let building = buildings[this.buildingType];
         if (!building) { return; }
 
-        if (building.consume) {
-            this.currentConsume.clearResources();
-            for (const [name, amount] of Object.entries(building.consume)) {
-                this.currentConsume.updateResource(name, amount * consumeMultiplier(this.buildingType, this.productionLevel));
+        // TODO: remove this if block after all buildings use new format
+        if (!building.recipes) {
+            if (building.consume) {
+                for (const [name, amount] of Object.entries(building.consume)) {
+                    this.currentConsume.updateResource(name, amount * consumeMultiplier(this.buildingType, this.productionLevel));
+                }
+            }
+            if (building.produce) {
+                for (const [name, amount] of Object.entries(building.produce)) {
+                    this.currentProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.productionLevel));
+                }
             }
         }
-        if (building.produce) {
+
+        if (building.recipes[0].consume) {
+            this.currentConsume.clearResources();
+            building.recipes[0].consume.forEach(resource => {
+                this.currentConsume.updateResource(resource.name, resource.amount * consumeMultiplier(this.buildingType, this.productionLevel));
+            });
+        }
+        if (building.recipes[0].produce) {
             this.currentProduce.clearResources();
-            for (const [name, amount] of Object.entries(building.produce)) {
-                this.currentProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.productionLevel));
-            }
+            building.recipes[0].produce.forEach(resource => {
+                this.currentProduce.updateResource(resource.name, resource.amount * produceMultiplier(this.buildingType, this.productionLevel));
+            });
         }
     }
 
     updateMaxConsumeProduce() {
+        this.maxConsume.clearResources();
+        this.maxProduce.clearResources();
         let building = buildings[this.buildingType];
         if (!building) { return; }
 
-        if (building.consume) {
-            this.maxConsume.clearResources();
-            for (const [name, amount] of Object.entries(building.consume)) {
-                this.maxConsume.updateResource(name, amount * consumeMultiplier(this.buildingType, this.upgradeLevel));
+        // TODO: remove this if block after all buildings use new format
+        if (!building.recipes) {
+            if (building.consume) {
+                for (const [name, amount] of Object.entries(building.consume)) {
+                    this.maxConsume.updateResource(name, amount * consumeMultiplier(this.buildingType, this.upgradeLevel));
+                }
+            }
+            if (building.produce) {
+                for (const [name, amount] of Object.entries(building.produce)) {
+                    this.maxProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.upgradeLevel));
+                }
             }
         }
-        if (building.produce) {
-            this.maxProduce.clearResources();
-            for (const [name, amount] of Object.entries(building.produce)) {
-                this.maxProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.upgradeLevel));
-            }
+
+        if (building.recipes[0].consume) {
+            building.recipes[0].consume.forEach(resource => {
+                this.maxConsume.updateResource(resource.name, resource.amount * consumeMultiplier(this.buildingType, this.upgradeLevel));
+            });
+        }
+        if (building.recipes[0].produce) {
+            building.recipes[0].produce.forEach(resource => {
+                this.maxProduce.updateResource(resource.name, resource.amount * produceMultiplier(this.buildingType, this.upgradeLevel));
+            });
         }
     }
 
     updateBuildCost() {
+        this.currentBuild.clearResources();
         let building = buildings[this.buildingType];
         if (!building || !building.build) { return; }
 
-        this.currentBuild.clearResources();
-        for (const [name, amount] of Object.entries(building.build)) {
-            this.currentBuild.updateResource(name, amount * buildCostMultiplier(this.buildingType, this.upgradeLevel));
+        // TODO: remove this if block after all buildings use new format
+        if (!building.recipes) {
+            for (const [name, amount] of Object.entries(building.build)) {
+                this.currentBuild.updateResource(name, amount * buildCostMultiplier(this.buildingType, this.upgradeLevel));
+            }
+            return;
         }
+        building.build.forEach(resource => {
+            this.currentBuild.updateResource(resource.name, resource.amount * buildCostMultiplier(this.buildingType, this.upgradeLevel));
+        });
     }
 
     handleEvent(event) {

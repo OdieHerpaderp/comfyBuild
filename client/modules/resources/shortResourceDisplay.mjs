@@ -46,9 +46,19 @@ class ShortResourceDisplayList extends EventTarget {
 
     setResources(resources) {
         this.clearResources();
-        for (const [name, amount] of Object.entries(resources)) {
-            this.updateResource(name, amount);
+        if (!resources) { return; }
+
+        // TODO: remove this if block after all buildings use new format
+        if (!Array.isArray(resources)) {
+            for (const [name, amount] of Object.entries(resources)) {
+                this.updateResource(name, amount);
+            }
+            return;
         }
+
+        resources.forEach(resource => {
+            this.updateResource(resource.name, resource.amount);
+        });
     }
 
     updateResource(name, amount) {

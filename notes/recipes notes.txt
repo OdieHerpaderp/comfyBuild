@@ -1,0 +1,86 @@
+Buildings.mjs has a new format: 
+    Building: 
+        buildingName: {
+            age: (number),
+            category: (string),
+            info: (string),
+            build: (array of resources)
+            recipes: (array of recipes)
+            requiredResearch: (array of strings)
+        }
+
+    Recipe:
+        {
+            consume: (array of resources),
+            produce: (array of resources)
+        }
+
+    Resource:
+        {
+            name: (string),
+            amount: (number)
+        }
+        OR: (not yet supported)
+        {
+            type: (string),
+            amount: (number),
+            minTier: (number),
+            maxTier: (number)
+        }
+
+example: 
+const buidings = {
+    headquarters: {
+        category: "wonderNatural"
+    },
+    dolmen: {
+        age: 1,
+        category: "housing",
+        info: "Several slabs of stone provide ample shelter.",
+        build: [{ name: "stone", amount: 1 }],
+        recipes: [{
+            consume: [
+                { name: "water", amount: 1 },
+                { name: "berry", amount: 1 }
+            ],
+            produce: [{ name: "population", amount: 4 }]
+        }],
+        requiredResearch: ["housing1"]
+    }
+}
+
+- If there is at least 1 recipe, this new format is used. Make sure to convert the entire building at once!
+
+- Resources must have a name or type (not both) and an amount, everything else is optional with defaults
+    - Note: categories are not yet supported, don't use them for now.
+- All numbers must be positive integers
+- For now, the first recipe is the only recipe that's used. This will be updated soon™
+- Produce resources cannot be categories (how would that even work?).
+- Housing recipe produce must contain exactly 1 "resource": { name: "population", amount: (number) }. Everything else (including categories) is ignored. 
+
+
+
+
+
+ResourceTypes: 
+Not yet implemented, this is merely a suggestion
+
+Format: 
+    categoryName: (array of ResourceDescriptors)
+
+    ResourceDescriptor: 
+        {
+            resourceName: (string),
+            tier: (number),
+            value: (number)
+        }
+
+example: 
+const resourceTypes = {
+    tool: [
+        { resourceName: "toolBlunt", tier: 1, value: 1 },
+        { resourceName: "toolFlint", tier: 2, value: 1 },
+        { resourceName: "toolCopper", tier: 3, value: 2 },
+    ]
+}
+

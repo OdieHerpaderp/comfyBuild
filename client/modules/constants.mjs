@@ -233,7 +233,7 @@ const materialMap = {
         color:"#ddddee",
         map: texIron,
         normalMap: texIronNor,
-        normalScale: new THREE.Vector2( 6, 6 ),
+        normalScale: new THREE.Vector2( 2, 2 ),
         roughness: 0.01,
         metalness: 0.99,
         envMapIntensity: 0.5, // Reflect environment
@@ -242,7 +242,7 @@ const materialMap = {
         color:"#ffcc55",
         map: texIron,
         normalMap: texIronNor,
-        normalScale: new THREE.Vector2( 6, 6 ),
+        normalScale: new THREE.Vector2( 2, 2 ),
         roughness: 0.01,
         metalness: 0.99,
         envMapIntensity: 0.5, // Reflect environment

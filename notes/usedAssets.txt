@@ -1,2 +1,3 @@
 Models:
-    frogPond: https://opengameart.org/content/low-poly-frog-blender
+    frogPond:   https://opengameart.org/content/low-poly-frog-blender
+    turtlePond: https://opengameart.org/content/turtle-low-poly

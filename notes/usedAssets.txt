@@ -1,4 +1,8 @@
 Models:
-    frogPond:   https://opengameart.org/content/low-poly-frog-blender
-    turtlePond: https://opengameart.org/content/turtle-low-poly
-    windMill:   https://opengameart.org/content/windmill-1
+    frogPond:       https://opengameart.org/content/low-poly-frog-blender
+    turtlePond:     https://opengameart.org/content/turtle-low-poly
+    windMill:       https://opengameart.org/content/windmill-1
+    sandStoneFort:  https://opengameart.org/content/low-poly-desert-castle
+
+Textures:
+    sandStone:      https://cc0-textures.com/t/cc0t-bricks-084

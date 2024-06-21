@@ -21,6 +21,8 @@ const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
 const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
 const texStone = textureLoader.load('client/textures/buildings/stone.webp');
 const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.webp');
+const texSandStone = textureLoader.load('client/textures/buildings/sandStone.webp');
+const texSandStoneNor = textureLoader.load('client/textures/buildings/sandStoneNor.webp');
 const texWood = textureLoader.load('client/textures/buildings/wood.webp');
 const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.webp');
 const texJade = textureLoader.load('client/textures/buildings/jade.webp');
@@ -92,6 +94,14 @@ const materialMap = {
         color:"#ffffff",
         map: texStone,
         normalMap: texStoneNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
+    'sandStone': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texSandStone,
+        normalMap: texSandStoneNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment

@@ -12,6 +12,7 @@ class ModelCache {
         }
         // Load any non-building models in advance.
         this.loadModel('fallback');
+        this.loadModel('foundation');
     }
 
     loadModel(modelName) {
@@ -24,7 +25,7 @@ class ModelCache {
 
     modelLoadedCallback(data, modelName) {
         this.models[modelName] = data.scene;
-        data.scene.scale.set(.24, .24, .24);
+        data.scene.scale.set(.245, .245, .245);
     }
 
     getModel(modelName) {

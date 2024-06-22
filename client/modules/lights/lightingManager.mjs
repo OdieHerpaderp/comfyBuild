@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import OrbitingLight from 'orbitingLight';
 import TimeBasedLight from 'timeBasedLight';
 
-const millisPerDayCycle = 10000;
+const millisPerDayCycle = 120_000;
 
 // Don't edit these values
 const tau = Math.PI * 2;

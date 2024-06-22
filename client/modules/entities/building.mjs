@@ -217,6 +217,32 @@ class Building extends BaseEntity {
 
         this.textSprite.position.set(0, 3.4, 1.1);
         this.mesh.add(this.textSprite);
+
+        // Foundation
+        // TODO: add models for all ages
+        let foundationModel = modelCache.getModel("foundation");
+        if (foundationModel) {
+            console.log("foundation");
+            // Use model if available
+            this.foundationMesh = foundationModel.clone();
+            this.foundationMesh.traverse ( function ( child )
+            {
+                if ( child.isMesh )
+                {
+                    const materialName = child.material.name;
+                    if (materialMap[materialName]) {
+                        child.material = materialMap[materialName];
+                        if(materialName == "glass") { child.castShadow = false; }
+                            else child.castShadow = true;
+                    }
+                    child.material.envMap = envMap;
+                    child.receiveShadow = true;
+                    child.material.needsUpdate = true;
+                }
+            });
+        }
+        this.foundationMesh.position.set(0, 0, 0);
+        this.mesh.add( this.foundationMesh );
     }
 
     update(data) {

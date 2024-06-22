@@ -288,11 +288,4 @@ const materialMap = {
       })
 };
 
-const timeToTicks = function(timeUnit) {
-    if(timeUnit == "minute") return 1;
-    else if(timeUnit == "hour") return 100;
-    else if(timeUnit == "day") return 2400;
-    else return 0;
-};
-
-export { materialMap, envMap, timeToTicks };
+export { materialMap, envMap };

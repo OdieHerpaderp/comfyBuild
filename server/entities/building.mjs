@@ -115,6 +115,7 @@ class Building extends BaseEntity {
         this.maxWorkers = 1;
         this.targetLevel = 1;
         this.buildingPhase = 0;
+        this.productionLevel = 0;
 
         this.afterConstructor();
     }

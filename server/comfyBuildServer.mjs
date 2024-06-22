@@ -41,6 +41,7 @@ class ComfyBuildServer {
 
         this.io = io;
         this.io.on("connection", (socket) => this.onSocketConnect(socket));
+
         console.log("ComfyBuild server started!");
     }
 

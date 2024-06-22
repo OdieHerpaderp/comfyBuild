@@ -1,6 +1,5 @@
 import Player from "../entities/player.mjs";
 import cheatManager from "./cheatManager.mjs";
-import worldManager from "./worldManager.mjs";
 
 class ChatManager {
     /**
@@ -20,11 +19,26 @@ class ChatManager {
         let args = message.split(" ");
         let command = args.shift().substring(1);
 
+        let handledCommand = false;
         switch (command) {
             case "tech":
-                if (cheatManager.cheatTech(player, args)) { break; }
+                handledCommand = cheatManager.cheatTech(player, args);
+                break;
+            case "building":
+                handledCommand = cheatManager.cheatBuilding(player, args);
+                break;
+            case "resource":
+                handledCommand = cheatManager.cheatResource(player, args);
+                break;
+            case "research":
+                handledCommand = cheatManager.cheatResearch(player, args);
+                break;
             default:
-                player.socket.emit("systemChatMessage", { message: "Unknown command: " + command });
+                break;
+        }
+
+        if (!handledCommand) {
+            player.socket.emit("systemChatMessage", { message: "Unknown command: " + command });
         }
     }
 }

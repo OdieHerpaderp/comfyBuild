@@ -1,0 +1,24 @@
+Current cheats (can be enabled/disabled in lib/serverSettings.mjs).
+Note: all commands are case sensitive
+
+Tech
+    /tech set (amount)
+        Sets the amount of tech to (amount)
+    /tech add (amount)
+        Adds (amount) to tech, accepts negative values to remove tech
+
+Building
+    /building level (newLevel)
+        Sets the currently selected buildings upgradeLevel and targetLevel to (newLevel)
+
+Resource
+    /resource (resourceName) set (amount)
+        Sets the given resource to the given amount.
+    /resource (resourceName) add (amount)
+        Adds (amount) to the given resource, accepts negative amounts to remove resources.
+
+Research
+    /research unlock (researchId)
+        Unlocks the given research without checking requirements
+    /research unlock all
+        Unlocks all research

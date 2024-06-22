@@ -35,6 +35,32 @@ class ResearchManager extends ResearchManagerBase {
     }
 
     /**
+     * Unlocks research without checking requirements, should only be used for cheats
+     * @param {string} researchId 
+     * @returns 
+     */
+    forceUnlockResearch(researchId) {
+        if (!researchId || !this.researchEntries[researchId]) {
+            return { success: false, message: "This research does not exist (" + researchId + ")" };
+        }
+        let researchEntry = this.researchEntries[researchId];
+        researchEntry.unlocked = true;
+        this.newlyUnlockedResearch.push(researchId);
+        return { success: true, message: "Unlocked research " + researchEntry.fullName };
+    }
+
+    /**
+     * Unlocks all research without checking any requirements. 
+     */
+    forceUnlockAllResearch() {
+        for (const [id, researchEntry] of Object.entries(this.researchEntries)) {
+            if (researchEntry.unlocked) { continue; }
+            researchEntry.unlocked = true;
+            this.newlyUnlockedResearch.push(id);
+        }
+    }
+
+    /**
      * @returns {string[]}
      */
     getNewlyUnlockedResearch() {

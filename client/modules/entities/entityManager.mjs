@@ -67,6 +67,7 @@ class EntityManager extends EventTarget {
             }
             let building = new Building(data.buildings[i]);
             this.buildings[building.id] = building;
+            building.mesh.position.y = 0.001;
             this.scene.add(building.mesh);
             if (this.localPlayer && building.x == this.localPlayer.x && building.y == this.localPlayer.y) {
                 this.selectedBuilding = building;

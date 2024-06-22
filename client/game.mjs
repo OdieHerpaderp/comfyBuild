@@ -164,7 +164,7 @@ var grid = new THREE.Mesh(gridGeometry, gridMaterial);
 
 // Position and rotate the mesh
 grid.position.x = serverSettings.mapWidth / 2 - .5;
-grid.position.y = 0;
+grid.position.y = -0.001;
 grid.position.z = serverSettings.mapHeight / 2 - .5;
 grid.rotation.x = Math.PI * 1.5;
 

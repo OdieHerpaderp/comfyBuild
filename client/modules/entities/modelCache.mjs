@@ -25,7 +25,7 @@ class ModelCache {
 
     modelLoadedCallback(data, modelName) {
         this.models[modelName] = data.scene;
-        data.scene.scale.set(.245, .245, .245);
+        data.scene.scale.set(.242, .242, .242);
     }
 
     getModel(modelName) {

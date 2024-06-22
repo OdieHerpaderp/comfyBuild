@@ -16,7 +16,7 @@ class Player extends BaseEntity {
         this.username = initData.username;
         this.isLocal = isLocal;
 
-        let geometry = new THREE.PlaneGeometry(1.1, 1.1, 1, 1);
+        let geometry = new THREE.PlaneGeometry(1.0, 1.0, 1, 1);
         let texture = new THREE.TextureLoader().load('/client/img/player.png');
         let material = new THREE.MeshLambertMaterial({ map: texture, emissive: this.color, transparent: true, depthWrite: false, depthTest: false, color: this.color, });
         this.mesh = new THREE.Mesh(geometry, material);

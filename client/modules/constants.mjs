@@ -17,10 +17,14 @@ const texSeaWater = textureLoader.load('client/textures/buildings/water.webp'); 
 const texSeaWaterNor = textureLoader.load('client/textures/buildings/waterNor.webp'); texSeaWaterNor.wrapS = texSeaWaterNor.wrapT = THREE.RepeatWrapping; texSeaWaterNor.repeat.set(32, 32);
 
 // Load building textures
+const texGround = textureLoader.load('client/textures/grass.webp');
+const texGroundNor = textureLoader.load('client/textures/grassNor.jpg');
 const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
 const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
 const texStone = textureLoader.load('client/textures/buildings/stone.webp');
 const texStoneNor = textureLoader.load('client/textures/buildings/stoneNor.webp');
+const texStoneBlock = textureLoader.load('client/textures/buildings/stoneBlock.webp');
+const texStoneBlockNor = textureLoader.load('client/textures/buildings/stoneBlockNor.webp');
 const texShingles = textureLoader.load('client/textures/buildings/shingles.webp');
 const texShinglesNor = textureLoader.load('client/textures/buildings/shinglesNor.webp');
 const texSandStone = textureLoader.load('client/textures/buildings/sandStone.webp');
@@ -92,10 +96,26 @@ const materialMap = {
         envMapIntensity: 0.2, // Reflect environment
       }),
     // Buildings
+    'ground': new THREE.MeshStandardMaterial({
+        color:"#dddddd",
+        map: texGround,
+        normalMap: texGroundNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.95,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
     'stone': new THREE.MeshStandardMaterial({
         color:"#ffffff",
         map: texStone,
         normalMap: texStoneNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
+    'stoneBlock': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texStoneBlock,
+        normalMap: texStoneBlockNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment

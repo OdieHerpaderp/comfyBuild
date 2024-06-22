@@ -2,6 +2,7 @@ import { BaseEntity } from "./baseEntity.mjs";
 import { Socket } from "socket.io";
 import buildingManager from "../managers/buildingManager.mjs";
 import researchManager from "../managers/researchManager.mjs";
+import chatManager from "../managers/chatManager.mjs";
 
 let playerColors = [
     "#FF6666",
@@ -47,6 +48,7 @@ class Player extends BaseEntity {
     constructor(x, y, username, socket) {
         super(x, y);
 
+        if (!username) { username = "Anonymous"; }
         this.username = username;
         this.socket = socket;
 
@@ -60,7 +62,9 @@ class Player extends BaseEntity {
         socket.on('upgradeSameType', (data) => this.upgradeSameType(data));
         socket.on('sellBuilding', () => this.sellBuilding());
         socket.on('buildBuilding', (data) => this.buildBuilding(data));
-        socket.on('unlockResearch', (data) => this.unlockResearch(data))
+        socket.on('unlockResearch', (data) => this.unlockResearch(data));
+
+        socket.on('chatMessage', (data) => this.chatMessage(data));
 
         socket.on('fakePlayer', (data) => this.movePlayer(data));
 
@@ -124,6 +128,12 @@ class Player extends BaseEntity {
             this.socket.emit('addToChat', result.message);
         }
     }
+
+    chatMessage(message) {
+        chatManager.chatMessage(this, message);
+    }
+
+
 }
 
 export default Player;

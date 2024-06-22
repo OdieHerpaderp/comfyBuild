@@ -128,6 +128,7 @@ class BuildingTooltip {
                     this.currentProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.productionLevel));
                 }
             }
+            return;
         }
 
         if (building.recipes[0].consume) {
@@ -162,6 +163,7 @@ class BuildingTooltip {
                     this.maxProduce.updateResource(name, amount * produceMultiplier(this.buildingType, this.upgradeLevel));
                 }
             }
+            return;
         }
 
         if (building.recipes[0].consume) {

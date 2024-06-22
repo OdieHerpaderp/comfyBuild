@@ -14,7 +14,7 @@ class PlayerManager {
         this.removedPlayers.push(playerToRemove.id);
         return playerToRemove;
     }
-
+    
     onSocketDisconnect(socket) {
         this.players = this.players.filter((player) => {
             if (player.socket !== socket) return true;

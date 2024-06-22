@@ -226,6 +226,16 @@ mark {
         flex-direction: column;
         overflow-y: auto;
         flex-grow: 1;
+
+        .chatAuthor::before {
+            content: '[';
+            color: $font-color;
+        }
+
+        .chatAuthor::after {
+            content: '] ';
+            color: $font-color;
+        }
     }
 
     #chat-input-bar {

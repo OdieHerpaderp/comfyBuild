@@ -13,6 +13,7 @@ class ResourceNode extends BaseEntity {
         let texture = new THREE.TextureLoader().load('/client/img/resourceNodes/' + this.resourceType + '.png');
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(1, 1);
+        texture.anisotropy = 16;
 
         let material = new THREE.MeshBasicMaterial({ color:"#999", map: texture, transparent: true,depthWrite: false, });
 

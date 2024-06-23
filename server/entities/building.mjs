@@ -264,7 +264,7 @@ class Building extends BaseEntity {
         if (this.recipes.length === 0) { return this.checkBuildResourcesOld(consumeResources); }
 
         const resources = [];
-        const multiplier = buildCostMultiplier(this.buildingType, this.upgradeLevel);
+        const multiplier = buildCostMultiplier(this.buildingType, this.upgradeLevel * (this.age + 1));
         this.build.forEach(resource => {
             resources.push({
                 name: resource.name,
@@ -277,7 +277,7 @@ class Building extends BaseEntity {
     // TODO: remove this once all old format buildings are gone
     checkBuildResourcesOld(consumeResources = false) {
         const resources = {};
-        const multiplier = buildCostMultiplier(this.buildingType, this.upgradeLevel);
+        const multiplier = buildCostMultiplier(this.buildingType, this.upgradeLevel * (this.age + 1));
         for (const [key, value] of Object.entries(this.baseBuild)) {
             resources[key] = value * multiplier;
         }

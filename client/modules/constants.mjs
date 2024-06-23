@@ -295,14 +295,15 @@ const materialMap = {
         envMapIntensity: 0.1, // Reflect environment
     }),
     'glass': new THREE.MeshPhysicalMaterial({
-        color: 0xffffff, // Set the base color
+        color: 0xaaaaaa, // Set the base color
         metalness: 0, // Non-metallic
         roughness: 0, // Smooth surface
         transmission: 0.9, // High transmission for glass
+        opacity: 0.8,
         transparent: true, // Enable transparency
         envMapIntensity: 0.3, // Reflect environment
-        clearcoat: 1, // Add a clear coat layer
-        clearcoatRoughness: 0 // Smooth clear coat
+        //clearcoat: 1, // Add a clear coat layer
+        //clearcoatRoughness: 0 // Smooth clear coat
       }),
       'water': new THREE.MeshPhysicalMaterial({
         color: 0xbbeeff, // Set the base color

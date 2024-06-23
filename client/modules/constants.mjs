@@ -31,6 +31,8 @@ const texSandStone = textureLoader.load('client/textures/buildings/sandStone.web
 const texSandStoneNor = textureLoader.load('client/textures/buildings/sandStoneNor.webp');
 const texWood = textureLoader.load('client/textures/buildings/wood.webp');
 const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.webp');
+const texBark = textureLoader.load('client/textures/buildings/bark.webp');
+const texBarkNor = textureLoader.load('client/textures/buildings/barkNor.webp');
 const texJade = textureLoader.load('client/textures/buildings/jade.webp');
 const texJadeNor = textureLoader.load('client/textures/buildings/jadeNor.webp');
 const texIron = textureLoader.load('client/textures/buildings/iron.jpg');
@@ -57,7 +59,7 @@ const materialMap = {
         normalMap: texSandNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         displacementMap: texSandDisp,
-        displacementScale: 0.65, // Adjust displacement strength
+        displacementScale: 0.6, // Adjust displacement strength
         roughness: 0.95,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -67,7 +69,7 @@ const materialMap = {
         normalMap: texGrassNor,
         normalScale: new THREE.Vector2( 2, 2 ),
         displacementMap: texGrassDisp,
-        displacementScale: 0.65,
+        displacementScale: 0.6,
         roughness: 0.95,
         envMapIntensity: 0.015, // Reflect environment
     }),
@@ -77,21 +79,21 @@ const materialMap = {
         normalMap: texRockNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         displacementMap: texRockDisp,
-        displacementScale: 0.65,
+        displacementScale: 0.6,
         roughness: 0.95,
         envMapIntensity: 0.015, // Reflect environment
     }),
     'seaWater': new THREE.MeshPhysicalMaterial({
-        color: 0xbbeeff,
+        color: 0xaaddee,
         map: texSeaWater,
         normalMap: texSeaWaterNor,
         displacementMap: texRockDisp,
-        displacementScale: 0.10,
+        displacementScale: 0.05,
         normalScale: new THREE.Vector2( 3, 3 ),
         metalness: 0,
         roughness: 0, // Smooth surface
-        transmission: 0.8,
-        opacity: 0.6,
+        transmission: 0.7,
+        opacity: 0.5,
         transparent: true, // Enable transparency
         envMapIntensity: 0.2, // Reflect environment
       }),
@@ -140,6 +142,14 @@ const materialMap = {
         color:"#ffffff",
         map: texWood,
         normalMap: texWoodNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
+    'bark': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texBark,
+        normalMap: texBarkNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment

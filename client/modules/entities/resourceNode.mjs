@@ -18,7 +18,7 @@ class ResourceNode extends BaseEntity {
         let material = new THREE.MeshBasicMaterial({ color:"#999", map: texture, transparent: true,depthWrite: false, });
 
         this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.position.set(this.worldX, 0, this.worldY);
+        this.mesh.position.set(this.worldX, -0.01, this.worldY);
         this.mesh.rotation.x = Math.PI * 1.5;
     }
 }

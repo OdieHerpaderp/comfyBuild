@@ -26,8 +26,8 @@ class BuildingData {
         useTemplate.bind(this)(template);
 
         this.name = new HighlightableText(name);
-        this.age = data.age ?? -1;
-        this.ageText = romanize(data.age + 1);
+        this.age = data.age ?? 0;
+        this.ageText = romanize(data.age);
         this.info = data.info ?? "[no info available]";
         this.node = data.node;
         this.build = new ShortResourceDisplayList();
@@ -173,8 +173,8 @@ class BuildingDataList {
         this.ageSelectorsElement = this.domElement.querySelector("#ageSelectors");
         this.resourceNodeSelectorsElement = this.domElement.querySelector("#resourceNodeSelectors");
 
-        for (let i = 0; i <= maxAge; i++) {
-            let button = new ToggleButton(romanize(i + 1), true);
+        for (let i = 1; i <= maxAge; i++) {
+            let button = new ToggleButton(romanize(i), true);
             button.addEventListener("input", event => { this.ageToggleChanged(i, event.target.checked); });
             this.ageSelectors.push(button);
         }

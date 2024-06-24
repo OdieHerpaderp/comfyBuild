@@ -61,6 +61,12 @@ class ShortResourceDisplayList extends EventTarget {
         });
     }
 
+    multiplyResources(multiplier) {
+        this.resources.forEach(resourceDisplay => {
+            resourceDisplay.amount *= multiplier;
+        });
+    }
+
     updateResource(name, amount) {
         if (this.resourceDisplays[name] === undefined) {
             this.resourceDisplays[name] = new ShortResourceDisplay(name, amount, this);

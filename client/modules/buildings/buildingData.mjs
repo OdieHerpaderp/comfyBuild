@@ -5,6 +5,7 @@ import { RequiredResearchListDisplay } from "researchEntryDisplay";
 import { buildings } from "buildings";
 import { socket } from "singletons";
 import { romanize } from "textHelpers";
+import { buildCostMultiplier, consumeMultiplier, produceMultiplier } from "../../../lib/lib.mjs";
 
 let template = await getHTMLTemplate("client/modules/buildings/buildings.html", "buildingDataRow");
 class BuildingData {
@@ -32,6 +33,7 @@ class BuildingData {
         this.node = data.node;
         this.build = new ShortResourceDisplayList();
         this.build.setResources(data.build);
+        this.build.multiplyResources(buildCostMultiplier(name, 0));
         this.consume = new ShortResourceDisplayList();
         this.produce = new ShortResourceDisplayList();
         
@@ -46,7 +48,9 @@ class BuildingData {
             this.consume.setResources(data.recipes[0].consume);
             this.produce.setResources(data.recipes[0].produce);
         }
-        
+
+        this.consume.multiplyResources(consumeMultiplier(name, 1));
+        this.produce.multiplyResources(produceMultiplier(name, 1));
 
         this.infoField = infoField;
         this.parent = parent;

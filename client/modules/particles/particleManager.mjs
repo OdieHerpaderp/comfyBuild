@@ -16,7 +16,7 @@ particleTexture["gem"] = new THREE.TextureLoader().load( '/client/img/gem.png' )
 
 
 class ParticleManager {
-    constructor(scene) {
+    initialize(scene) {
         //useTemplate.bind(this)(template);
         this.scene = scene;
 
@@ -208,4 +208,7 @@ class ParticleManager {
     }
 }
 
-export { ParticleManager };
+const instance = new ParticleManager();
+
+export default instance;
+export { instance };

@@ -1,6 +1,6 @@
 import { EntityManager } from "entityManager";
 import { LightingManager } from "lightingManager";
-import { ParticleManager } from "particleManager";
+import particleManager from "particleManager";
 import { LoadingScreen } from "loadingScreen";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -50,7 +50,7 @@ entityManager.addEventListener("playerDisconnected", (event) => {
 
 var lightingManager = new LightingManager(scene);
 
-var particleManager = new ParticleManager(scene);
+particleManager.initialize(scene);
 
 var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1.5, 900);
 

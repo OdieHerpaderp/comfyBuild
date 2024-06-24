@@ -132,7 +132,7 @@ gameElement.addEventListener('click', (event) => {
     var intersection = (intersections.length > 0 ? intersections[0] : null);
     if (intersection) {
         socket.emit('fakePlayer', { x: intersection.point.x, y: intersection.point.z });
-        particleManager.spawnParticle("fire",3,1,intersection.point.x,0,intersection.point.z,undefined);
+        particleManager.spawnParticle("smoke",3,1,intersection.point.x,0,intersection.point.z,undefined);
     }
 });
 

@@ -8,6 +8,7 @@ particleTexture["fireWall"] = new THREE.TextureLoader().load( '/client/textures/
 particleTexture["skull"] = new THREE.TextureLoader().load( '/client/img/skull.png' );
 particleTexture["smoke"] = new THREE.TextureLoader().load( '/client/textures/particles/smoke.webp' );
 particleTexture["dust"] = new THREE.TextureLoader().load( '/client/textures/particles/dust.webp' );
+particleTexture["star"] = new THREE.TextureLoader().load( '/client/textures/particles/star.webp' );
 particleTexture["poison"] = new THREE.TextureLoader().load( '/client/img/poison.png' );
 particleTexture["ice"] = new THREE.TextureLoader().load( '/client/img/ice.png' );
 particleTexture["psmoke"] = new THREE.TextureLoader().load( '/client/img/smoke.png' );
@@ -33,8 +34,8 @@ class ParticleManager {
         {
             var color = 0xffffff; 
             var spriteMaterial;
-            if (type == "smoke" || type == "psmoke" || type == "poison" || type == "gem" || type == "skull") spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type], transparent:true, depthWrite: false } );
-            else spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type] } );
+            if (type == "smoke" || type == "dust" || type == "star" || type == "gem" || type == "skull") spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type], transparent:true, depthWrite: false } );
+            else spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture[type], transparent:true, depthWrite: false } );
                 
             var sprite = new THREE.Sprite( spriteMaterial );
             var spriteScale = (0.5 + Math.random() * 0.5) * scale;
@@ -49,30 +50,30 @@ class ParticleManager {
                 sprite.speedY = (0.3 - Math.random())*0.6;
             }
             else{
-                sprite.speedX = (0.005 - Math.random())*0.010;
-                sprite.speedY = (0.003 - Math.random())*0.006;
-                sprite.speedZ = (0.005 - Math.random())*0.010;
+                sprite.speedX = (0.033 - Math.random() * 0.066 );
+                sprite.speedY = (0.016 - Math.random() * 0.032 );
+                sprite.speedZ = (0.033 - Math.random() * 0.066 );
             }
             
             sprite.lifespan = 85;
             sprite.type = type;
                 
-            if (type == "smoke") {
-                sprite.position.y -= 0.8;
+            if (type == "smoke" || type == "dust") {
+                sprite.position.y += 0.01;
                 sprite.material.opacity = 0.10;
                 sprite.scale.x *= 0.77;
                 sprite.scale.y *= 0.77;
-                sprite.speedX *= 2.8;
-                sprite.speedZ *= 1.6;
-                sprite.speedY *= 2.8;
+                //sprite.speedX *= 4.8;
+                //sprite.speedZ *= 1.6;
+                //sprite.speedY *= 4.8;
             }
-            else if (type == "poison") {
+            else if (type == "star") {
                 sprite.position.y -= 0.2;
                 sprite.material.opacity = 0.40;
                 sprite.scale.x *= 1.33;
                 sprite.scale.y *= 1.33;
                 sprite.speedX *= 1.2;
-                sprite.speedZ *= 1.8;
+                sprite.speedZ -= 0.1;
                 sprite.speedY *= 1.2;
                 sprite.lifespan = 125;
             }
@@ -139,18 +140,18 @@ class ParticleManager {
             //sprite.position.y -= 0.01 + a * 0.3 - Math.abs(sprite.speedX / 16) + Math.abs(sprite.speedY / 16);
             sprite.position.y += sprite.speedY / 6;
             sprite.position.z += sprite.speedZ / 6;
-            sprite.lifespan -= 2.5;
+            sprite.lifespan -= 1;
         
                 
-            if (sprite.type == "smoke") {
-                sprite.speedZ += 0.01;
-                sprite.speedX *= 0.96;
-                sprite.speedY *= 0.96;
+            if (sprite.type == "smoke" || sprite.type == "dust") {
+                //sprite.speedX *= 0.999;
+                //sprite.speedY += 0.0001;
+                //sprite.speedZ *= 0.999;
                 sprite.lifespan += 0.15;
-                sprite.scale.x += 0.004;
-                sprite.scale.y += 0.004;
-                sprite.scale.x *= 1.004;
-                sprite.scale.y *= 1.004;
+                //sprite.scale.x += 0.004;
+                //sprite.scale.y += 0.004;
+                //sprite.scale.x *= 1.004;
+                //sprite.scale.y *= 1.004;
                 sprite.material.opacity = 0.02 + sprite.lifespan / 125;
                 sprite.material.color.setHSL( 0, 0 , 0.01 + sprite.lifespan / 160 );
             }

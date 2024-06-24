@@ -2,6 +2,7 @@ import { ResourceNode } from "resourceNode";
 import { socket } from "singletons";
 import { Building } from "building";
 import { Player } from "player";
+import particleManager from "particleManager";
 
 class EntityManager extends EventTarget {
     selectedBuildingChangedEvent = new Event("selectedBuildingChanged");
@@ -69,6 +70,8 @@ class EntityManager extends EventTarget {
             this.buildings[building.id] = building;
             building.mesh.position.y = 0.001;
             this.scene.add(building.mesh);
+            particleManager.spawnParticle("dust",78,0.5,building.x, -0.1, building.y,undefined);
+            particleManager.spawnParticle("dust",78,0.6,building.x, -0.3, building.y,undefined);
             if (this.localPlayer && building.x == this.localPlayer.x && building.y == this.localPlayer.y) {
                 this.selectedBuilding = building;
             }

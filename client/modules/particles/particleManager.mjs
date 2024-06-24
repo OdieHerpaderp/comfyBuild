@@ -6,7 +6,8 @@ particleTexture["spark"] = new THREE.TextureLoader().load( '/client/img/spark.pn
 particleTexture["fire"] = new THREE.TextureLoader().load( '/client/textures/particles/fire.webp' );
 particleTexture["fireWall"] = new THREE.TextureLoader().load( '/client/textures/particles/fire.webp' );
 particleTexture["skull"] = new THREE.TextureLoader().load( '/client/img/skull.png' );
-particleTexture["smoke"] = new THREE.TextureLoader().load( '/client/img/smoke.png' );
+particleTexture["smoke"] = new THREE.TextureLoader().load( '/client/textures/particles/smoke.webp' );
+particleTexture["dust"] = new THREE.TextureLoader().load( '/client/textures/particles/dust.webp' );
 particleTexture["poison"] = new THREE.TextureLoader().load( '/client/img/poison.png' );
 particleTexture["ice"] = new THREE.TextureLoader().load( '/client/img/ice.png' );
 particleTexture["psmoke"] = new THREE.TextureLoader().load( '/client/img/smoke.png' );
@@ -48,9 +49,9 @@ class ParticleManager {
                 sprite.speedY = (0.3 - Math.random())*0.6;
             }
             else{
-                sprite.speedX = (0.5 - Math.random())*1.0;
-                sprite.speedY = (0.3 - Math.random())*0.6;
-                sprite.speedZ = (0.5 - Math.random())*1.0;
+                sprite.speedX = (0.005 - Math.random())*0.010;
+                sprite.speedY = (0.003 - Math.random())*0.006;
+                sprite.speedZ = (0.005 - Math.random())*0.010;
             }
             
             sprite.lifespan = 85;
@@ -199,8 +200,8 @@ class ParticleManager {
                 sprite.scale.y *= 0.922;
             }
             else sprite.material.color.setHSL( 1, 0.3 + sprite.lifespan / 10 , 0.3 + sprite.lifespan / 30 );
-            sprite.scale.x += 0.004;
-            sprite.scale.y += 0.004;
+            sprite.scale.x += 0.0004;
+            sprite.scale.y += 0.0004;
             sprite.scale.x *= 1.004;
             sprite.scale.y *= 1.004;
             }

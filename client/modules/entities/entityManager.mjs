@@ -37,8 +37,11 @@ class EntityManager extends EventTarget {
         return this.players[this.localPlayerId];
     }
 
-    constructor(scene) {
+    constructor() {
         super();
+    }
+
+    initialize(scene) {
         this.scene = scene;
 
         socket.on('init', (data) => { this.onInitEntities(data) });
@@ -175,5 +178,6 @@ class EntityManager extends EventTarget {
     }
 }
 
-export { EntityManager };
-export default EntityManager;
+const entityManager = new EntityManager();
+
+export default entityManager;

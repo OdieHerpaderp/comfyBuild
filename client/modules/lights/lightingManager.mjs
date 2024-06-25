@@ -20,7 +20,7 @@ class LightingManager {
     /**
      * @param {THREE.Scene} scene
      */
-    constructor(scene) {
+    initialize(scene) {
         this.scene = scene;
 
         // Size = 100, Y offset = 50 => ground is at acos(50/100) = acos(0.5)
@@ -81,5 +81,6 @@ class LightingManager {
     }
 }
 
-export { LightingManager };
-export default LightingManager;
+const lightingManager = new LightingManager();
+
+export default lightingManager;

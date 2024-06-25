@@ -25,7 +25,7 @@ class FrameManager {
         }
     };
 
-    constructor(renderer, scene) {
+    initialize(renderer, scene) {
         useTemplate.bind(this)(template);
 
         this.loginScreen = new LoginScreen();
@@ -125,4 +125,7 @@ class FrameManager {
 }
 
 Object.assign(FrameManager.prototype, jsFrameMixin);
-export default FrameManager;
+
+const frameManager = new FrameManager();
+
+export default frameManager;

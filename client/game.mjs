@@ -1,5 +1,5 @@
-import { EntityManager } from "entityManager";
-import { LightingManager } from "lightingManager";
+import entityManager from "entityManager";
+import lightingManager from "lightingManager";
 import particleManager from "particleManager";
 import { LoadingScreen } from "loadingScreen";
 import * as THREE from 'three';
@@ -9,7 +9,7 @@ import { MapControls } from 'three/addons/controls/MapControls.js';
 import { socket } from "singletons";
 import { materialMap, envMap } from "constants";
 import Stats from 'three/addons/libs/stats.module.js';
-import FrameManager from "frameManager";
+import frameManager from "frameManager";
 import serverSettings from "serverSettings";
 import researchManager from "researchManager";
 
@@ -34,7 +34,7 @@ document.body.appendChild(loadingScreen.domElement);
 var scene = new THREE.Scene();
 
 // Don't mind me, I just need the scene...
-var entityManager = new EntityManager(scene);
+entityManager.initialize(scene);
 entityManager.addEventListener("selectedBuildingChanged", (event) => {
     frameManager.buildingsFrame.selectedBuildingChanged(event.detail.building);
 });
@@ -48,7 +48,7 @@ entityManager.addEventListener("playerDisconnected", (event) => {
     frameManager.playerList.removePlayer(event.detail.player);
 });
 
-var lightingManager = new LightingManager(scene);
+lightingManager.initialize(scene);
 
 particleManager.initialize(scene);
 
@@ -92,7 +92,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 renderer.logarithmicDepthBuffer = true; // should address clipping
 
 // Frame Manager
-const frameManager = new FrameManager(renderer, scene);
+frameManager.initialize(renderer, scene);
 frameManager.addEventListener("loginSuccessful", data => {
     if (data.detail) { 
         entityManager.localPlayerId = data.detail;

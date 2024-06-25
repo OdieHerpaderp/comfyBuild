@@ -34,7 +34,6 @@ class Chat {
     }
 
     playerChatMessage(data) {
-        console.log("playerChatMessage", data);
         let container = document.createElement("span");
         container.appendChild(this.createAuthorSpan(data.playerName, data.playerColor))
         let messageSpan = document.createElement("span");
@@ -44,7 +43,6 @@ class Chat {
     }
 
     systemChatMessage(data) {
-        console.log("systemChatMessage", data);
         let container = document.createElement("span");
         container.appendChild(this.createAuthorSpan("System"));
         let messageSpan = document.createElement("span");

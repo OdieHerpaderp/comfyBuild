@@ -26,6 +26,7 @@ class SettingsFrame {
 
         this.renderer = renderer;
         this.scene = scene;
+        //TODO: Add effectsComposer so settings can be adjusted again.
     }
 
 
@@ -71,6 +72,7 @@ class SettingsFrame {
     renderScaleChanged(event) {
         let newValue =  event.target.value;
         this.renderer.setPixelRatio(window.devicePixelRatio * newValue / 100);
+        this.composer.setPixelRatio(window.devicePixelRatio * renderScale / 100);
     }
 }
 

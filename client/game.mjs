@@ -6,6 +6,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { MapControls } from 'three/addons/controls/MapControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
 import { socket } from "singletons";
 import { materialMap, envMap } from "constants";
 import Stats from 'three/addons/libs/stats.module.js';
@@ -62,41 +67,95 @@ var oldHeight = 0;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Post-Processing
-THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars_fragment.replace(
-    'vec3 CustomToneMapping( vec3 color ) { return color; }',
-
-    `#define Uncharted2Helper( x ) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.0202 / 0.30, vec3( 0.0 ) )
-
-    float toneMappingWhitePoint = 1.0;
-    float saturationAmount = 1.25; // Slightly increased saturation
-    float contrastAmount = 1.05; // Contrast adjustment
-    float darknessAmount = 0.95; // Darkness adjustment (values < 1.0 make it darker)
-
-    vec3 CustomToneMapping( vec3 color ) {
-        color *= toneMappingExposure * darknessAmount;
-        vec3 mappedColor = saturate( Uncharted2Helper( color ) / Uncharted2Helper( vec3( toneMappingWhitePoint ) ) );
-        
-        // Increase contrast
-        mappedColor = pow(mappedColor, vec3(contrastAmount));
-        
-        // Calculate luminance
-        float luminance = dot(mappedColor, vec3(0.2126, 0.7152, 0.0722));
-        
-        // Increase saturation
-        vec3 saturatedColor = mix(vec3(luminance), mappedColor, saturationAmount);
-        
-        return saturatedColor;
-    }`
-);
-
-renderer.toneMapping = THREE.CustomToneMapping; //Default to Linear
-renderer.toneMappingExposure = 1.5;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-
 renderer.shadowMap.enabled = true; // Enables Shadows
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-renderer.logarithmicDepthBuffer = true; // should address clipping
+//renderer.logarithmicDepthBuffer = true; // should address clipping
+
+// Effect Composer
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+// Screen-Space Ambient Occlusion
+const ssaoPass = new SSAOPass(scene, camera);
+ssaoPass.samples = 16; // Increase for better quality, decrease for performance
+ssaoPass.kernelRadius = 24; // Adjust kernel radius as needed
+ssaoPass.rings = 7;
+ssaoPass.distanceThreshold = 1.0;
+ssaoPass.distanceFalloff = 0.0;
+ssaoPass.rangeThreshold = 0.5;
+ssaoPass.rangeFalloff = 0.1;
+ssaoPass.luminanceInfluence = 0.8;
+ssaoPass.radius = 2;
+ssaoPass.scale = 5.5;
+ssaoPass.bias = 5.5;
+ssaoPass.minDistance = 0.0005;
+ssaoPass.maxDistance = 0.8;
+ssaoPass.depthAwareUpsampling = true;
+
+composer.addPass(ssaoPass);
+
+// Custom Tone Mapping Shader
+const CustomToneMappingShader = {
+    uniforms: {
+        'tDiffuse': { value: null },
+        'toneMappingExposure': { value: 1.0 },
+        'toneMappingWhitePoint': { value: 1.0 },
+        'saturationAmount': { value: 1.25 },
+        'contrastAmount': { value: 1.04 },
+        'darknessAmount': { value: 0.92 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float toneMappingExposure;
+        uniform float toneMappingWhitePoint;
+        uniform float saturationAmount;
+        uniform float contrastAmount;
+        uniform float darknessAmount;
+        varying vec2 vUv;
+
+        #define saturate(a) clamp( a, 0.0, 1.0 )
+        #define Uncharted2Helper(x) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.02 / 0.30, vec3( 0.0 ) )
+
+        vec3 CustomToneMapping( vec3 color ) {
+            color *= toneMappingExposure * darknessAmount;
+            vec3 mappedColor = saturate( Uncharted2Helper( color ) / Uncharted2Helper( vec3( toneMappingWhitePoint ) ) );
+            
+            // Increase contrast
+            mappedColor = pow(mappedColor, vec3(contrastAmount));
+            
+            // Calculate luminance
+            float luminance = dot(mappedColor, vec3(0.2126, 0.7152, 0.0722));
+            
+            // Increase saturation
+            vec3 saturatedColor = mix(vec3(luminance), mappedColor, saturationAmount);
+            
+            return saturatedColor;
+        }
+
+        void main() {
+            vec4 color = texture2D( tDiffuse, vUv );
+            color.rgb = CustomToneMapping( color.rgb );
+            gl_FragColor = color;
+        }
+    `
+};
+
+// Tone Mapping Pass
+const customToneMappingPass = new ShaderPass(new THREE.ShaderMaterial(CustomToneMappingShader));
+composer.addPass(customToneMappingPass);
+
+// Gamma Correction Pass (for sRGB output)
+const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
+composer.addPass(gammaCorrectionPass);
 
 // Frame Manager
 frameManager.initialize(renderer, scene);
@@ -293,11 +352,14 @@ var animate = function () {
         oldHeight = window.innerHeight;
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio * renderScale / 100);
+        composer.setPixelRatio(window.devicePixelRatio * renderScale / 100);
         camera.aspect = (window.innerWidth / window.innerHeight) * 1.06;
         camera.updateProjectionMatrix();
     }
     stats.begin();
-    renderer.render(scene, camera);
+    // TODO: Add option to enable/disable the composer and post-processing for performance/battery reasons.
+    //renderer.render(scene, camera);
+    composer.render();
     stats.end();
 };
 

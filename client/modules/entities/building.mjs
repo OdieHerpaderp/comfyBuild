@@ -146,8 +146,15 @@ class Building extends BaseEntity {
                         if(materialName == "glass") { child.castShadow = false; }
                             else child.castShadow = true;
                     }
-                    child.material.envMap = envMap;
+                    else{
+                        // setup material to follow materialMap defaults
+                        //child.material.color = "#ffffff";
+                        child.material.roughness = 0.9;
+                        child.material.envMapIntensity = 0.1; // Reflect environment
+                        child.castShadow = true;
+                    }
                     child.receiveShadow = true;
+                    child.material.envMap = envMap;
                     child.material.needsUpdate = true;
                 }
             });

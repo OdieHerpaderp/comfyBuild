@@ -65,22 +65,29 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars_fragment.replace(
     'vec3 CustomToneMapping( vec3 color ) { return color; }',
 
-    `#define Uncharted2Helper( x ) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.0206 / 0.30, vec3( 0.0 ) )
+    `#define Uncharted2Helper( x ) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.0202 / 0.30, vec3( 0.0 ) )
 
     float toneMappingWhitePoint = 1.0;
-    float saturationAmount = 1.2; // Adjust this value to increase or decrease saturation
+    float saturationAmount = 1.25; // Slightly increased saturation
+    float contrastAmount = 1.05; // Contrast adjustment
+    float darknessAmount = 0.95; // Darkness adjustment (values < 1.0 make it darker)
 
     vec3 CustomToneMapping( vec3 color ) {
-        color *= toneMappingExposure;
+        color *= toneMappingExposure * darknessAmount;
         vec3 mappedColor = saturate( Uncharted2Helper( color ) / Uncharted2Helper( vec3( toneMappingWhitePoint ) ) );
         
-        // Increase saturation
+        // Increase contrast
+        mappedColor = pow(mappedColor, vec3(contrastAmount));
+        
+        // Calculate luminance
         float luminance = dot(mappedColor, vec3(0.2126, 0.7152, 0.0722));
+        
+        // Increase saturation
         vec3 saturatedColor = mix(vec3(luminance), mappedColor, saturationAmount);
         
         return saturatedColor;
     }`
-)
+);
 
 renderer.toneMapping = THREE.CustomToneMapping; //Default to Linear
 renderer.toneMappingExposure = 1.5;

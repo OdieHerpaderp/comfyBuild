@@ -5,6 +5,7 @@ Models:
     sandStoneFort:  https://opengameart.org/content/low-poly-desert-castle
 
 Textures:
+    limeStone:      https://www.sharetextures.com/textures/floor/marble-20
     sandStone:      https://cc0-textures.com/t/cc0t-bricks-084
     shingles:       https://ambientcg.com/view?id=RoofingTiles011C
     bark:           https://cc0-textures.com/t/cc0t-bark-008

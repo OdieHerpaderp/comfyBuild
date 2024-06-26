@@ -29,6 +29,8 @@ const texShingles = textureLoader.load('client/textures/buildings/shingles.webp'
 const texShinglesNor = textureLoader.load('client/textures/buildings/shinglesNor.webp');
 const texSandStone = textureLoader.load('client/textures/buildings/sandStone.webp');
 const texSandStoneNor = textureLoader.load('client/textures/buildings/sandStoneNor.webp');
+const texLimeStone = textureLoader.load('client/textures/buildings/limeStone.webp');
+const texLimeStoneNor = textureLoader.load('client/textures/buildings/limeStoneNor.webp');
 const texWood = textureLoader.load('client/textures/buildings/wood.webp');
 const texWoodNor = textureLoader.load('client/textures/buildings/woodNor.webp');
 const texBark = textureLoader.load('client/textures/buildings/bark.webp');
@@ -122,8 +124,16 @@ const materialMap = {
         roughness: 0.9,
         envMapIntensity: 0.015, // Reflect environment
     }),
+    'limeStone': new THREE.MeshStandardMaterial({
+        color:"#eeffee",
+        map: texLimeStone,
+        normalMap: texLimeStoneNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.9,
+        envMapIntensity: 0.015, // Reflect environment
+    }),
     'sandStone': new THREE.MeshStandardMaterial({
-        color:"#ffee99",
+        color:"#ffeeaa",
         map: texSandStone,
         normalMap: texSandStoneNor,
         normalScale: new THREE.Vector2( 3, 3 ),

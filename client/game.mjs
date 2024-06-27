@@ -104,7 +104,8 @@ const CustomToneMappingShader = {
         'toneMappingWhitePoint': { value: 1.0 },
         'saturationAmount': { value: 1.25 },
         'contrastAmount': { value: 1.04 },
-        'darknessAmount': { value: 0.92 }
+        'darknessAmount': { value: 0.92 },
+        'gamma': { value: 2.2 } // Added gamma uniform
     },
     vertexShader: `
         varying vec2 vUv;
@@ -120,6 +121,7 @@ const CustomToneMappingShader = {
         uniform float saturationAmount;
         uniform float contrastAmount;
         uniform float darknessAmount;
+        uniform float gamma;
         varying vec2 vUv;
 
         #define saturate(a) clamp( a, 0.0, 1.0 )
@@ -138,6 +140,9 @@ const CustomToneMappingShader = {
             // Increase saturation
             vec3 saturatedColor = mix(vec3(luminance), mappedColor, saturationAmount);
             
+            // Apply gamma correction
+            saturatedColor = pow(saturatedColor, vec3(1.0 / gamma));
+            
             return saturatedColor;
         }
 
@@ -149,13 +154,9 @@ const CustomToneMappingShader = {
     `
 };
 
-// Tone Mapping Pass
+// Tone Mapping Pass (including gamma correction)
 const customToneMappingPass = new ShaderPass(new THREE.ShaderMaterial(CustomToneMappingShader));
 composer.addPass(customToneMappingPass);
-
-// Gamma Correction Pass (for sRGB output)
-const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
-composer.addPass(gammaCorrectionPass);
 
 // Frame Manager
 frameManager.initialize(renderer, scene);

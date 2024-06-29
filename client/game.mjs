@@ -100,11 +100,11 @@ composer.addPass(ssaoPass);
 const CustomToneMappingShader = {
     uniforms: {
         'tDiffuse': { value: null },
-        'toneMappingExposure': { value: 1.0 },
-        'toneMappingWhitePoint': { value: 1.0 },
-        'saturationAmount': { value: 1.25 },
-        'contrastAmount': { value: 1.04 },
-        'darknessAmount': { value: 0.92 },
+        'toneMappingExposure': { value: 1.05 },
+        'toneMappingWhitePoint': { value: 1.03 },
+        'saturationAmount': { value: 1.15 },
+        'contrastAmount': { value: 1.06 },
+        'darknessAmount': { value: 0.98 },
         'gamma': { value: 2.2 } // Added gamma uniform
     },
     vertexShader: `
@@ -125,7 +125,7 @@ const CustomToneMappingShader = {
         varying vec2 vUv;
 
         #define saturate(a) clamp( a, 0.0, 1.0 )
-        #define Uncharted2Helper(x) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.02 / 0.30, vec3( 0.0 ) )
+        #define Uncharted2Helper(x) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.0203 / 0.30, vec3( 0.0 ) )
 
         vec3 CustomToneMapping( vec3 color ) {
             color *= toneMappingExposure * darknessAmount;
@@ -341,7 +341,7 @@ var animate = function () {
 
     controls.update();
     lightingManager.animationFrame(camera.position, controls.target);
-    if (currentTime - 60 > lastEmit) {
+    if (currentTime - 50 > lastEmit) {
         frameManager.displayTick();
         lightingManager.tick(delta, camera.position, controls.target);
         lastEmit = currentTime;

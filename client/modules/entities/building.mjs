@@ -211,13 +211,13 @@ class Building extends BaseEntity {
         this.textSprite.text = this.upgradeLevel + "\n" + this.buildingType + "\n";
         this.textSprite.font = '/client/font/RobotoSlab-Bold.woff';
         this.textSprite.fontSize = 0.45;
-        this.textSprite.fontWeight = 500;
+        this.textSprite.fontWeight = 400;
         this.textSprite.lineHeight = 0.9;
         this.textSprite.material = material;
         this.textSprite.anchorX = "center";
         this.textSprite.textAlign = "center";
         this.textSprite.color = 0xFEFEFE;
-        this.textSprite.outlineWidth = 0.02;
+        this.textSprite.outlineWidth = 0.025;
         this.textSprite.sdfGlyphSize = 16;
 
         // Update the rendering:

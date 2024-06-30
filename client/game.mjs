@@ -103,7 +103,7 @@ const CustomToneMappingShader = {
         'toneMappingExposure': { value: 1.05 },
         'toneMappingWhitePoint': { value: 1.03 },
         'saturationAmount': { value: 1.15 },
-        'contrastAmount': { value: 1.06 },
+        'contrastAmount': { value: 1.12 },
         'darknessAmount': { value: 0.98 },
         'gamma': { value: 2.2 } // Added gamma uniform
     },
@@ -125,7 +125,7 @@ const CustomToneMappingShader = {
         varying vec2 vUv;
 
         #define saturate(a) clamp( a, 0.0, 1.0 )
-        #define Uncharted2Helper(x) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.0203 / 0.30, vec3( 0.0 ) )
+        #define Uncharted2Helper(x) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.0202 / 0.30, vec3( 0.0 ) )
 
         vec3 CustomToneMapping( vec3 color ) {
             color *= toneMappingExposure * darknessAmount;

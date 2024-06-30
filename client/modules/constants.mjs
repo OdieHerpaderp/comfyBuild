@@ -19,6 +19,8 @@ const texSeaWaterNor = textureLoader.load('client/textures/buildings/waterNor.we
 // Load building textures
 const texGround = textureLoader.load('client/textures/grass.webp');
 const texGroundNor = textureLoader.load('client/textures/grassNor.jpg');
+const texBone = textureLoader.load('client/textures/buildings/bone.webp');
+const texBoneNor = textureLoader.load('client/textures/buildings/boneNor.webp');
 const texDirt = textureLoader.load('client/textures/buildings/dirt.png');
 const texDirtNor = textureLoader.load('client/textures/buildings/dirtNor.png');
 const texStone = textureLoader.load('client/textures/buildings/stone.webp');
@@ -63,7 +65,7 @@ const materialMap = {
         displacementMap: texSandDisp,
         displacementScale: 0.6, // Adjust displacement strength
         roughness: 0.95,
-        envMapIntensity: 0.01, // Reflect environment
+        envMapIntensity: 0.002, // Reflect environment
     }),
     'grass': new THREE.MeshStandardMaterial({
         color:"#cccccc",
@@ -73,7 +75,7 @@ const materialMap = {
         displacementMap: texGrassDisp,
         displacementScale: 0.6,
         roughness: 0.95,
-        envMapIntensity: 0.01, // Reflect environment
+        envMapIntensity: 0.002, // Reflect environment
     }),
     'rock': new THREE.MeshStandardMaterial({
         color:"#cccccc",
@@ -83,7 +85,7 @@ const materialMap = {
         displacementMap: texRockDisp,
         displacementScale: 0.6,
         roughness: 0.95,
-        envMapIntensity: 0.01, // Reflect environment
+        envMapIntensity: 0.002, // Reflect environment
     }),
     'seaWater': new THREE.MeshPhysicalMaterial({
         color: 0xaaddee,
@@ -176,6 +178,14 @@ const materialMap = {
         color:"#ffffff",
         map: texHide,
         normalMap: texHideNor,
+        normalScale: new THREE.Vector2( 3, 3 ),
+        roughness: 0.9,
+        envMapIntensity: 0.02, // Reflect environment
+    }),
+    'bone': new THREE.MeshStandardMaterial({
+        color:"#ffffff",
+        map: texBone,
+        normalMap: texBoneNor,
         normalScale: new THREE.Vector2( 3, 3 ),
         roughness: 0.9,
         envMapIntensity: 0.02, // Reflect environment
